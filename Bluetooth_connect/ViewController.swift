@@ -40,7 +40,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //           If the value is nil, the central manager dispatches central role events using the main queue.
         print("WORKING!!!")
         
-        @IBAction func btConnect(_ sender: UIButton) {
+        func btConnect(_ sender: UIButton) {
             print("Pressed")
             centralManager = CBCentralManager(delegate: self, queue: nil) //Starts scanning using ble
             return
