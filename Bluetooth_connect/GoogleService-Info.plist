@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>157810467245-97mpfif005073uceof92n3m849c51hgp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.157810467245-97mpfif005073uceof92n3m849c51hgp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBYnQhOy-ba90_FtoW8T1aGRrWr7_ZJt-c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>157810467245</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.microneedle.Microneedle-iOS</string>
+	<key>PROJECT_ID</key>
+	<string>microneedle-e54d6</string>
+	<key>STORAGE_BUCKET</key>
+	<string>microneedle-e54d6.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:157810467245:ios:875c10e44d63d743ac4124</string>
+	<key>DATABASE_URL</key>
+	<string>https://microneedle-e54d6.firebaseio.com</string>
+</dict>
+</plist>
