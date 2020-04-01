@@ -51,7 +51,13 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
             
         } else {
             // Fallback on earlier versions
-            
+            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = deviceList[indexPath.row]
+            self.present(controller, animated: true) {
+                // do nothing....
+            }
         }
         
     }
