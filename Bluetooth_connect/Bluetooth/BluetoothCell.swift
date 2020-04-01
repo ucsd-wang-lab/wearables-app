@@ -14,6 +14,7 @@ class BluetoothCell: UITableViewCell, UITableViewDelegate{
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.contentView.layer.borderWidth = 2.0
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

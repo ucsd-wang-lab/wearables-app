@@ -26,6 +26,7 @@
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
 		5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
+		5EB6896B243501F50017A1FC /* BLEDiscoveredProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */; };
 		8BFD2EFE4C528D99400FD27F /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		5E30DF7D242AA552007D8277 /* BluetoothCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCell.swift; sourceTree = "<group>"; };
 		5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BTSelectionScreen.storyboard; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredProtocol.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
 		98449944E49349783A1D760F /* Pods-Bluetooth_connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.debug.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				0FC47D3F22DE8E32006E931E /* AppDelegate.swift */,
+				5EB689692435019E0017A1FC /* Protocol */,
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
@@ -156,6 +159,14 @@
 				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
 			);
 			path = Bluetooth;
+			sourceTree = "<group>";
+		};
+		5EB689692435019E0017A1FC /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {
@@ -297,6 +308,7 @@
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,
+				5EB6896B243501F50017A1FC /* BLEDiscoveredProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

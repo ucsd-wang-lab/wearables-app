@@ -9,17 +9,19 @@
 import Foundation
 import CoreBluetooth
 
-class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate {
+class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate {
+    
+    static let instance = BluetoothInterface.init()
     
     override init() {
         super.init()
         print("Bluetooth Manager init")
-        centralManager = CBCentralManager(delegate: self, queue: nil)
-        initVar()
     }
     
     func initVar() {
-        peripheral = nil
+        print("init vars for BTInterface")
+        centralManager = CBCentralManager(delegate: self, queue: nil)
+//        peripheral = nil
         connectedPeripheral = nil
         self.serviceDictionary = [:]
     }
@@ -29,23 +31,21 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralManagerD
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOn {
             print("Starting Scan")
+            notifyBTStatus(statue: true)
             startScan()
         }
         else {
-            print("Turn on Bluetooth on phone and Stella")
+            notifyBTStatus(statue: false)
+            print("Turn on Bluetooth on phone and Microneedle")
         }
     }
+    
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if peripheral.name != nil {
             print("Peripheral name: ", peripheral.name)
-        }
-        
-        if  peripheral_Name == peripheral.name {
-            if self.peripheral == nil {
-                self.peripheral = peripheral
-                self.centralManager.connect(peripheral, options: nil)
-            }
+            self.discoveredPeripheral.updateValue(peripheral, forKey: peripheral.name!)
+            notifyBLEObserver(bleName: peripheral.name!, device: peripheral)
         }
     }
     
@@ -55,13 +55,14 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralManagerD
             self.connectedPeripheral = peripheral
             self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
             print("connected to: \(peripheral.name!)")
+            self.notifyConnectedDevice(bleName: peripheral.name!)
             self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
         }
         
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        initVar()
+//        initVar()
         //Do Something
     }
     
@@ -110,16 +111,56 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, CBPeripheralManagerD
         connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
     }
     
-    private func startScan() {
+    public func startScan() {
         centralManager?.stopScan()
         centralManager?.scanForPeripherals(withServices: nil, options: nil)
+    }
+    
+    public func stopScan(){
+        centralManager?.stopScan()
+    }
+    
+    public func connect(peripheral: CBPeripheral){
+        self.centralManager.connect(peripheral, options: nil)
+    }
+    
+    public func disconnect(){
+        self.centralManager.cancelPeripheralConnection(self.connectedPeripheral)
     }
     
     var connectedPeripheral: CBPeripheral!
     
     private var peripheral_Name = "Microneedle"
     private var centralManager: CBCentralManager!
-    private var peripheral: CBPeripheral!
     private var serviceDictionary: [CBService: [CBCharacteristic]]!
+    private var discoveredPeripheral: [String: CBPeripheral] = [:]
     
+    // Observer pattern
+    private var bleObserver: [Int:BLEDiscoveredObserver] = [:]
+    
+    func attachBLEDiscoveredObserver(id: Int, observer: BLEDiscoveredObserver){
+        bleObserver.updateValue(observer, forKey: id)
+    }
+    
+    func detachBLEDiscoveredObserver(id: Int, observer: BLEDiscoveredObserver){
+        bleObserver.removeValue(forKey: id)
+    }
+    
+    private func notifyBLEObserver(bleName: String, device: CBPeripheral){
+        for (_, observer) in bleObserver{
+            observer.update(with: bleName, with: device)
+        }
+    }
+    
+    private func notifyConnectedDevice(bleName: String){
+        for (_, observer) in bleObserver{
+            observer.deviceConnected(with: bleName)
+        }
+    }
+    
+    private func notifyBTStatus(statue: Bool){
+        for (_, observer) in bleObserver{
+            observer.didBTEnable(with: statue)
+        }
+    }
 }

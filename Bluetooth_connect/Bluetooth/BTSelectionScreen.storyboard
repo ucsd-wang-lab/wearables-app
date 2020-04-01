@@ -39,14 +39,19 @@
                                             <rect key="frame" x="0.0" y="0.0" width="364" height="56"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiP-M6-OoB">
-                                                    <rect key="frame" x="16" y="18" width="102" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uiP-M6-OoB">
+                                                    <rect key="frame" x="0.0" y="0.0" width="364" height="56"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="uiP-M6-OoB" secondAttribute="bottom" id="CwM-9U-LIC"/>
+                                                <constraint firstItem="uiP-M6-OoB" firstAttribute="leading" secondItem="Iqi-Ue-GQK" secondAttribute="leading" id="rXc-Ok-AZq"/>
+                                                <constraint firstItem="uiP-M6-OoB" firstAttribute="top" secondItem="Iqi-Ue-GQK" secondAttribute="top" id="t08-iD-f9K"/>
+                                                <constraint firstAttribute="trailing" secondItem="uiP-M6-OoB" secondAttribute="trailing" id="z26-U0-AKF"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="deviceNameLabel" destination="uiP-M6-OoB" id="Ywe-be-nA3"/>

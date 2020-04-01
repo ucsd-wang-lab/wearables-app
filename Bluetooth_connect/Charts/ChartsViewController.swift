@@ -12,7 +12,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class ChartsViewController: UIViewController, MFMailComposeViewControllerDelegate {
+class ChartsViewController: UIViewController {
 
     @IBOutlet weak var graphView: LineChartView!
     
@@ -109,18 +109,6 @@ class ChartsViewController: UIViewController, MFMailComposeViewControllerDelegat
 
             }
         }
-        
-//        if MFMailComposeViewController.canSendMail() {
-//            let mail = MFMailComposeViewController()
-//            mail.mailComposeDelegate = self
-//            mail.setToRecipients(["rap004@ucsd.edu"])
-//            mail.setMessageBody("<p> You're so aweson! </p>", isHTML: true)
-//
-//            self.present(mail, animated: true)
-//        }
-//        else{
-//            print("Can't sent email.....")
-//        }
     }
     
     @IBAction func quitButtonClicked(_ sender: Any) {

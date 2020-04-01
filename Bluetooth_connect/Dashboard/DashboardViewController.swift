@@ -113,8 +113,13 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {
-        self.dismiss(animated: true) {
+        BluetoothInterface.instance.disconnect()
+        let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true) {
             // do nothing....
         }
+        
     }
 }

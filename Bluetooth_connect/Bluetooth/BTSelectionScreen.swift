@@ -7,23 +7,66 @@
 //
 
 import UIKit
+import CoreBluetooth
 
-class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate, BLEDiscoveredObserver{
+    var id: Int = 0
+        
+    func update<T>(with name: String, with device: T){
+        bleDeviceList.updateValue(device as! CBPeripheral, forKey: name)
+        bluetoothTableView.reloadData()
+    }
+    
+    func deviceConnected<T>(with device: T) {
+        let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+        controller.modalPresentationStyle = .fullScreen
+        controller.deviceName = (device as! String)
+        self.present(controller, animated: true) {
+            self.bleDeviceList.removeAll()
+            BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id, observer: self)
+            BluetoothInterface.instance.stopScan()
+        }
+    }
+    
+    func didBTEnable(with value: Bool) {
+        if value == false{
+            let alert = UIAlertController(title: "Error: Bluetooth Off!!", message: "Please turn on Bluetooth on phone!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
+    }
+
 
     @IBOutlet weak var bluetoothTableView: UITableView!
     
-    let deviceList = ["Device 0", "Device 1", "Device 2", "Device 3", "Device 4", "Device 5", "Device 6", "Device 7", "Device 8", "Device 9", "Device 10", "Device 11", "Device 12", "Device 13", "Device 14", "Device 15"]
+    var bleDeviceList: [String: CBPeripheral] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("View did load....")
 
         bluetoothTableView.delegate = self
         bluetoothTableView.dataSource = self
+        BluetoothInterface.instance.attachBLEDiscoveredObserver(id: id, observer: self)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        bleDeviceList.removeAll()
+        bluetoothTableView.reloadData()
+        BluetoothInterface.instance.initVar()
+        BluetoothInterface.instance.startScan()
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return deviceList.count
+        return bleDeviceList.count
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -32,34 +75,20 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "bluetooth_cell") as! BluetoothCell
-        cell.deviceNameLabel.text = deviceList[indexPath.row]
+        cell.deviceNameLabel.text = bleDeviceList[indexPath.row].key
         cell.backgroundColor = .clear
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
-        if #available(iOS 13.0, *) {
-            let controller = storyboard.instantiateViewController(identifier: "dashboard") as! DashboardViewController
-            controller.modalPresentationStyle = .fullScreen
-            controller.deviceName = deviceList[indexPath.row]
-            
-            self.present(controller, animated: true) {
-                // do nothing....
-            }
-            
-        } else {
-            // Fallback on earlier versions
-            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
-            controller.modalPresentationStyle = .fullScreen
-            controller.deviceName = deviceList[indexPath.row]
-            self.present(controller, animated: true) {
-                // do nothing....
-            }
-        }
-        
+        BluetoothInterface.instance.connect(peripheral: bleDeviceList[indexPath.row].value)
     }
     
+}
+
+extension Dictionary {
+    subscript(i: Int) -> (key: Key, value: Value) {
+        return self[index(startIndex, offsetBy: i)]
+    }
 }
