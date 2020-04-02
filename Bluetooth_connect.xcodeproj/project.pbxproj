@@ -105,7 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				0FC47D3F22DE8E32006E931E /* AppDelegate.swift */,
-				5EB689692435019E0017A1FC /* Protocol */,
+				5EB689692435019E0017A1FC /* BluetoothInterface */,
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
@@ -155,18 +155,18 @@
 				5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */,
 				5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */,
 				5E30DF7D242AA552007D8277 /* BluetoothCell.swift */,
-				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
-				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
 		};
-		5EB689692435019E0017A1FC /* Protocol */ = {
+		5EB689692435019E0017A1FC /* BluetoothInterface */ = {
 			isa = PBXGroup;
 			children = (
 				5E697159243564500060FE7C /* BLEProtocol.swift */,
+				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
+				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
-			path = Protocol;
+			path = BluetoothInterface;
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {

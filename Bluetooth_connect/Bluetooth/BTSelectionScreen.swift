@@ -84,7 +84,6 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         BluetoothInterface.instance.connect(peripheral: bleDeviceList[indexPath.row].value)
-//        self.deviceConnected(with: "Test Device")
     }
     
 }

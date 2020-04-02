@@ -91,13 +91,20 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {
+//        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Potential")!
+//        BluetoothInterface.instance.writeData(data: "1".data(using: .utf8)!, characteristicUUIDString: charUUID, withReapose: true)
+        
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Firmware Revision")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+        
+        
         // TODO: Write '1' to 'Start/Stop Queue' Characteristics
-        let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
-        controller.modalPresentationStyle = .fullScreen
-        self.present(controller, animated: true) {
-            // do nothing....
-        }
+//        let storyboard = UIStoryboard(name: "Charts", bundle: nil)
+//        let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+//        controller.modalPresentationStyle = .fullScreen
+//        self.present(controller, animated: true) {
+//            // do nothing....
+//        }
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {

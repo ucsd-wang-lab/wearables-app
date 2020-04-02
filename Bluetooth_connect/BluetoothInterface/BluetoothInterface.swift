@@ -63,6 +63,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         //Do Nothing for now
+        print("Peripheral Disconnected: ", peripheral.name)
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -70,12 +71,10 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-        print("Listing all available services")
-//        print(peripheral.services)
         if let services = peripheral.services {
 
             for service in services{
-                print("service = ", service)
+//                print("service = ", ServiceUUID.instance.getServiceName(serviceUUID: service.uuid.uuidString))
                 self.connectedPeripheral.discoverCharacteristics(nil, for: service)
             }
         }
@@ -86,16 +85,11 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
             self.serviceDictionary[service] = service.characteristics
 
             for characteristic in characteristics{
-                if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
-                    print("characteristics = ", name)
+                if let _ = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
+//                    print("characteristics = ", name)
+                    characteristicDictionary.updateValue(characteristic, forKey: characteristic.uuid.uuidString)
+                    self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                 }
-                else{
-                    print("characteristics = ", characteristic.uuid.uuidString)
-                }
-                
-                
-                characteristicDictionary.updateValue(characteristic, forKey: characteristic.uuid.uuidString)
-                self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                 
                 //                let data = "a\n".data(using: .utf8)!
                 //                writeData(data: data, characteristic: characteristic)
@@ -107,14 +101,26 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         // TODO: notify any observer of value changes....
         if let data = characteristic.value {
-            let val = String.init(data: data, encoding: .utf8) ?? "nil"
+            let val = String.init(data: data, encoding: .ascii) ?? "nil"
             print("val = ", val)
         }
         //        print(serviceDictionary)
     }
     
-    func writeData(data: Data, characteristic: CBCharacteristic) {
-        self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
+    func readData(characteristicUUIDString characteristicUUID: String){
+        let characteristic = characteristicDictionary[characteristicUUID]!
+        self.connectedPeripheral.readValue(for: characteristic)
+    }
+    
+    func writeData(data: Data, characteristicUUIDString: String, withReapose: Bool) {
+        let characteristic = characteristicDictionary[characteristicUUIDString]!
+        
+        if withReapose {
+            self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withResponse)
+        }
+        else{
+            self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
+        }
     }
     
     public func startScan() {
