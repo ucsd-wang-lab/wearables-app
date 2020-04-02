@@ -17,7 +17,6 @@
 		0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */; };
 		5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E225295242AB6CE00A676CB /* Dashboard.storyboard */; };
 		5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E225297242AB6EE00A676CB /* DashboardViewController.swift */; };
-		5E22529A242AB9F700A676CB /* DashboardReadOnlyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E225299242AB9F700A676CB /* DashboardReadOnlyCell.swift */; };
 		5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */; };
 		5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E22529E242AD1ED00A676CB /* Charts.storyboard */; };
 		5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2252A0242AD22B00A676CB /* ChartsViewController.swift */; };
@@ -25,8 +24,9 @@
 		5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */; };
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
 		5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */; };
+		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
+		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
-		5EB6896B243501F50017A1FC /* BLEDiscoveredProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */; };
 		8BFD2EFE4C528D99400FD27F /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,7 +57,6 @@
 		1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bluetooth_connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E225295242AB6CE00A676CB /* Dashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dashboard.storyboard; sourceTree = "<group>"; };
 		5E225297242AB6EE00A676CB /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
-		5E225299242AB9F700A676CB /* DashboardReadOnlyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardReadOnlyCell.swift; sourceTree = "<group>"; };
 		5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEditableCell.swift; sourceTree = "<group>"; };
 		5E22529E242AD1ED00A676CB /* Charts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Charts.storyboard; sourceTree = "<group>"; };
 		5E2252A0242AD22B00A676CB /* ChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
@@ -65,8 +64,9 @@
 		5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothInterface.swift; sourceTree = "<group>"; };
 		5E30DF7D242AA552007D8277 /* BluetoothCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCell.swift; sourceTree = "<group>"; };
 		5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BTSelectionScreen.storyboard; sourceTree = "<group>"; };
+		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
+		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredProtocol.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
 		98449944E49349783A1D760F /* Pods-Bluetooth_connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.debug.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,7 +135,6 @@
 			children = (
 				5E225295242AB6CE00A676CB /* Dashboard.storyboard */,
 				5E225297242AB6EE00A676CB /* DashboardViewController.swift */,
-				5E225299242AB9F700A676CB /* DashboardReadOnlyCell.swift */,
 				5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */,
 			);
 			path = Dashboard;
@@ -157,6 +156,7 @@
 				5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */,
 				5E30DF7D242AA552007D8277 /* BluetoothCell.swift */,
 				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
+				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
@@ -164,7 +164,7 @@
 		5EB689692435019E0017A1FC /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
-				5EB6896A243501F50017A1FC /* BLEDiscoveredProtocol.swift */,
+				5E697159243564500060FE7C /* BLEProtocol.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -297,6 +297,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E697152243556DE0060FE7C /* UUIDs.swift in Sources */,
+				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
 				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
 				0FC47D4222DE8E32006E931E /* ViewController.swift in Sources */,
@@ -304,11 +306,9 @@
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
 				0FC01E6C23F9ECAF009C6A0C /* GraphViewController.swift in Sources */,
 				0FAC3BD123875FC500BA9BCE /* dashboardViewController.swift in Sources */,
-				5E22529A242AB9F700A676CB /* DashboardReadOnlyCell.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,
-				5EB6896B243501F50017A1FC /* BLEDiscoveredProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

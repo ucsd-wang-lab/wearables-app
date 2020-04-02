@@ -16,8 +16,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     var deviceName: String?
     
     let keys = ["Battery Level", "Firmware Version", "Start/Stop", "Sampling Time", "Sample Count", "Sensitivity", "Electrode Mask"]
-    let value = ["00", "0.1.4", "000", "0000", "00", "000", "0000 1111"]
-    let suffix = ["%", "", "mV", "ms", "", "x", ""]
+    let value = ["xx", "x.x.x", "xxx", "xxxx", "xx", "xxx", "xxxx xxxx"]
+    let suffix = [" %", "", " mV", " ms", "", " x", ""]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +30,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         dashboardTableView.dataSource = self
         
         deviceNameLabel.text = deviceName
+        
+        BluetoothInterface.instance.printServiceDictionary()
     }
     
     
@@ -60,12 +62,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 2{
-            return 80
-        }
-        else{
-            return 65
-        }
+        return 65
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,37 +75,28 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 || indexPath.row == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "read_only_cell") as! DashboardReadOnlyCell
-            cell.key_label.text = keys[indexPath.row]
-            cell.value_label.text = value[indexPath.row] + suffix[indexPath.row]
-            cell.selectionStyle = .none
-            
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
+        cell.key_label.text = keys[indexPath.row]
+//        cell.value_label.text = value[indexPath.row]
+        cell.value_label.placeholder = value[indexPath.row]
+        cell.value_label.delegate = self
+        cell.suffix_label.text = suffix[indexPath.row]
+        
+        if indexPath.row == 0 || indexPath.row == 1{
+            cell.value_label.isUserInteractionEnabled = false
         }
-        else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
-            cell.key_label.text = keys[indexPath.row]
-            cell.value_label.text = value[indexPath.row] + suffix[indexPath.row]
-            cell.value_label.delegate = self
-            cell.selectionStyle = .none
-            
-            return cell
-        }
+        cell.selectionStyle = .none
+        
+        return cell
     }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {
+        // TODO: Write '1' to 'Start/Stop Queue' Characteristics
         let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-        if #available(iOS 13.0, *) {
-            let controller = storyboard.instantiateViewController(identifier: "charts_view") as! ChartsViewController
-            controller.modalPresentationStyle = .fullScreen
-            
-            self.present(controller, animated: true) {
-                // do nothing....
-            }
-            
-        } else {
-            // Fallback on earlier versions
+        let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true) {
+            // do nothing....
         }
     }
     

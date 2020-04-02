@@ -11,17 +11,18 @@ import CoreBluetooth
 
 class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate {
     
-    static let instance = BluetoothInterface.init()
+    static var instance = BluetoothInterface.init()
     
     override init() {
         super.init()
         print("Bluetooth Manager init")
+//        ServiceUUID.instance.doNothig()
+//        CharacteristicsUUID.instance.doNothin()
     }
     
     func initVar() {
         print("init vars for BTInterface")
         centralManager = CBCentralManager(delegate: self, queue: nil)
-//        peripheral = nil
         connectedPeripheral = nil
         self.serviceDictionary = [:]
     }
@@ -44,7 +45,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         
         if peripheral.name != nil {
             print("Peripheral name: ", peripheral.name)
-            self.discoveredPeripheral.updateValue(peripheral, forKey: peripheral.name!)
             notifyBLEObserver(bleName: peripheral.name!, device: peripheral)
         }
     }
@@ -62,8 +62,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-//        initVar()
-        //Do Something
+        //Do Nothing for now
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
@@ -72,9 +71,11 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         print("Listing all available services")
-        print(peripheral.services)
+//        print(peripheral.services)
         if let services = peripheral.services {
+
             for service in services{
+                print("service = ", service)
                 self.connectedPeripheral.discoverCharacteristics(nil, for: service)
             }
         }
@@ -83,32 +84,37 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if let characteristics = service.characteristics {
             self.serviceDictionary[service] = service.characteristics
+
             for characteristic in characteristics{
+                if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
+                    print("characteristics = ", name)
+                }
+                else{
+                    print("characteristics = ", characteristic.uuid.uuidString)
+                }
+                
+                
+                characteristicDictionary.updateValue(characteristic, forKey: characteristic.uuid.uuidString)
                 self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                 
                 //                let data = "a\n".data(using: .utf8)!
                 //                writeData(data: data, characteristic: characteristic)
             }
-            print(serviceDictionary);
+//            print(serviceDictionary);
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        // TODO: notify any observer of value changes....
         if let data = characteristic.value {
-            notifyObservers(data: data)
             let val = String.init(data: data, encoding: .utf8) ?? "nil"
-            //            print("val = ", val)
+            print("val = ", val)
         }
         //        print(serviceDictionary)
     }
     
-    private func notifyObservers(data: Data) {
-        //        print("notifying observer")
-        
-    }
-    
     func writeData(data: Data, characteristic: CBCharacteristic) {
-        connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
+        self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
     }
     
     public func startScan() {
@@ -128,16 +134,25 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         self.centralManager.cancelPeripheralConnection(self.connectedPeripheral)
     }
     
+    public func printServiceDictionary(){
+        for (service, _) in serviceDictionary{
+            print("service = ", service)
+        }
+    }
+    
     var connectedPeripheral: CBPeripheral!
     
-    private var peripheral_Name = "Microneedle"
     private var centralManager: CBCentralManager!
     private var serviceDictionary: [CBService: [CBCharacteristic]]!
-    private var discoveredPeripheral: [String: CBPeripheral] = [:]
+    private var characteristicDictionary: [String: CBCharacteristic] = [:]
     
+    /// #################################################################################
+    /// #################################################################################
+    /// #################################################################################
     // Observer pattern
     private var bleObserver: [Int:BLEDiscoveredObserver] = [:]
     
+    // START: BLEDiscoveredObserver
     func attachBLEDiscoveredObserver(id: Int, observer: BLEDiscoveredObserver){
         bleObserver.updateValue(observer, forKey: id)
     }
@@ -163,4 +178,5 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
             observer.didBTEnable(with: statue)
         }
     }
+    // END: BLEDiscoveredObserver
 }
