@@ -21,7 +21,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
         let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
         controller.modalPresentationStyle = .fullScreen
-        controller.deviceName = (device as! String)
+        controller.deviceName = device
         self.present(controller, animated: true) {
             self.bleDeviceList.removeAll()
             BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id)

@@ -36,7 +36,8 @@ protocol BLECharacteristicObserver {
     func characteristicDiscovered(with characteristicUUIDString: String)   // didDiscoveredCharacteristics
 }
 
-protocol BLEValueUpdateObserver {
+@objc protocol BLEValueUpdateObserver {
     var id : Int { get } // property to get an id
-    func update<T>(with characteristicUUIDString: String, with value: T)   // valueUpdatedforCharacteristics
+    func update(with characteristicUUIDString: String, with value: Data)   // valueUpdatedforCharacteristics
+    @objc optional func writeResponseReceived(with characteristicUUIDString: String)
 }

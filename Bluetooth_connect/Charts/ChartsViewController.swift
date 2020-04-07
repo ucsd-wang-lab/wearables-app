@@ -12,7 +12,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class ChartsViewController: UIViewController, BLEStatusObserver {
+class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateObserver {
     var id: Int = 2
     
     func deviceDisconnected(with device: String) {
@@ -23,6 +23,31 @@ class ChartsViewController: UIViewController, BLEStatusObserver {
             self.present(controller, animated: true) {
                 // do nothing....
                 BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+            }
+        }
+    }
+    
+    // For when current data is recorded
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if characteristicUUIDString == "Data Characteristic - current"{
+            let data = value.int32
+            print("data = ", data)
+            updatChart(value: Double(data))
+        }
+    }
+    
+    // For sending the stop command
+    func writeResponseReceived(with characteristicUUIDString: String){
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
+        if name == "Start/Stop Queue"{
+            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = self.deviceName
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
             }
         }
     }
@@ -42,6 +67,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver {
         customizeLoadingIcon()
         
         BluetoothInterface.instance.attachBLEStatusObserver(id: self.id, observer: self)
+        BluetoothInterface.instance.attachBLEValueObserver(id: self.id, observer: self)
         
     }
     
@@ -132,9 +158,11 @@ class ChartsViewController: UIViewController, BLEStatusObserver {
     }
     
     @IBAction func quitButtonClicked(_ sender: Any) {
-        self.dismiss(animated: true) {
-            // do nothing....
-        }
+        let data: UInt8 = 0
+        var d: Data = Data(count: 1)
+        d[0] = data
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
 
 }

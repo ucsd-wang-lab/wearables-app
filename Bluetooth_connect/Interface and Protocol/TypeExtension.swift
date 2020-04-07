@@ -37,6 +37,13 @@ extension Data {
         }
     }
     
+    var int32: Int32 {
+        get {
+            let i32array = self.withUnsafeBytes { $0.load(as: Int32.self) }
+            return i32array
+        }
+    }
+    
     var uuid: NSUUID? {
         get {
             var bytes = [UInt8](repeating: 0, count: self.count)

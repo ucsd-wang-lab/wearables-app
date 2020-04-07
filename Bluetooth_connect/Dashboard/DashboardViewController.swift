@@ -52,40 +52,56 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     // Characteristic Value Update Observer
-    func update<T>(with characteristicUUIDString: String, with value: T) {
+    func update(with characteristicUUIDString: String, with value: Data) {
         if characteristicUUIDString == "Battery Level" {
-            let batteryLevel = (value as! Data).uint8
+            let batteryLevel = value.uint8
             self.value[0] = String(batteryLevel)
             self.dashboardTableView.reloadData()
         }
         else if characteristicUUIDString == "Firmware Revision"{
-            let firmwareVersion = String.init(data: value as! Data, encoding: .utf8) ?? "nil"
+            let firmwareVersion = String.init(data: value , encoding: .utf8) ?? "nil"
             self.value[1] = firmwareVersion
             self.dashboardTableView.reloadData()
         }
         else if characteristicUUIDString == "Potential"{
-            let test = (value as! Data).toByteArray()
+            let test = value.toByteArray()
             for byte in test{
                 print("byte = ", byte)
             }
-            let biasPotential = (value as! Data).uint16
+            let biasPotential = value.uint16
             self.value[2] = String(biasPotential)
             self.dashboardTableView.reloadData()
         }
         else if characteristicUUIDString == "Sample Period"{
-            let samplingPeriod = (value as! Data).uint16
+            let samplingPeriod = value.uint16
             self.value[3] = String(samplingPeriod)
             self.dashboardTableView.reloadData()
         }
         else if characteristicUUIDString == "Sample Count"{
-            let sampleCount = (value as! Data).uint16
+            let sampleCount = value.uint16
             self.value[4] = String(sampleCount)
             self.dashboardTableView.reloadData()
         }
         else if characteristicUUIDString == "Gain"{
-            let gain = (value as! Data).uint8
+            let gain = value.uint8
             self.value[5] = String(gain)
             self.dashboardTableView.reloadData()
+        }
+    }
+    
+    func writeResponseReceived(with characteristicUUIDString: String){
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
+        if name == "Start/Stop Queue"{
+            let storyboard = UIStoryboard(name: "Charts", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = self.deviceName
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            }
         }
     }
     
@@ -206,28 +222,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d[0] = data
-//        d.append(contentsOf: [data])
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "System Power")!
-        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-
-//        let sample_period: UInt16 = 1000
-//        var sample_period_data = withUnsafeBytes(of: sample_period) { Data($0) }
-        
-//        let charUUID2 = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Firmware Revision")!
-//        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID2)
-        
-        
-        // TODO: Write '1' to 'Start/Stop Queue' Characteristics
-//        let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-//        let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
-//        controller.modalPresentationStyle = .fullScreen
-//        controller.deviceName = self.deviceName
-//        self.present(controller, animated: true) {
-//            // do nothing....
-//            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-//            BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-//            BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-//        }
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)        
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {

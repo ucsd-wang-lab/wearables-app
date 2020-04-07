@@ -50,20 +50,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 //            }
             
             notifyBLEObserver(bleName: peripheral.name!, device: peripheral)
-            
-//            print("broadcast = ", CBCharacteristicProperties.broadcast.rawValue)
-//            print("read = ", CBCharacteristicProperties.read.rawValue)
-//            print("write w/o response = ", CBCharacteristicProperties.writeWithoutResponse.rawValue)
-//            print("write = ", CBCharacteristicProperties.write.rawValue)
-//            print("notify = ", CBCharacteristicProperties.notify.rawValue)
-//            print("indicate = ", CBCharacteristicProperties.indicate.rawValue)
-//            print("\n")
-//            print("BROADCAST = ", CHARACTERISTICS_PROPERTIES.BROADCAST.rawValue)
-//            print("READ = ", CHARACTERISTICS_PROPERTIES.READ.rawValue)
-//            print("WRITE_WITHOUT_RESPONSE = ", CHARACTERISTICS_PROPERTIES.WRITE_WITHOUT_RESPONSE.rawValue)
-//            print("WRITE = ", CHARACTERISTICS_PROPERTIES.WRITE.rawValue)
-//            print("NOTIFY = ", CHARACTERISTICS_PROPERTIES.NOTIFY.rawValue)
-//            print("INDICATE = ", CHARACTERISTICS_PROPERTIES.INDICATE.rawValue)
         }
         
     }
@@ -126,25 +112,19 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         }
     }
     
+
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        print("write update received...")
+        notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)
+    }
+    
+    
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        // TODO: notify any observer of value changes....
-        print("didUpdateValueFor: ", characteristic)
+//        print("didUpdateValueFor: ", characteristic)
         if let data = characteristic.value {
-//            let val = String.init(data: data, encoding: .utf8) ?? "nil"
-//            print("val = ", val)
-//            print("data = ", data.uint8)
-            let name2 = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString)
-            if name2 == "Potential" {
-                print("test[0] = ", data[1])
-                let test = data.toByteArray()
-//                let value = UnsafePointer<UInt16>(test)
-//                print("value = ", value)
-            }
-            
             let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString)!
             notifyBLEValueUpdate(bleName: name, data: data)
         }
-        //        print(serviceDictionary)
     }
     
     func readData(characteristicUUIDString characteristicUUID: String){
@@ -156,7 +136,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func writeData(data: Data, characteristicUUIDString: String) {
         let characteristic = characteristicDictionary[characteristicUUIDString]!
         
-        print("writing to ", CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString))
+        print("writing to ", CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) ?? "nil")
         
         if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.WRITE_WITHOUT_RESPONSE.rawValue) != 0 {
             self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)
@@ -271,6 +251,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     private func notifyBLEValueUpdate(bleName: String, data: Data){
         for (_, observer) in bleValueUpdateObserver{
             observer.update(with: bleName, with: data)
+        }
+    }
+    
+    private func notifyBLEWriteResponseReceived(characteristicUUIDString: String){
+        for (_, observer) in bleValueUpdateObserver{
+            observer.writeResponseReceived?(with: characteristicUUIDString)
         }
     }
     // END: BLEValueUpdateObserver
