@@ -223,9 +223,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
         let indexPath = IndexPath(item: button.tag, section: 0)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
+        
         if encodingType is UInt8{
             let data = UInt8(cell.value_label.text!)!
-            print("sending....", data)
             var d = Data(count: 1)
             d = withUnsafeBytes(of: data) { Data($0) }
             let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
@@ -233,7 +233,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         else if encodingType is UInt16{
             let data = UInt16(cell.value_label.text!)!
-            print("sending....", data)
             var d = Data(count: 2)
             d = withUnsafeBytes(of: data) { Data($0) }
             let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
