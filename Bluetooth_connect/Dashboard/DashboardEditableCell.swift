@@ -32,7 +32,7 @@ class DashboardEditableCell: UITableViewCell, UITableViewDelegate{
         suffix_label.adjustsFontSizeToFitWidth = true
         
 //        key_label.backgroundColor = .clear
-//        value_label.backgroundColor = .clear
+//        value_label.backgroundColor = .orange
 //        suffix_label.backgroundColor = .clear
                 
         let width = displayView.frame.width

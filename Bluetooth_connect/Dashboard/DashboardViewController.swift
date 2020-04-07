@@ -10,13 +10,14 @@ import UIKit
 
 class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BLEStatusObserver, BLEValueUpdateObserver, BLECharacteristicObserver{
 
-    func addDoneButtonOnKeyboard(txtNumber: UITextField)
+    func addDoneButtonOnKeyboard(txtNumber: UITextField, tag: Int)
     {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         doneToolbar.barStyle = UIBarStyle.default
       
         let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
         let done: UIBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(saveClicked))
+        done.tag = tag
       
       var items = [UIBarButtonItem]()
       items.append(flexSpace)
@@ -201,12 +202,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.suffix_label.text = suffix_mapping[keys[indexPath.row]]
 
 
-        
-        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == keys.count - 1{
+        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == (keys.count - 1){
             cell.value_label.isUserInteractionEnabled = false
         }
         cell.selectionStyle = .none
-        addDoneButtonOnKeyboard(txtNumber: cell.value_label)
+        addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
         
         return cell
     }
@@ -217,30 +217,35 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
 
-    @objc func saveClicked(index: Int){
-        print("save clicked....index = ", index)
+    @objc func saveClicked(_ sender: Any){
+        let button = sender as! UIBarButtonItem
+        let name = keys[button.tag]
+        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
+        let indexPath = IndexPath(item: button.tag, section: 0)
+        let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
+        
+        if encodingType is UInt8{
+            let data = UInt8(cell.value_label.text!)
+            var d = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else if encodingType is UInt16{
+            let data = UInt16(cell.value_label.text!)
+            var d = Data(count: 2)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else{
+            let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            self.present(alert, animated: true)
+
+        }
         self.view.endEditing(true)
-    }
-    
-    private func writeConfiguration(){
-        if value_mapping["Potential"] == "-1 to +1"{
-            
-        }
-        if value_mapping["Initial Delay"] == "xxx"{
-            
-        }
-        if value_mapping["Sample Period"] == "xxxx"{
-            
-        }
-        if value_mapping["Sample Count"] == "xxx"{
-            
-        }
-        if value_mapping["Gain"] == "xxxx"{
-            
-        }
-        if value_mapping["Electrode Mask"] == "xxxx xxxx"{
-            
-        }
     }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {

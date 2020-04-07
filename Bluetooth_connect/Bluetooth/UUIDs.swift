@@ -155,7 +155,7 @@ class CharacteristicsUUID{
         
         // Ampero Output Data Service
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - current")
-        characteristicProperty.updateValue("Read/Notify", forKey: "Queue ID")
+        characteristicProperty.updateValue("Read", forKey: "Queue ID")
     }
     
     private func setCharacteristicDataType(){
