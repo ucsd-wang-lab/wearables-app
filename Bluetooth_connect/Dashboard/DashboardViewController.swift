@@ -10,6 +10,25 @@ import UIKit
 
 class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BLEStatusObserver, BLEValueUpdateObserver, BLECharacteristicObserver{
 
+    func addDoneButtonOnKeyboard(txtNumber: UITextField)
+    {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle = UIBarStyle.default
+      
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(saveClicked))
+      
+      var items = [UIBarButtonItem]()
+      items.append(flexSpace)
+      items.append(done)
+      
+      doneToolbar.items = items
+      doneToolbar.sizeToFit()
+      
+      txtNumber.inputAccessoryView = doneToolbar
+      
+    }
+    
     var id: Int = 1
     
     // Status Observer
@@ -30,62 +49,37 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     func characteristicDiscovered(with characteristicUUIDString: String) {
         if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
         
-            if name == "Battery Level"{
-                readBatteryLevel()
-            }
-            else if name == "Firmware Revision"{
-                readFirmwareVersion()
-            }
-            else if name == "Potential"{
-                readBiasPotential()
-            }
-            else if name == "Sample Period"{
-                readSamplePeriod()
-            }
-            else if name == "Sample Count"{
-                readSampleCount()
-            }
-            else if name == "Gain"{
-                readGain()
+            if self.value_mapping[name] != nil{
+                readCharacteristicValue(characteristicName: name)
             }
         }
     }
     
     // Characteristic Value Update Observer
     func update(with characteristicUUIDString: String, with value: Data) {
-        if characteristicUUIDString == "Battery Level" {
-            let batteryLevel = value.uint8
-            self.value[0] = String(batteryLevel)
-            self.dashboardTableView.reloadData()
-        }
-        else if characteristicUUIDString == "Firmware Revision"{
-            let firmwareVersion = String.init(data: value , encoding: .utf8) ?? "nil"
-            self.value[1] = firmwareVersion
-            self.dashboardTableView.reloadData()
-        }
-        else if characteristicUUIDString == "Potential"{
-            let test = value.toByteArray()
-            for byte in test{
-                print("byte = ", byte)
+        if self.value_mapping[characteristicUUIDString] != nil {
+            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
+            
+            if decodingType is UInt8{
+                let data = value.uint8
+                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
             }
-            let biasPotential = value.uint16
-            self.value[2] = String(biasPotential)
-            self.dashboardTableView.reloadData()
-        }
-        else if characteristicUUIDString == "Sample Period"{
-            let samplingPeriod = value.uint16
-            self.value[3] = String(samplingPeriod)
-            self.dashboardTableView.reloadData()
-        }
-        else if characteristicUUIDString == "Sample Count"{
-            let sampleCount = value.uint16
-            self.value[4] = String(sampleCount)
-            self.dashboardTableView.reloadData()
-        }
-        else if characteristicUUIDString == "Gain"{
-            let gain = value.uint8
-            self.value[5] = String(gain)
-            self.dashboardTableView.reloadData()
+            else if decodingType is UInt16{
+                let data = value.uint16
+                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is Int32{
+                let data = value.int32
+                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is String.Encoding.RawValue{
+                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
+                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
         }
     }
     
@@ -110,9 +104,27 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var deviceName: String?
     
-    let keys = ["Battery Level", "Firmware Version", "Bias Potential", "Sampling Time", "Sample Count", "Gain", "Electrode Mask"]
-    var value = ["xx", "x.x.x", "0/1", "xxxx", "xx", "xxx", "xxxx xxxx"]
-    let suffix = [" %", "", " mV", " ms", "", " x", ""]
+    let keys = ["Battery Level", "Firmware Revision", "Potential", "Initial Delay", "Sample Period", "Sample Count", "Gain", "Electrode Mask"]
+
+    var value_mapping: [String: String] = ["Battery Level": "xx",
+                                           "Firmware Revision": "x.x.x",
+                                           "Potential": "-1 to +1",
+                                           "Initial Delay": "xxx",
+                                           "Sample Period": "xxxx",
+                                           "Sample Count": "xxx",
+                                           "Gain": "xxxx",
+                                           "Electrode Mask": "xxxx xxxx"
+                                            ]
+    var suffix_mapping: [String: String] = ["Battery Level": " %",
+                                            "Firmware Revision": "",
+                                            "Potential": " mV",
+                                            "Initial Delay": " ms",
+                                            "Sample Period": " ms",
+                                            "Sample Count": "",
+                                            "Gain": " x",
+                                            "Electrode Mask": ""
+                                             ]
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,58 +182,72 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         keys.count
     }
     
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        print("ending row...", indexPath?.row as Any)
+    }
+    
+    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
+        print("Will begin editing row...", indexPath.row)
+    }
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
         cell.key_label.text = keys[indexPath.row]
-//        cell.value_label.text = value[indexPath.row]
-        cell.value_label.placeholder = value[indexPath.row]
+        cell.value_label.placeholder = value_mapping[keys[indexPath.row]]
+
+
         cell.value_label.delegate = self
-        cell.suffix_label.text = suffix[indexPath.row]
+        cell.suffix_label.text = suffix_mapping[keys[indexPath.row]]
+
+
         
         if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == keys.count - 1{
             cell.value_label.isUserInteractionEnabled = false
         }
         cell.selectionStyle = .none
+        addDoneButtonOnKeyboard(txtNumber: cell.value_label)
         
         return cell
     }
     
-    private func readBatteryLevel(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Battery Level")!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
-    
-    private func readFirmwareVersion(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Firmware Revision")!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
-    
-    private func readBiasPotential(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Potential")!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
-    
-    private func readSamplePeriod(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Sample Period")!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
-    
-    private func readSampleCount(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Sample Count")!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
-    
-    private func readGain(){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Gain")!
+    private func readCharacteristicValue(characteristicName: String){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
         BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
     }
     
 
+    @objc func saveClicked(index: Int){
+        print("save clicked....index = ", index)
+        self.view.endEditing(true)
+    }
+    
+    private func writeConfiguration(){
+        if value_mapping["Potential"] == "-1 to +1"{
+            
+        }
+        if value_mapping["Initial Delay"] == "xxx"{
+            
+        }
+        if value_mapping["Sample Period"] == "xxxx"{
+            
+        }
+        if value_mapping["Sample Count"] == "xxx"{
+            
+        }
+        if value_mapping["Gain"] == "xxxx"{
+            
+        }
+        if value_mapping["Electrode Mask"] == "xxxx xxxx"{
+            
+        }
+    }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
-        d[0] = data
+//        d[0] = data
+        d = withUnsafeBytes(of: data) { Data($0) }
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)        
     }

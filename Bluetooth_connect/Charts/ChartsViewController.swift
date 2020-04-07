@@ -104,9 +104,11 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
         graphView.noDataText = "Chart data needs to be provided"
         graphView.noDataTextColor = .orange
         graphView.leftAxis.drawGridLinesEnabled = false
+        graphView.leftAxis.labelTextColor = .orange
         graphView.rightAxis.enabled = false
         graphView.xAxis.drawGridLinesEnabled = false
         graphView.xAxis.labelPosition = .bottom
+        graphView.xAxis.labelTextColor = .orange
         graphView.legend.enabled = false
 //        graphView.data?.setDrawValues(false)
     }
@@ -119,8 +121,13 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {
-        print("Repeate Button clicked....")
-        updatChart(value: Double(chartData.count * chartData.count))
+//        print("Repeate Button clicked....")
+//        updatChart(value: Double(chartData.count * chartData.count))
+        let data: UInt8 = 1
+        var d: Data = Data(count: 1)
+        d[0] = data
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
     
     

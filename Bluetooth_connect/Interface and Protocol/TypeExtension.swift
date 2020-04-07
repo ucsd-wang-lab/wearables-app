@@ -44,6 +44,13 @@ extension Data {
         }
     }
     
+    var int16: Int16{
+        get {
+            let i16array = self.withUnsafeBytes { $0.load(as: Int16.self) }
+            return i16array
+        }
+    }
+    
     var uuid: NSUUID? {
         get {
             var bytes = [UInt8](repeating: 0, count: self.count)
@@ -88,24 +95,3 @@ extension Dictionary {
 }
 
 
-extension UITextField {
-    func addDoneCancelToolbar(onDone: (target: Any, action: Selector)? = nil, onCancel: (target: Any, action: Selector)? = nil) {
-        let onCancel = onCancel ?? (target: self, action: #selector(cancelButtonTapped))
-        let onDone = onDone ?? (target: self, action: #selector(doneButtonTapped))
-
-        let toolbar: UIToolbar = UIToolbar()
-        toolbar.barStyle = .default
-        toolbar.items = [
-            UIBarButtonItem(title: "Cancel", style: .plain, target: onCancel.target, action: onCancel.action),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(title: "Done", style: .done, target: onDone.target, action: onDone.action)
-        ]
-        toolbar.sizeToFit()
-
-        self.inputAccessoryView = toolbar
-    }
-
-    // Default actions:
-    @objc func doneButtonTapped() { self.resignFirstResponder() }
-    @objc func cancelButtonTapped() { self.resignFirstResponder() }
-}

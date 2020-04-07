@@ -66,6 +66,11 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         
     }
     
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        print("failed to connect with device...")
+        notifyBLEFailToConnect(bleName: peripheral.name!)
+    }
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         //Do Nothing for now
         if let name = peripheral.name{
@@ -76,6 +81,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         //Do nothing for now
+        if peripheral.state == .poweredOff{
+            notifyBLEFailToConnect(bleName: "")
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
@@ -219,6 +227,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     private func notifyBLEStatusConnect(bleName: String){
         for (_, observer) in bleStatusObserver{
             observer.deviceConnected?(with: bleName)
+        }
+    }
+    
+    private func notifyBLEFailToConnect(bleName: String){
+        for (_, observer) in bleStatusObserver{
+            observer.deviceFailToConnect?(with: bleName)
         }
     }
     // END: BLEStatusObserver
