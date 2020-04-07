@@ -36,10 +36,10 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
         }
     }
     
-    // For sending the stop command
+    // For sending the stop command when quit is pressed
     func writeResponseReceived(with characteristicUUIDString: String){
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
-        if name == "Start/Stop Queue"{
+        if name == "Start/Stop Queue" && doQuit == true{
             let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
             let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
             controller.modalPresentationStyle = .fullScreen
@@ -59,6 +59,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     var spinner: UIActivityIndicatorView!
     
     var deviceName: String?
+    var doQuit: Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +115,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     }
     
     func updatChart(value: Double){
+        doQuit = false
         chartData.append(value)
         let newValue = ChartDataEntry(x: Double(chartData.count - 1), y: value)
         graphView.data?.addEntry(newValue, dataSetIndex: 0)
@@ -165,6 +167,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     }
     
     @IBAction func quitButtonClicked(_ sender: Any) {
+        doQuit = true
         let data: UInt8 = 0
         var d: Data = Data(count: 1)
         d[0] = data
