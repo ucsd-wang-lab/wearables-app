@@ -51,6 +51,16 @@ enum CHARACTERISTICS_PROPERTIES: UInt{
     case INDICATE = 0b100000;
 }
 
+var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
+                                              "Firmware Revision": "x.x.x",
+                                              "Potential": "-1/+1",
+                                              "Initial Delay": "xxx",
+                                              "Sample Period": "xxxx",
+                                              "Sample Count": "xxx",
+                                              "Gain": "xxxx",
+                                              "Electrode Mask": "xxxx xxxx"
+                                            ]
+
 class CharacteristicsUUID{
     static let instance = CharacteristicsUUID.init()
     
@@ -58,6 +68,7 @@ class CharacteristicsUUID{
     private var characteristicNametoUUID: [String: String] = [:]
     private var characteristicProperty: [String: String] = [:]
     private var characteristicDataType: [String: Any] = [:]
+    private var characteristicValue: [String: String] = [:]
     
 
     
@@ -66,6 +77,7 @@ class CharacteristicsUUID{
         setupUUIDtoCharacteristicName()
         setCharacteristicPropery()
         setCharacteristicDataType()
+        setCharacteristicValue()
     }
     
     private func setupUUIDtoCharacteristicName(){
@@ -180,7 +192,7 @@ class CharacteristicsUUID{
         
         // Ampero Configuration Service
         characteristicDataType.updateValue(UInt8(), forKey: "Electrode Selection")
-        characteristicDataType.updateValue(UInt16(), forKey: "Potential")
+        characteristicDataType.updateValue(Int16(), forKey: "Potential")
         characteristicDataType.updateValue(UInt16(), forKey: "Initial Delay")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Count")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Period")
@@ -189,6 +201,22 @@ class CharacteristicsUUID{
         // Ampero Output Data Service
         characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - current")
         characteristicDataType.updateValue(UInt8(), forKey: "Queue ID")
+    }
+    
+    private func setCharacteristicValue(){
+        // Device Info Service
+        characteristicValue.updateValue("x.x.x", forKey: "Firmware Revision")
+
+        // Battery Service
+        characteristicValue.updateValue("xx", forKey: "Battery Level")
+        
+        // Ampero Configuration Service
+        characteristicValue.updateValue("xxxx xxxx", forKey: "Electrode Mask")
+        characteristicValue.updateValue("-1 to +1", forKey: "Potential")
+        characteristicValue.updateValue("xxx", forKey: "Initial Delay")
+        characteristicValue.updateValue("xxx", forKey: "Sample Count")
+        characteristicValue.updateValue("xxxx", forKey: "Sample Period")
+        characteristicValue.updateValue("xxxx", forKey: "Gain")
     }
     
     func getCharacteristicName(characteristicUUID: String) -> String? {
@@ -214,5 +242,13 @@ class CharacteristicsUUID{
     
     func getCharacteristicDataType(characteristicName: String) -> Any?{
         return characteristicDataType[characteristicName]
+    }
+    
+    func getCharacteristicValue(characteristicName: String) -> String?{
+        return characteristicValue[characteristicName]
+    }
+    
+    func updateCharacteristicValue(characteristicName: String, value: String){
+        characteristicValue.updateValue(value, forKey: characteristicName)
     }
 }

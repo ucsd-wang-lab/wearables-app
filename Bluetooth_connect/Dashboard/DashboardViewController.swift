@@ -64,21 +64,31 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             if decodingType is UInt8{
                 let data = value.uint8
                 self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is UInt16{
                 let data = value.uint16
                 self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is Int16{
+                let data = value.int16
+                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is Int32{
                 let data = value.int32
                 self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is String.Encoding.RawValue{
                 let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
-                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
+                self.value_mapping.updateValue(data, forKey: characteristicUUIDString)
+                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
         }
@@ -109,7 +119,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
     var value_mapping: [String: String] = ["Battery Level": "xx",
                                            "Firmware Revision": "x.x.x",
-                                           "Potential": "-1 to +1",
+                                           "Potential": "-1/+1",
                                            "Initial Delay": "xxx",
                                            "Sample Period": "xxxx",
                                            "Sample Count": "xxx",
@@ -195,16 +205,23 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
         cell.key_label.text = keys[indexPath.row]
-        cell.value_label.placeholder = value_mapping[keys[indexPath.row]]
+//        cell.value_label.placeholder = value_mapping[keys[indexPath.row]]
+//        cell.value_label.text = value_mapping[keys[indexPath.row]]
+        cell.value_label.text = CHARACTERISTIC_VALUE[keys[indexPath.row]]
 
 
         cell.value_label.delegate = self
         cell.suffix_label.text = suffix_mapping[keys[indexPath.row]]
 
+//        if keys[indexPath.row] == "Battery Level" || keys[indexPath.row] == "Firmware Revision" || keys[indexPath.row] == "Electrode Mask"{
+//            cell.value_label.isUserInteractionEnabled = false
+//        }
 
-        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == (keys.count - 1){
-            cell.value_label.isUserInteractionEnabled = false
-        }
+//        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == (keys.count - 1){
+//            print("blocked index = ", indexPath.row)
+//            cell.value_label.isUserInteractionEnabled = false
+//        }
+        
         cell.selectionStyle = .none
         addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
         
@@ -225,18 +242,59 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
         
         if encodingType is UInt8{
-            let data = UInt8(cell.value_label.text!)!
-            var d = Data(count: 1)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            if let value = cell.value_label.text{
+                if value == ""{
+                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
+
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
+                else{
+                    let data = UInt8(value)!
+                    var d = Data(count: 1)
+                    d = withUnsafeBytes(of: data) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                }
+                
+            }
         }
         else if encodingType is UInt16{
-            let data = UInt16(cell.value_label.text!)!
-            var d = Data(count: 2)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            if let value = cell.value_label.text{
+                if value == ""{
+                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
+
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
+                else{
+                    let data = UInt16(value)!
+                    var d = Data(count: 2)
+                    d = withUnsafeBytes(of: data) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                }
+            }
+        }
+        else if encodingType is Int16{
+            if let value = cell.value_label.text{
+                if value == ""{
+                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
+
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
+                else{
+                    let data = Int16(value)!
+                    var d = Data(count: 2)
+                    d = withUnsafeBytes(of: data) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                }
+            }
         }
         else{
             let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)

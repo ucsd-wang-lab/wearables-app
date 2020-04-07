@@ -26,7 +26,9 @@ class DashboardEditableCell: UITableViewCell, UITableViewDelegate{
         
         value_label.textColor = .lightGray
         value_label.textAlignment = .right
-        value_label.keyboardType = .numberPad
+        value_label.keyboardType = .numbersAndPunctuation
+        value_label.textAlignment = .center
+        value_label.clearButtonMode = .whileEditing
         suffix_label.textColor = .lightGray
         suffix_label.textAlignment = .right
         suffix_label.adjustsFontSizeToFitWidth = true
