@@ -24,6 +24,7 @@
 		5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */; };
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
 		5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */; };
+		5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6736982437F88800FA03E9 /* TypeExtension.swift */; };
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
 		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
@@ -64,6 +65,7 @@
 		5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothInterface.swift; sourceTree = "<group>"; };
 		5E30DF7D242AA552007D8277 /* BluetoothCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCell.swift; sourceTree = "<group>"; };
 		5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BTSelectionScreen.storyboard; sourceTree = "<group>"; };
+		5E6736982437F88800FA03E9 /* TypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtension.swift; sourceTree = "<group>"; };
 		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
 		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -105,7 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				0FC47D3F22DE8E32006E931E /* AppDelegate.swift */,
-				5EB689692435019E0017A1FC /* BluetoothInterface */,
+				5EB689692435019E0017A1FC /* Interface and Protocol */,
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
@@ -155,18 +157,19 @@
 				5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */,
 				5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */,
 				5E30DF7D242AA552007D8277 /* BluetoothCell.swift */,
+				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
+				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
 		};
-		5EB689692435019E0017A1FC /* BluetoothInterface */ = {
+		5EB689692435019E0017A1FC /* Interface and Protocol */ = {
 			isa = PBXGroup;
 			children = (
 				5E697159243564500060FE7C /* BLEProtocol.swift */,
-				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
-				5E697151243556DE0060FE7C /* UUIDs.swift */,
+				5E6736982437F88800FA03E9 /* TypeExtension.swift */,
 			);
-			path = BluetoothInterface;
+			path = "Interface and Protocol";
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {
@@ -306,6 +309,7 @@
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
 				0FC01E6C23F9ECAF009C6A0C /* GraphViewController.swift in Sources */,
 				0FAC3BD123875FC500BA9BCE /* dashboardViewController.swift in Sources */,
+				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,

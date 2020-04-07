@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate, BLEDiscoveredObserver{
+class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate, BLEDiscoveredObserver, BLEStatusObserver{
     var id: Int = 0
         
     func update<T>(with name: String, with device: T){
@@ -17,14 +17,15 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         bluetoothTableView.reloadData()
     }
     
-    func deviceConnected<T>(with device: T) {
+    func deviceConnected(with device: String) {
         let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
         let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
         controller.modalPresentationStyle = .fullScreen
         controller.deviceName = (device as! String)
         self.present(controller, animated: true) {
             self.bleDeviceList.removeAll()
-            BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id, observer: self)
+            BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id)
+            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
             BluetoothInterface.instance.stopScan()
         }
     }
@@ -49,6 +50,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         bluetoothTableView.delegate = self
         bluetoothTableView.dataSource = self
         BluetoothInterface.instance.attachBLEDiscoveredObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         
     }
     
@@ -86,10 +88,4 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         BluetoothInterface.instance.connect(peripheral: bleDeviceList[indexPath.row].value)
     }
     
-}
-
-extension Dictionary {
-    subscript(i: Int) -> (key: Key, value: Value) {
-        return self[index(startIndex, offsetBy: i)]
-    }
 }

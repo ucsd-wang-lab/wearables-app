@@ -12,7 +12,20 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class ChartsViewController: UIViewController {
+class ChartsViewController: UIViewController, BLEStatusObserver {
+    var id: Int = 2
+    
+    func deviceDisconnected(with device: String) {
+        if device == self.deviceName{
+            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+            }
+        }
+    }
 
     @IBOutlet weak var graphView: LineChartView!
     
@@ -20,11 +33,19 @@ class ChartsViewController: UIViewController {
     let db = Firestore.firestore()
     var spinner: UIActivityIndicatorView!
     
+    var deviceName: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         customizeChart()
+        customizeLoadingIcon()
         
+        BluetoothInterface.instance.attachBLEStatusObserver(id: self.id, observer: self)
+        
+    }
+    
+    func customizeLoadingIcon(){
         if traitCollection.userInterfaceStyle == .dark{
             spinner = UIActivityIndicatorView(style: .white)
         }
@@ -36,14 +57,6 @@ class ChartsViewController: UIViewController {
         self.view.addSubview(spinner)
         spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-
-    }
-    
-    func updatChart(value: Double){
-        chartData.append(value)
-        let newValue = ChartDataEntry(x: Double(chartData.count - 1), y: value)
-        graphView.data?.addEntry(newValue, dataSetIndex: 0)
-        graphView.notifyDataSetChanged()
     }
     
     func customizeChart(){
@@ -70,6 +83,13 @@ class ChartsViewController: UIViewController {
         graphView.xAxis.labelPosition = .bottom
         graphView.legend.enabled = false
 //        graphView.data?.setDrawValues(false)
+    }
+    
+    func updatChart(value: Double){
+        chartData.append(value)
+        let newValue = ChartDataEntry(x: Double(chartData.count - 1), y: value)
+        graphView.data?.addEntry(newValue, dataSetIndex: 0)
+        graphView.notifyDataSetChanged()
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {

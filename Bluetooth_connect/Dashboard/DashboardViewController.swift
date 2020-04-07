@@ -8,15 +8,94 @@
 
 import UIKit
 
-class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate{
+class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BLEStatusObserver, BLEValueUpdateObserver, BLECharacteristicObserver{
+
+    var id: Int = 1
+    
+    // Status Observer
+    func deviceDisconnected(with device: String) {
+        if device == self.deviceName{
+            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            }
+        }
+    }
+    
+    func characteristicDiscovered(with characteristicUUIDString: String) {
+        if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
+        
+            if name == "Battery Level"{
+                readBatteryLevel()
+            }
+            else if name == "Firmware Revision"{
+                readFirmwareVersion()
+            }
+            else if name == "Potential"{
+                readBiasPotential()
+            }
+            else if name == "Sample Period"{
+                readSamplePeriod()
+            }
+            else if name == "Sample Count"{
+                readSampleCount()
+            }
+            else if name == "Gain"{
+                readGain()
+            }
+        }
+    }
+    
+    // Characteristic Value Update Observer
+    func update<T>(with characteristicUUIDString: String, with value: T) {
+        if characteristicUUIDString == "Battery Level" {
+            let batteryLevel = (value as! Data).uint8
+            self.value[0] = String(batteryLevel)
+            self.dashboardTableView.reloadData()
+        }
+        else if characteristicUUIDString == "Firmware Revision"{
+            let firmwareVersion = String.init(data: value as! Data, encoding: .utf8) ?? "nil"
+            self.value[1] = firmwareVersion
+            self.dashboardTableView.reloadData()
+        }
+        else if characteristicUUIDString == "Potential"{
+            let test = (value as! Data).toByteArray()
+            for byte in test{
+                print("byte = ", byte)
+            }
+            let biasPotential = (value as! Data).uint16
+            self.value[2] = String(biasPotential)
+            self.dashboardTableView.reloadData()
+        }
+        else if characteristicUUIDString == "Sample Period"{
+            let samplingPeriod = (value as! Data).uint16
+            self.value[3] = String(samplingPeriod)
+            self.dashboardTableView.reloadData()
+        }
+        else if characteristicUUIDString == "Sample Count"{
+            let sampleCount = (value as! Data).uint16
+            self.value[4] = String(sampleCount)
+            self.dashboardTableView.reloadData()
+        }
+        else if characteristicUUIDString == "Gain"{
+            let gain = (value as! Data).uint8
+            self.value[5] = String(gain)
+            self.dashboardTableView.reloadData()
+        }
+    }
     
     @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var dashboardTableView: UITableView!
     
     var deviceName: String?
     
-    let keys = ["Battery Level", "Firmware Version", "Start/Stop", "Sampling Time", "Sample Count", "Sensitivity", "Electrode Mask"]
-    let value = ["xx", "x.x.x", "xxx", "xxxx", "xx", "xxx", "xxxx xxxx"]
+    let keys = ["Battery Level", "Firmware Version", "Bias Potential", "Sampling Time", "Sample Count", "Gain", "Electrode Mask"]
+    var value = ["xx", "x.x.x", "0/1", "xxxx", "xx", "xxx", "xxxx xxxx"]
     let suffix = [" %", "", " mV", " ms", "", " x", ""]
     
     override func viewDidLoad() {
@@ -31,9 +110,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         deviceNameLabel.text = deviceName
         
-        BluetoothInterface.instance.printServiceDictionary()
+        BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachBLECharacteristicObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
     }
-    
     
     // when touched anywhere on the screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -82,7 +162,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.value_label.delegate = self
         cell.suffix_label.text = suffix[indexPath.row]
         
-        if indexPath.row == 0 || indexPath.row == 1{
+        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == keys.count - 1{
             cell.value_label.isUserInteractionEnabled = false
         }
         cell.selectionStyle = .none
@@ -90,31 +170,67 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
-    @IBAction func startMeasurementClicked(_ sender: Any) {
-//        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Potential")!
-//        BluetoothInterface.instance.writeData(data: "1".data(using: .utf8)!, characteristicUUIDString: charUUID, withReapose: true)
-        
+    private func readBatteryLevel(){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Battery Level")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+    private func readFirmwareVersion(){
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Firmware Revision")!
         BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+    private func readBiasPotential(){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Potential")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+    private func readSamplePeriod(){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Sample Period")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+    private func readSampleCount(){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Sample Count")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+    private func readGain(){
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Gain")!
+        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+    }
+    
+
+    
+    @IBAction func startMeasurementClicked(_ sender: Any) {
+        let data: UInt8 = 1
+        var d: Data = Data(count: 1)
+        d[0] = data
+//        d.append(contentsOf: [data])
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "System Power")!
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+
+//        let sample_period: UInt16 = 1000
+//        var sample_period_data = withUnsafeBytes(of: sample_period) { Data($0) }
+        
+//        let charUUID2 = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Firmware Revision")!
+//        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID2)
         
         
         // TODO: Write '1' to 'Start/Stop Queue' Characteristics
 //        let storyboard = UIStoryboard(name: "Charts", bundle: nil)
 //        let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
 //        controller.modalPresentationStyle = .fullScreen
+//        controller.deviceName = self.deviceName
 //        self.present(controller, animated: true) {
 //            // do nothing....
+//            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+//            BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+//            BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
 //        }
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {
         BluetoothInterface.instance.disconnect()
-        let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
-        controller.modalPresentationStyle = .fullScreen
-        self.present(controller, animated: true) {
-            // do nothing....
-        }
-        
     }
 }

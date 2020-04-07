@@ -13,7 +13,6 @@ class ServiceUUID{
         
     private var UUIDtoServiceName: [String: String] = [:]
     private var serviceNametoUUID: [String: String] = [:]
-
     
     init() {
         UUIDtoServiceName.updateValue("Device Info Service", forKey: "180A")
@@ -43,17 +42,30 @@ class ServiceUUID{
     }
 }
 
+enum CHARACTERISTICS_PROPERTIES: UInt{
+    case BROADCAST = 0b1;
+    case READ = 0b10;
+    case WRITE_WITHOUT_RESPONSE = 0b100;
+    case WRITE = 0b1000;
+    case NOTIFY = 0b10000;
+    case INDICATE = 0b100000;
+}
+
 class CharacteristicsUUID{
     static let instance = CharacteristicsUUID.init()
     
     private var UUIDtoCharacteristicName: [String: String] = [:]
     private var characteristicNametoUUID: [String: String] = [:]
+    private var characteristicProperty: [String: String] = [:]
+    private var characteristicDataType: [String: String] = [:]
     
 
     
     init() {
         setupCharacteristicNametoUUID()
         setupUUIDtoCharacteristicName()
+        setCharacteristicPropery()
+        setCharacteristicDataType()
     }
     
     private func setupUUIDtoCharacteristicName(){
@@ -116,11 +128,84 @@ class CharacteristicsUUID{
         characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Queue ID")
     }
     
+    private func setCharacteristicPropery(){
+        // Device Info Service
+        characteristicProperty.updateValue("Read", forKey: "Manufacturer")
+        characteristicProperty.updateValue("Read", forKey: "Model Number")
+        characteristicProperty.updateValue("Read", forKey: "System ID")
+        characteristicProperty.updateValue("Read", forKey: "Firmware Revision")
+        
+        // Battery Service
+        characteristicProperty.updateValue("Read", forKey: "Battery Level")
+        
+        // Power Service
+        characteristicProperty.updateValue("Write No Response", forKey: "System Power")
+        
+        // Sensing Configuration Service
+        characteristicProperty.updateValue("Read/Write", forKey: "Queue Repeat Count")
+        characteristicProperty.updateValue("Read/Write", forKey: "Start/Stop Queue")
+        
+        // Ampero Configuration Service
+        characteristicProperty.updateValue("Read/Write", forKey: "Electrode Selection")
+        characteristicProperty.updateValue("Read/Write", forKey: "Potential")
+        characteristicProperty.updateValue("Read/Write", forKey: "Initial Delay")
+        characteristicProperty.updateValue("Read/Write", forKey: "Sample Count")
+        characteristicProperty.updateValue("Read/Write", forKey: "Sample Period")
+        characteristicProperty.updateValue("Read/Write", forKey: "Gain")
+        
+        // Ampero Output Data Service
+        characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - current")
+        characteristicProperty.updateValue("Read/Notify", forKey: "Queue ID")
+    }
+    
+    private func setCharacteristicDataType(){
+        // Device Info Service
+        characteristicDataType.updateValue("UTF8 String", forKey: "Manufacturer")
+        characteristicDataType.updateValue("UTF8 String", forKey: "Model Number")
+        characteristicDataType.updateValue("UTF8 String", forKey: "System ID")
+        characteristicDataType.updateValue("UTF8 String", forKey: "Firmware Revision")
+        
+        // Battery Service
+        characteristicDataType.updateValue("UTF8", forKey: "Battery Level")
+        
+        // Power Service
+        characteristicDataType.updateValue("UINT8", forKey: "System Power")
+        
+        // Sensing Configuration Service
+        characteristicDataType.updateValue("UINT16", forKey: "Queue Repeat Count")
+        characteristicDataType.updateValue("UINT8", forKey: "Start/Stop Queue")
+        
+        // Ampero Configuration Service
+        characteristicDataType.updateValue("UINT8", forKey: "Electrode Selection")
+        characteristicDataType.updateValue("INT16", forKey: "Potential")
+        characteristicDataType.updateValue("UINT16", forKey: "Initial Delay")
+        characteristicDataType.updateValue("UINT16", forKey: "Sample Count")
+        characteristicDataType.updateValue("UINT16", forKey: "Sample Period")
+        characteristicDataType.updateValue("UINT8", forKey: "Gain")
+        
+        // Ampero Output Data Service
+        characteristicDataType.updateValue("INT32", forKey: "Data Characteristic - current")
+        characteristicDataType.updateValue("UINT8", forKey: "Queue ID")
+    }
+    
     func getCharacteristicName(characteristicUUID: String) -> String? {
         return UUIDtoCharacteristicName[characteristicUUID]
     }
     
     func getCharacteristicUUID(characteristicName: String) -> String? {
         return characteristicNametoUUID[characteristicName]
+    }
+    
+    func getCharacteristicProperty(characteristic: String, isUUID: Bool) -> String?{
+        if isUUID{
+            if let name = getCharacteristicName(characteristicUUID: characteristic){
+                return characteristicProperty[name]
+            }
+        }
+        else{
+            return characteristicProperty[characteristic]
+
+        }
+        return nil
     }
 }
