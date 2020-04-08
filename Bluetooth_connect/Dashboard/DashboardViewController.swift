@@ -27,7 +27,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
       doneToolbar.sizeToFit()
       
       txtNumber.inputAccessoryView = doneToolbar
-      
     }
     
     var id: Int = 1

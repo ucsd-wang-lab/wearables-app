@@ -34,6 +34,31 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
             print("data = ", data)
             updatChart(value: Double(data))
         }
+        
+        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
+            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
+            
+            if decodingType is UInt8{
+                let data = value.uint8
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is UInt16{
+                let data = value.uint16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is Int16{
+                let data = value.int16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is Int32{
+                let data = value.int32
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is String.Encoding.RawValue{
+                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
+                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
+            }
+        }
     }
     
     // For sending the stop command when quit is pressed
