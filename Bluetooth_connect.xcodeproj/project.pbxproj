@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FAC3BD123875FC500BA9BCE /* dashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC3BD023875FC500BA9BCE /* dashboardViewController.swift */; };
-		0FC01E6C23F9ECAF009C6A0C /* GraphViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC01E6B23F9ECAF009C6A0C /* GraphViewController.swift */; };
 		0FC01E6D23F9FF29009C6A0C /* Pods_Bluetooth_connect.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC47D3F22DE8E32006E931E /* AppDelegate.swift */; };
-		0FC47D4222DE8E32006E931E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC47D4122DE8E32006E931E /* ViewController.swift */; };
-		0FC47D4522DE8E32006E931E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4322DE8E32006E931E /* Main.storyboard */; };
 		0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4622DE8E37006E931E /* Assets.xcassets */; };
 		0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */; };
 		5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E225295242AB6CE00A676CB /* Dashboard.storyboard */; };
@@ -46,12 +42,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0FAC3BD023875FC500BA9BCE /* dashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dashboardViewController.swift; sourceTree = "<group>"; };
-		0FC01E6B23F9ECAF009C6A0C /* GraphViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GraphViewController.swift; path = ../GraphViewController.swift; sourceTree = "<group>"; };
 		0FC47D3C22DE8E32006E931E /* Microneedle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Microneedle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FC47D3F22DE8E32006E931E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		0FC47D4122DE8E32006E931E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		0FC47D4422DE8E32006E931E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0FC47D4622DE8E37006E931E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0FC47D4922DE8E37006E931E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0FC47D4B22DE8E37006E931E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -111,10 +103,6 @@
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
-				0FC47D4122DE8E32006E931E /* ViewController.swift */,
-				0FAC3BD023875FC500BA9BCE /* dashboardViewController.swift */,
-				0FC01E6B23F9ECAF009C6A0C /* GraphViewController.swift */,
-				0FC47D4322DE8E32006E931E /* Main.storyboard */,
 				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
@@ -245,7 +233,6 @@
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
 				5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */,
 				0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */,
-				0FC47D4522DE8E32006E931E /* Main.storyboard in Resources */,
 				5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */,
 				5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */,
 			);
@@ -304,11 +291,8 @@
 				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
 				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
-				0FC47D4222DE8E32006E931E /* ViewController.swift in Sources */,
 				5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */,
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
-				0FC01E6C23F9ECAF009C6A0C /* GraphViewController.swift in Sources */,
-				0FAC3BD123875FC500BA9BCE /* dashboardViewController.swift in Sources */,
 				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
@@ -319,14 +303,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		0FC47D4322DE8E32006E931E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				0FC47D4422DE8E32006E931E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
