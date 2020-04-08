@@ -205,7 +205,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func numberOfSections(in tableView: UITableView) -> Int {
         section_mapping.keys.count
-//        return 2
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -234,15 +233,15 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         let indexPath = IndexPath(item: button.tag, section: 1)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
         
-        if encodingType is UInt8{
-            if let value = cell.value_label.text{
-                if value == ""{
-                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
+        if let value = cell.value_label.text{
+            if value == ""{
+                let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
 
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
-                else{
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
+            else{
+                if encodingType is UInt8{
                     let data = UInt8(value)!
                     var d = Data(count: 1)
                     d = withUnsafeBytes(of: data) { Data($0) }
@@ -250,18 +249,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
                     CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
                 }
-                
-            }
-        }
-        else if encodingType is UInt16{
-            if let value = cell.value_label.text{
-                if value == ""{
-                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
-
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
-                else{
+                else if encodingType is UInt16{
                     let data = UInt16(value)!
                     var d = Data(count: 2)
                     d = withUnsafeBytes(of: data) { Data($0) }
@@ -269,17 +257,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
                     CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
                 }
-            }
-        }
-        else if encodingType is Int16{
-            if let value = cell.value_label.text{
-                if value == ""{
-                    let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
-
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                }
-                else{
+                else if encodingType is Int16{
                     let data = Int16(value)!
                     var d = Data(count: 2)
                     d = withUnsafeBytes(of: data) { Data($0) }
@@ -287,14 +265,20 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
                     CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
                 }
+                else{
+                    let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)
+
+                    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                }
             }
+            
         }
         else{
             let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)
 
             alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
             self.present(alert, animated: true)
-
         }
         self.view.endEditing(true)
     }

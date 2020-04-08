@@ -49,12 +49,12 @@ class DashboardEditableCell: UITableViewCell, UITableViewDelegate{
         let suffix_label_frame = CGRect(x: value_label.frame.maxX, y: 0, width: width * 0.2, height: height)
         suffix_label.frame = suffix_label_frame
         
-//        displayView.addSubview(key_label)
-//        displayView.addSubview(value_label)
-//        displayView.addSubview(suffix_label)
+        displayView.addSubview(key_label)
+        displayView.addSubview(value_label)
+        displayView.addSubview(suffix_label)
         
-        self.contentView.addSubview(key_label)
-        self.contentView.addSubview(value_label)
-        self.contentView.addSubview(suffix_label)
+//        self.contentView.addSubview(key_label)
+//        self.contentView.addSubview(value_label)
+//        self.contentView.addSubview(suffix_label)
     }
 }
