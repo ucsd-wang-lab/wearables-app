@@ -157,8 +157,6 @@
 				5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */,
 				5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */,
 				5E30DF7D242AA552007D8277 /* BluetoothCell.swift */,
-				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
-				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = Bluetooth;
 			sourceTree = "<group>";
@@ -168,6 +166,8 @@
 			children = (
 				5E697159243564500060FE7C /* BLEProtocol.swift */,
 				5E6736982437F88800FA03E9 /* TypeExtension.swift */,
+				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
+				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = "Interface and Protocol";
 			sourceTree = "<group>";

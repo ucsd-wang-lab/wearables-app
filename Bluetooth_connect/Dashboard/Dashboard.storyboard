@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="zNc-de-4Kf">
-                                <rect key="frame" x="25" y="182" width="364" height="532"/>
+                                <rect key="frame" x="25" y="182" width="364" height="572"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="editable_cell" rowHeight="65" id="o03-Hs-ZJd" customClass="DashboardEditableCell" customModule="Microneedle" customModuleProvider="target">
@@ -104,10 +104,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="pRs-fr-eHg" firstAttribute="centerX" secondItem="p70-Xi-tdG" secondAttribute="centerX" id="0Tw-88-6Fy"/>
-                            <constraint firstItem="Fqo-cy-kpa" firstAttribute="top" secondItem="zNc-de-4Kf" secondAttribute="bottom" constant="92" id="1n3-G1-R7i"/>
                             <constraint firstItem="zNc-de-4Kf" firstAttribute="centerX" secondItem="p70-Xi-tdG" secondAttribute="centerX" id="7wO-JV-hZl"/>
-                            <constraint firstItem="zNc-de-4Kf" firstAttribute="centerY" secondItem="p70-Xi-tdG" secondAttribute="centerY" id="8T2-g8-LKa"/>
-                            <constraint firstItem="Fqo-cy-kpa" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zNc-de-4Kf" secondAttribute="bottom" constant="25" id="Cft-iy-9kf"/>
+                            <constraint firstItem="zNc-de-4Kf" firstAttribute="centerY" secondItem="p70-Xi-tdG" secondAttribute="centerY" constant="20" id="8T2-g8-LKa"/>
+                            <constraint firstItem="Fqo-cy-kpa" firstAttribute="top" relation="greaterThanOrEqual" secondItem="zNc-de-4Kf" secondAttribute="bottom" constant="15" id="Cft-iy-9kf"/>
                             <constraint firstItem="zNc-de-4Kf" firstAttribute="leading" secondItem="lcd-Ko-kqP" secondAttribute="leading" id="Cuz-dm-hoK"/>
                             <constraint firstItem="Beh-Dy-3Ih" firstAttribute="top" secondItem="pRs-fr-eHg" secondAttribute="bottom" id="EN9-qC-2Eu"/>
                             <constraint firstItem="lcd-Ko-kqP" firstAttribute="leading" secondItem="p70-Xi-tdG" secondAttribute="leadingMargin" constant="5" id="K0t-wb-Plh"/>
@@ -117,6 +116,7 @@
                             <constraint firstItem="zNc-de-4Kf" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Beh-Dy-3Ih" secondAttribute="bottom" constant="25" id="icZ-Px-uBo"/>
                             <constraint firstItem="pRs-fr-eHg" firstAttribute="top" secondItem="c8w-Gc-r2o" secondAttribute="top" constant="50" id="uKq-2r-0hx"/>
                             <constraint firstItem="Beh-Dy-3Ih" firstAttribute="centerX" secondItem="p70-Xi-tdG" secondAttribute="centerX" id="uVQ-lQ-Mjp"/>
+                            <constraint firstItem="zNc-de-4Kf" firstAttribute="top" secondItem="Beh-Dy-3Ih" secondAttribute="bottom" constant="25" id="xXG-xc-0c5"/>
                             <constraint firstItem="lcd-Ko-kqP" firstAttribute="top" secondItem="p70-Xi-tdG" secondAttribute="topMargin" constant="5" id="z2h-f0-g3R"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="c8w-Gc-r2o"/>

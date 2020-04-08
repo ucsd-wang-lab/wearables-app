@@ -50,7 +50,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     func characteristicDiscovered(with characteristicUUIDString: String) {
         if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
         
-            if self.value_mapping[name] != nil{
+            if CHARACTERISTIC_VALUE[name] != nil{
                 readCharacteristicValue(characteristicName: name)
             }
         }
@@ -58,36 +58,31 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // Characteristic Value Update Observer
     func update(with characteristicUUIDString: String, with value: Data) {
-        if self.value_mapping[characteristicUUIDString] != nil {
+        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
             let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
             
             if decodingType is UInt8{
                 let data = value.uint8
-                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
                 CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is UInt16{
                 let data = value.uint16
-                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
                 CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is Int16{
                 let data = value.int16
-                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
                 CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is Int32{
                 let data = value.int32
-                self.value_mapping.updateValue(String(data), forKey: characteristicUUIDString)
                 CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
             else if decodingType is String.Encoding.RawValue{
                 let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
-                self.value_mapping.updateValue(data, forKey: characteristicUUIDString)
                 CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
                 self.dashboardTableView.reloadData()
             }
@@ -114,18 +109,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var dashboardTableView: UITableView!
     
     var deviceName: String?
-    
-    let keys = ["Battery Level", "Firmware Revision", "Potential", "Initial Delay", "Sample Period", "Sample Count", "Gain", "Electrode Mask"]
 
-    var value_mapping: [String: String] = ["Battery Level": "xx",
-                                           "Firmware Revision": "x.x.x",
-                                           "Potential": "-1/+1",
-                                           "Initial Delay": "xxx",
-                                           "Sample Period": "xxxx",
-                                           "Sample Count": "xxx",
-                                           "Gain": "xxxx",
-                                           "Electrode Mask": "xxxx xxxx"
-                                            ]
     var suffix_mapping: [String: String] = ["Battery Level": " %",
                                             "Firmware Revision": "",
                                             "Potential": " mV",
@@ -135,6 +119,13 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                             "Gain": " x",
                                             "Electrode Mask": ""
                                              ]
+    
+    
+    // Section 0: read-only value; Section 1: modifiable values
+    var section_mapping: [Int: [String]] = [0:["Battery Level", "Firmware Revision"],
+                                        1: ["Potential", "Initial Delay", "Sample Period",
+                                            "Sample Count", "Gain", "Electrode Mask"]
+                                        ]
 
     
     override func viewDidLoad() {
@@ -185,42 +176,26 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected: ", indexPath.row)
         self.view.endEditing(true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        keys.count
+        return section_mapping[section]?.count ?? 0
+//        return keys.count
     }
-    
-    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
-        print("ending row...", indexPath?.row as Any)
-    }
-    
-    func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
-        print("Will begin editing row...", indexPath.row)
-    }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
-        cell.key_label.text = keys[indexPath.row]
-//        cell.value_label.placeholder = value_mapping[keys[indexPath.row]]
-//        cell.value_label.text = value_mapping[keys[indexPath.row]]
-        cell.value_label.text = CHARACTERISTIC_VALUE[keys[indexPath.row]]
+        cell.key_label.text = section_mapping[indexPath.section]![indexPath.row]
+        cell.value_label.text = CHARACTERISTIC_VALUE[section_mapping[indexPath.section]![indexPath.row]]
 
 
         cell.value_label.delegate = self
-        cell.suffix_label.text = suffix_mapping[keys[indexPath.row]]
+        cell.suffix_label.text = suffix_mapping[section_mapping[indexPath.section]![indexPath.row]]
 
-//        if keys[indexPath.row] == "Battery Level" || keys[indexPath.row] == "Firmware Revision" || keys[indexPath.row] == "Electrode Mask"{
-//            cell.value_label.isUserInteractionEnabled = false
-//        }
-
-//        if indexPath.row == 0 || indexPath.row == 1 || indexPath.row == (keys.count - 1){
-//            print("blocked index = ", indexPath.row)
-//            cell.value_label.isUserInteractionEnabled = false
-//        }
+        if indexPath.section == 0{
+            cell.value_label.isUserInteractionEnabled = false
+        }
         
         cell.selectionStyle = .none
         addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
@@ -228,6 +203,24 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        section_mapping.keys.count
+//        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0{
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: dashboardTableView.frame.width, height: 0))
+            view.backgroundColor = .clear
+            return view
+        }
+        else{
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+            view.backgroundColor = .clear
+            return view
+        }
+    }
+        
     private func readCharacteristicValue(characteristicName: String){
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
         BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
@@ -236,9 +229,9 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @objc func saveClicked(_ sender: Any){
         let button = sender as! UIBarButtonItem
-        let name = keys[button.tag]
+        let name = section_mapping[1]![button.tag]
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
-        let indexPath = IndexPath(item: button.tag, section: 0)
+        let indexPath = IndexPath(item: button.tag, section: 1)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
         
         if encodingType is UInt8{
