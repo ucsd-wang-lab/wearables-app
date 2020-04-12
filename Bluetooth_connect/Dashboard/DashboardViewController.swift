@@ -179,6 +179,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! DashboardEditableCell
             cell.value_label.becomeFirstResponder()
+            cell.value_label.selectAll(nil)
         }
     }
     
