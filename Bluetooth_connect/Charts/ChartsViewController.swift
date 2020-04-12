@@ -86,6 +86,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     
     var deviceName: String?
     var doQuit: Bool!
+    var sampleCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,4 +226,8 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
         }
     }
     
+    private func readCharacteristicValue(characteristicName: String){
+           let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
+           BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+       }
 }

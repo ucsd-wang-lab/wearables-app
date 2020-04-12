@@ -252,11 +252,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             else{
                 if encodingType is UInt8{
-                    if value.contains("-"){
-                        showErrorMessage(message: "Value Field Cannot be Negative")
-                        return
-                    }
-                    
                     let data = UInt8(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 1)
@@ -268,11 +263,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                 }
                 else if encodingType is UInt16{
-                    if value.contains("-"){
-                        showErrorMessage(message: "Value Field Cannot be Negative")
-                        return
-                    }
-                    
                     let data = UInt16(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 2)
