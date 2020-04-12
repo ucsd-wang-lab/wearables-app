@@ -60,6 +60,25 @@ var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
                                               "Gain": "xxxx",
                                               "Electrode Mask": "xxxx xxxx"
                                             ]
+var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
+                                                 "Firmware Revision": -1,
+                                                 "Potential": -1000,
+                                                 "Initial Delay": 0,
+                                                 "Sample Period": 25,
+                                                 "Sample Count": 0,
+                                                 "Gain": 0,
+                                                 "Electrode Mask": 0
+                                            ]
+
+var CHARACTERISTIC_VALUE_MAX_VALUE: [String: Int] = ["Battery Level": 100,
+                                                     "Firmware Revision": -1,
+                                                     "Potential": 1000,
+                                                     "Initial Delay": Int(UInt16.max),
+                                                     "Sample Period": Int(UInt16.max),
+                                                     "Sample Count": Int(UInt16.max),
+                                                     "Gain": 27,
+                                                     "Electrode Mask": Int(UInt8.max)
+                                                    ]
 
 class CharacteristicsUUID{
     static let instance = CharacteristicsUUID.init()

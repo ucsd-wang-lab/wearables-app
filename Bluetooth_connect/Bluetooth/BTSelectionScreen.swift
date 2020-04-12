@@ -9,11 +9,13 @@
 import UIKit
 import CoreBluetooth
 
-class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate, BLEDiscoveredObserver, BLEStatusObserver{
+class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDelegate, BLEDiscoveredObserver, BLEStatusObserver, UIScrollViewDelegate{
     var id: Int = 0
         
     func update<T>(with name: String, with device: T){
         bleDeviceList.updateValue(device as! CBPeripheral, forKey: name)
+//        UIView.transition(with: bluetoothTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {self.bluetoothTableView.reloadData()}, completion: nil)
+
         bluetoothTableView.reloadData()
     }
     
@@ -49,6 +51,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
 
         bluetoothTableView.delegate = self
         bluetoothTableView.dataSource = self
+        bluetoothTableView.isScrollEnabled = true
         BluetoothInterface.instance.attachBLEDiscoveredObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         

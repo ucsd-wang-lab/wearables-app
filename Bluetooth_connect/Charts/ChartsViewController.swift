@@ -78,6 +78,7 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     }
 
     @IBOutlet weak var graphView: LineChartView!
+    @IBOutlet weak var stopStartButton: UIButton!
     
     var chartData = [Double]()
     let db = Firestore.firestore()
@@ -148,8 +149,9 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {
-//        print("Repeate Button clicked....")
-//        updatChart(value: Double(chartData.count * chartData.count))
+        stopStartButton.tag = 0
+        stopStartButton.setTitle("Stop", for: .normal)
+
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d[0] = data
@@ -200,4 +202,27 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
 
+    @IBAction func startStopClicked(_ sender: UIButton) {
+        if sender.tag == 0{
+            sender.tag = 1
+            sender.setTitle("Start", for: .normal)
+            let data: UInt8 = 0
+            var d: Data = Data(count: 1)
+    //        d[0] = data
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else {
+            sender.tag = 0
+            sender.setTitle("Stop", for: .normal)
+            let data: UInt8 = 1
+            var d: Data = Data(count: 1)
+    //        d[0] = data
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+    }
+    
 }

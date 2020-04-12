@@ -126,7 +126,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                             "Sample Count", "Gain", "Electrode Mask"]
                                         ]
 
-    
+    var uiTextFieldForCharacteristic: [Int: UITextField] = [:]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -175,7 +176,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.view.endEditing(true)
+        if indexPath.section == 1 {
+            let cell = tableView.cellForRow(at: indexPath) as! DashboardEditableCell
+            cell.value_label.becomeFirstResponder()
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -198,7 +202,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         cell.selectionStyle = .none
         addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
-        
+
         return cell
     }
     
@@ -234,52 +238,92 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         if let value = cell.value_label.text{
             if value == ""{
-                let alert = UIAlertController(title: "Error!!", message: "Value Field Cannot be empty", preferredStyle: .alert)
-
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
+                showErrorMessage(message: "Value Field Cannot be empty")
             }
             else{
                 if encodingType is UInt8{
+                    if value.contains("-"){
+                        showErrorMessage(message: "Value Field Cannot be Negative")
+                        return
+                    }
+                    
                     let data = UInt8(value)!
-                    var d = Data(count: 1)
-                    d = withUnsafeBytes(of: data) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 1)
+                        d = withUnsafeBytes(of: data) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                        
+                    }
                 }
                 else if encodingType is UInt16{
+                    if value.contains("-"){
+                        showErrorMessage(message: "Value Field Cannot be Negative")
+                        return
+                    }
+                    
                     let data = UInt16(value)!
-                    var d = Data(count: 2)
-                    d = withUnsafeBytes(of: data) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 2)
+                        d = withUnsafeBytes(of: data) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                    }
                 }
                 else if encodingType is Int16{
                     let data = Int16(value)!
-                    var d = Data(count: 2)
-                    d = withUnsafeBytes(of: data) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 2)
+                        d = withUnsafeBytes(of: data) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                    }
                 }
                 else{
-                    let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)
-
-                    alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-                    self.present(alert, animated: true)
+                    showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
                 }
             }
             
         }
         else{
-            let alert = UIAlertController(title: "Error!!", message: "Error Sending Data to Firmware", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
         }
         self.view.endEditing(true)
+    }
+    
+    private func isValidValue(value: Any, characteristicName: String) -> Bool {
+        let type = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicName)
+        let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[characteristicName]!
+        let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[characteristicName]!
+        
+        if type is UInt8{
+            let val = value as! UInt8
+            if val < minVal || val > maxVal{
+                let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
+                showErrorMessage(message: message)
+                return false
+            }
+        }
+        else if type is UInt16{
+            let val = value as! UInt16
+            if val < minVal || val > maxVal{
+                let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
+                showErrorMessage(message: message)
+                return false
+            }
+        }
+        else if type is Int16{
+            let val = value as! Int16
+            if val < minVal || val > maxVal{
+                let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
+                showErrorMessage(message: message)
+                return false
+            }
+        }
+        return true
     }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {
@@ -293,5 +337,12 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func disconnectClicked(_ sender: Any) {
         BluetoothInterface.instance.disconnect()
+    }
+    
+    private func showErrorMessage(message: String){
+        let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
 }
