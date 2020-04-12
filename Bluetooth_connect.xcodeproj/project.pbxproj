@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0FC01E6D23F9FF29009C6A0C /* Pods_Bluetooth_connect.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC47D3F22DE8E32006E931E /* AppDelegate.swift */; };
 		0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4622DE8E37006E931E /* Assets.xcassets */; };
 		0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */; };
@@ -16,6 +15,7 @@
 		5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */; };
 		5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E22529E242AD1ED00A676CB /* Charts.storyboard */; };
 		5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2252A0242AD22B00A676CB /* ChartsViewController.swift */; };
+		5E2BF12E24439BE200159DB6 /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
 		5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */; };
 		5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */; };
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
@@ -24,22 +24,7 @@
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
 		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
-		8BFD2EFE4C528D99400FD27F /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		0F641D0B23F2631800094F18 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				0FC01E6D23F9FF29009C6A0C /* Pods_Bluetooth_connect.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0FC47D3C22DE8E32006E931E /* Microneedle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Microneedle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -70,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BFD2EFE4C528D99400FD27F /* Pods_Bluetooth_connect.framework in Frameworks */,
+				5E2BF12E24439BE200159DB6 /* Pods_Bluetooth_connect.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,7 +164,6 @@
 				0FC47D3822DE8E32006E931E /* Sources */,
 				0FC47D3922DE8E32006E931E /* Frameworks */,
 				0FC47D3A22DE8E32006E931E /* Resources */,
-				0F641D0B23F2631800094F18 /* Embed Frameworks */,
 				99B12ACECFADEB1D528BC7AC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -437,17 +421,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FM24GH558A;
 				INFOPLIST_FILE = Bluetooth_connect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -458,17 +444,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FM24GH558A;
 				INFOPLIST_FILE = Bluetooth_connect/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
