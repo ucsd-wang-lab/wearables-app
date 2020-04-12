@@ -171,6 +171,10 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         return true
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.selectAll(nil)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
@@ -179,7 +183,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! DashboardEditableCell
             cell.value_label.becomeFirstResponder()
-            cell.value_label.selectAll(nil)
         }
     }
     
@@ -203,6 +206,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         
         cell.selectionStyle = .none
         addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
+        cell.value_label.selectAll(nil)
 
         return cell
     }
@@ -240,6 +244,11 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         if let value = cell.value_label.text{
             if value == ""{
                 showErrorMessage(message: "Value Field Cannot be empty")
+                cell.value_label.becomeFirstResponder()
+            }
+            else if Int(value) == nil{
+                showErrorMessage(message: "Value Field Must be a number")
+                cell.value_label.becomeFirstResponder()
             }
             else{
                 if encodingType is UInt8{
@@ -248,13 +257,13 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         return
                     }
                     
-                    let data = UInt8(value)!
+                    let data = UInt8(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 1)
-                        d = withUnsafeBytes(of: data) { Data($0) }
+                        d = withUnsafeBytes(of: data!) { Data($0) }
                         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
                         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
                         
                     }
                 }
@@ -264,27 +273,28 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                         return
                     }
                     
-                    let data = UInt16(value)!
+                    let data = UInt16(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 2)
-                        d = withUnsafeBytes(of: data) { Data($0) }
+                        d = withUnsafeBytes(of: data!) { Data($0) }
                         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
                         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
                     }
                 }
                 else if encodingType is Int16{
-                    let data = Int16(value)!
+                    let data = Int16(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 2)
-                        d = withUnsafeBytes(of: data) { Data($0) }
+                        d = withUnsafeBytes(of: data!) { Data($0) }
                         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
                         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data), forKey: name)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
                     }
                 }
                 else{
                     showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
+                    cell.value_label.becomeFirstResponder()
                 }
             }
             
@@ -295,10 +305,16 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         self.view.endEditing(true)
     }
     
-    private func isValidValue(value: Any, characteristicName: String) -> Bool {
+    private func isValidValue(value: Any?, characteristicName: String) -> Bool {
         let type = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicName)
         let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[characteristicName]!
         let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[characteristicName]!
+        
+        if value == nil{
+            let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
+            showErrorMessage(message: message)
+            return false
+        }
         
         if type is UInt8{
             let val = value as! UInt8
