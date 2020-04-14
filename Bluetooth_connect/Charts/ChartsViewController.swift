@@ -12,70 +12,8 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateObserver {
+class ChartsViewController: UIViewController {
     var id: Int = 2
-    
-    func deviceDisconnected(with device: String) {
-        if device == self.deviceName{
-            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-            }
-        }
-    }
-    
-    // For when current data is recorded
-    func update(with characteristicUUIDString: String, with value: Data) {
-        if characteristicUUIDString == "Data Characteristic - current"{
-            let data = value.int32
-            print("data = ", data)
-            updatChart(value: Double(data))
-        }
-        
-        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
-            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
-            
-            if decodingType is UInt8{
-                let data = value.uint8
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-            }
-            else if decodingType is UInt16{
-                let data = value.uint16
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-            }
-            else if decodingType is Int16{
-                let data = value.int16
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-            }
-            else if decodingType is Int32{
-                let data = value.int32
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-            }
-            else if decodingType is String.Encoding.RawValue{
-                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
-                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
-            }
-        }
-    }
-    
-    // For sending the stop command when quit is pressed
-    func writeResponseReceived(with characteristicUUIDString: String){
-        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
-        if name == "Start/Stop Queue" && doQuit == true{
-            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
-            controller.modalPresentationStyle = .fullScreen
-            controller.deviceName = self.deviceName
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-            }
-        }
-    }
 
     @IBOutlet weak var graphView: LineChartView!
     @IBOutlet weak var stopStartButton: UIButton!
@@ -164,14 +102,16 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
     @IBAction func saveButtonClicked(_ sender: Any) {
         print("Save Button clicked....")
         spinner.startAnimating()
-        
+
         // Preparing for storage
         var data:[String:Any] = [:]
-        
-        data.updateValue(FirebaseFirestore.Timestamp(), forKey: "Timestamp")
+        var int_data:[Int: Any] = [:]
+        let timestamp = get_current_time()
+        data.updateValue(timestamp, forKey: "Timestamp")
         for i in 0..<chartData.count{
             print("data: ", i, "\t", chartData[i])
             data.updateValue(chartData[i], forKey: String(i))
+            int_data.updateValue(chartData[i], forKey: i)
         }
         
         // Updating the database
@@ -179,19 +119,55 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
         ref = db.collection("Data").addDocument(data: data) { err in
             if let err = err {
                 print("Error adding document: \(err)")
+                self.spinner.stopAnimating()
+                let alert = UIAlertController(title: "Error!!", message: "Error Saving Data! Ensure internet is accessible.", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
             } else {
                 print("Document added with ID: \(ref!.documentID)")
-                
+
                 self.spinner.stopAnimating()
                 self.customizeChart()
                 self.chartData.removeAll()
-                let alert = UIAlertController(title: "Success!!", message: "Successfully saved data to database!", preferredStyle: .alert)
+                data["Timestamp"] = nil
+                let csvString = self.createCSV(from: int_data, currentTime: timestamp)
+                
+                guard MFMailComposeViewController.canSendMail() else{
+                    let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
 
-                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: nil))
-                self.present(alert, animated: true)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    return
+                }
 
+                let composer = MFMailComposeViewController()
+                composer.mailComposeDelegate = self
+//                composer.setToRecipients(["rap004@ucsd.edu"])
+                composer.setSubject("Data Collected: \(timestamp)")
+                composer.setMessageBody("Attached is the data collected on: \(timestamp)", isHTML: true)
+                composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "data_\(timestamp).csv")
+
+                self.present(composer, animated: true)
             }
         }
+        
+    }
+    
+    private func createCSV(from dataArray:[Int: Any], currentTime: String) -> String{
+        var csvString = "\("Timestamp"),\(currentTime)\n\n"
+        csvString.append("x,y\n")
+        
+        let sortedKeys = Array(dataArray.keys).sorted(by: <)
+                
+        for key in sortedKeys {
+            print("keys = ", key)
+            csvString.append("\(key), \(String(describing: dataArray[key]!))\n")
+            
+        }
+        print("csvString = \n\(csvString)")
+        
+        return csvString
     }
     
     @IBAction func quitButtonClicked(_ sender: Any) {
@@ -230,4 +206,143 @@ class ChartsViewController: UIViewController, BLEStatusObserver, BLEValueUpdateO
            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
            BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
        }
+    
+    func get_current_time() -> String {
+        let date = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        
+        var current_hour = ""
+        
+        if hour < 10 {
+            current_hour = String("0") + String(hour)
+        }
+        else if hour > 12 {
+            current_hour = String(hour - 12)
+        }
+        else{
+            current_hour = String(hour)
+        }
+        
+        let current_minute = minutes < 10 ? String("0") + String(minutes) : String(minutes)
+                    
+        var current_time = ""
+        current_time = String(month) + "/" + String(day) + "/" + String(year) + ": "
+        current_time = current_time + String(current_hour) + ":" + String(current_minute)
+        
+        if hour >= 12 {
+            current_time = current_time + " PM"
+        }
+        else{
+            current_time = current_time + " AM"
+        }
+        
+        return current_time
+    }
+}
+
+extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if let err = error{
+            print("Error: ", err)
+            let alert = UIAlertController(title: "Error!!", message: "Cannot sent email: \(err)", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            controller.dismiss(animated: true, completion: nil)
+        }
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        switch result {
+        case .cancelled:
+            print("Cancelled!")
+        case .failed:
+            print("Failed!")
+            let alert = UIAlertController(title: "Error!!", message: "Failed to sent email!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        case .saved:
+            print("Email Saved!")
+            let alert = UIAlertController(title: "Success!!", message: "Email saved to Drafts!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        case .sent:
+            print("Email Sent!")
+            let alert = UIAlertController(title: "Success!!", message: "Email Sent! It may take a few minutes to arrive.", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        @unknown default:
+            print("Unknown Default!")
+        }
+    }
+    
+    func deviceDisconnected(with device: String) {
+        if device == self.deviceName{
+            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+            }
+        }
+    }
+    
+    // For when current data is recorded
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if characteristicUUIDString == "Data Characteristic - current"{
+            let data = value.int32
+            print("data = ", data)
+            updatChart(value: Double(data))
+        }
+        
+        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
+            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
+            
+            if decodingType is UInt8{
+                let data = value.uint8
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is UInt16{
+                let data = value.uint16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is Int16{
+                let data = value.int16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is Int32{
+                let data = value.int32
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+            }
+            else if decodingType is String.Encoding.RawValue{
+                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
+                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
+            }
+        }
+    }
+    
+    // For sending the stop command when quit is pressed
+    func writeResponseReceived(with characteristicUUIDString: String){
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
+        if name == "Start/Stop Queue" && doQuit == true{
+            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = self.deviceName
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            }
+        }
+    }
 }
