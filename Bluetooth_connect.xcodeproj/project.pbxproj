@@ -26,6 +26,19 @@
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5ECC89FD2446F43D00C0FF9A /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0FC47D3C22DE8E32006E931E /* Microneedle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Microneedle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FC47D3F22DE8E32006E931E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -165,6 +178,7 @@
 				0FC47D3922DE8E32006E931E /* Frameworks */,
 				0FC47D3A22DE8E32006E931E /* Resources */,
 				99B12ACECFADEB1D528BC7AC /* [CP] Embed Pods Frameworks */,
+				5ECC89FD2446F43D00C0FF9A /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -181,7 +195,7 @@
 		0FC47D3422DE8E32006E931E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1020;
+				LastSwiftUpdateCheck = 1140;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "neel shah";
 				TargetAttributes = {
@@ -428,7 +442,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -451,7 +465,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";

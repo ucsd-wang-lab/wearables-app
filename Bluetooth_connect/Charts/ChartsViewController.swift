@@ -156,13 +156,19 @@ class ChartsViewController: UIViewController {
     
     private func createCSV(from dataArray:[Int: Any], currentTime: String) -> String{
         var csvString = "\("Timestamp"),\(currentTime)\n\n"
+        csvString.append("Potential,\(CHARACTERISTIC_VALUE["Potential"]!),mV\n")
+        csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay"]!),ms\n")
+        csvString.append("Sample Period,\(CHARACTERISTIC_VALUE["Sample Period"]!),ms\n")
+        csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count"]!)\n")
+        csvString.append("Gain,\(CHARACTERISTIC_VALUE["Gain"]!),x\n")
+        csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
         csvString.append("x,y\n")
         
         let sortedKeys = Array(dataArray.keys).sorted(by: <)
                 
         for key in sortedKeys {
             print("keys = ", key)
-            csvString.append("\(key), \(String(describing: dataArray[key]!))\n")
+            csvString.append("\(key),\(String(describing: dataArray[key]!))\n")
             
         }
         print("csvString = \n\(csvString)")

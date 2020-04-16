@@ -8,101 +8,9 @@
 
 import UIKit
 
-class DashboardViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BLEStatusObserver, BLEValueUpdateObserver, BLECharacteristicObserver{
-
-    func addDoneButtonOnKeyboard(txtNumber: UITextField, tag: Int)
-    {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        doneToolbar.barStyle = UIBarStyle.default
-      
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(saveClicked))
-        done.tag = tag
-      
-      var items = [UIBarButtonItem]()
-      items.append(flexSpace)
-      items.append(done)
-      
-      doneToolbar.items = items
-      doneToolbar.sizeToFit()
-      
-      txtNumber.inputAccessoryView = doneToolbar
-    }
+class DashboardViewController: UIViewController{
     
     var id: Int = 1
-    
-    // Status Observer
-    func deviceDisconnected(with device: String) {
-        if device == self.deviceName{
-            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-            }
-        }
-    }
-    
-    func characteristicDiscovered(with characteristicUUIDString: String) {
-        if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
-        
-            if CHARACTERISTIC_VALUE[name] != nil{
-                readCharacteristicValue(characteristicName: name)
-            }
-        }
-    }
-    
-    // Characteristic Value Update Observer
-    func update(with characteristicUUIDString: String, with value: Data) {
-        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
-            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
-            
-            if decodingType is UInt8{
-                let data = value.uint8
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-                self.dashboardTableView.reloadData()
-            }
-            else if decodingType is UInt16{
-                let data = value.uint16
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-                self.dashboardTableView.reloadData()
-            }
-            else if decodingType is Int16{
-                let data = value.int16
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-                self.dashboardTableView.reloadData()
-            }
-            else if decodingType is Int32{
-                let data = value.int32
-                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-                self.dashboardTableView.reloadData()
-            }
-            else if decodingType is String.Encoding.RawValue{
-                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
-                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
-                self.dashboardTableView.reloadData()
-            }
-        }
-    }
-    
-    func writeResponseReceived(with characteristicUUIDString: String){
-        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
-        if name == "Start/Stop Queue"{
-            let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
-            controller.modalPresentationStyle = .fullScreen
-            controller.deviceName = self.deviceName
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-            }
-        }
-    }
     
     @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var dashboardTableView: UITableView!
@@ -125,8 +33,6 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
                                         1: ["Potential", "Initial Delay", "Sample Period",
                                             "Sample Count", "Gain", "Electrode Mask"]
                                         ]
-
-    var uiTextFieldForCharacteristic: [Int: UITextField] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -175,6 +81,7 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
         textField.selectAll(nil)
     }
     
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
@@ -185,6 +92,8 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.value_label.becomeFirstResponder()
         }
     }
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section_mapping[section]?.count ?? 0
@@ -227,12 +136,30 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
             return view
         }
     }
+    
+    func addDoneButtonOnKeyboard(txtNumber: UITextField, tag: Int)
+    {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        doneToolbar.barStyle = UIBarStyle.default
+      
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(saveClicked))
+        done.tag = tag
+      
+        var items = [UIBarButtonItem]()
+        items.append(flexSpace)
+        items.append(done)
+      
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+      
+        txtNumber.inputAccessoryView = doneToolbar
+    }
         
     private func readCharacteristicValue(characteristicName: String){
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
         BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
     }
-    
 
     @objc func saveClicked(_ sender: Any){
         let button = sender as! UIBarButtonItem
@@ -351,5 +278,82 @@ class DashboardViewController: UIViewController, UITableViewDelegate, UITableVie
 
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         self.present(alert, animated: true)
+    }
+}
+
+
+extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, BLEStatusObserver, BLEValueUpdateObserver, BLECharacteristicObserver{
+    
+    // Status Observer
+    func deviceDisconnected(with device: String) {
+        if device == self.deviceName{
+           let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+           let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+           controller.modalPresentationStyle = .fullScreen
+           self.present(controller, animated: true) {
+               // do nothing....
+               BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+               BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+               BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+           }
+        }
+    }
+       
+    func characteristicDiscovered(with characteristicUUIDString: String) {
+        if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
+
+           if CHARACTERISTIC_VALUE[name] != nil{
+               readCharacteristicValue(characteristicName: name)
+           }
+        }
+    }
+       
+    // Characteristic Value Update Observer
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
+           let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
+           
+           if decodingType is UInt8{
+               let data = value.uint8
+               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+               self.dashboardTableView.reloadData()
+           }
+           else if decodingType is UInt16{
+               let data = value.uint16
+               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+               self.dashboardTableView.reloadData()
+           }
+           else if decodingType is Int16{
+               let data = value.int16
+               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+               self.dashboardTableView.reloadData()
+           }
+           else if decodingType is Int32{
+               let data = value.int32
+               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+               self.dashboardTableView.reloadData()
+           }
+           else if decodingType is String.Encoding.RawValue{
+               let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
+               CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
+               self.dashboardTableView.reloadData()
+           }
+        }
+    }
+       
+    func writeResponseReceived(with characteristicUUIDString: String){
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
+        if name == "Start/Stop Queue"{
+           let storyboard = UIStoryboard(name: "Charts", bundle: nil)
+           let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+           controller.modalPresentationStyle = .fullScreen
+           controller.deviceName = self.deviceName
+           self.present(controller, animated: true) {
+               // do nothing....
+               BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+               BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+               BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+           }
+        }
     }
 }
