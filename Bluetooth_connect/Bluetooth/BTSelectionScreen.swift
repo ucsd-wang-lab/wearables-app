@@ -27,6 +27,12 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         
         bluetoothTableView.addSubview(refreshControl)
+        if traitCollection.userInterfaceStyle == .dark{
+            refreshControl.tintColor = .white
+        }
+        else{
+            refreshControl.tintColor = .gray
+        }
         refreshControl.addTarget(self, action: #selector(refreshBluetoothTableView), for: .valueChanged)
     }
     
