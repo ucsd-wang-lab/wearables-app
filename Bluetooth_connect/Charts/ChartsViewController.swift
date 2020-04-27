@@ -60,6 +60,10 @@ class ChartsViewController: UIViewController {
         line.circleHoleColor = .orange
         line.circleRadius = 2.5
         
+        // User the following lines of code to enable background color
+//        line.fill = Fill.fillWithColor(.orange)
+//        line.drawFilledEnabled = true
+        
        
         let data = LineChartData()
         data.addDataSet(line)
