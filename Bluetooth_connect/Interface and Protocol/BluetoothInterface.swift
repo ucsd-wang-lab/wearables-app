@@ -64,8 +64,8 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        print("failed to connect with device...")
-        notifyBLEFailToConnect(bleName: peripheral.name!)
+        print("failed to connect with device...", error.debugDescription)
+        notifyBLEFailToConnect(bleName: peripheral.name!, error: error)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -79,7 +79,17 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         //Do nothing for now
         if peripheral.state == .poweredOff{
-            notifyBLEFailToConnect(bleName: "")
+            notifyBLEFailToConnect(bleName: "", error: nil)
+            print("peripheral is poweroff")
+        }
+        else if peripheral.state == .unsupported{
+            print("peripheral is unsupported")
+        }
+        else if peripheral.state == .unknown{
+            print("peripheral is unknown")
+        }
+        else if peripheral.state == .unauthorized{
+            print("peripheral is unauthorized")
         }
     }
     
@@ -98,6 +108,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
             self.serviceDictionary[service] = service.characteristics
 
             for characteristic in characteristics{
+//                print("Characteristics = ", characteristic.uuid.uuidString)
                 if let _ = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
 //                    print("characteristics = ", name)
 //
@@ -133,7 +144,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     }
     
     func readData(characteristicUUIDString characteristicUUID: String){
-        print("reading from characteristic = ", characteristicUUID)
+//        print("reading from characteristic = ", characteristicUUID)
         let characteristic = characteristicDictionary[characteristicUUID]!
         self.connectedPeripheral.readValue(for: characteristic)
     }
@@ -227,9 +238,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         }
     }
     
-    private func notifyBLEFailToConnect(bleName: String){
+    private func notifyBLEFailToConnect(bleName: String, error: Error?){
         for (_, observer) in bleStatusObserver{
-            observer.deviceFailToConnect?(with: bleName)
+            observer.deviceFailToConnect?(with: bleName, error: error)
         }
     }
     // END: BLEStatusObserver

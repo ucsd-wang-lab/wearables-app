@@ -178,7 +178,21 @@ class DashboardViewController: UIViewController{
                 cell.value_label.becomeFirstResponder()
             }
             else{
-                if encodingType is UInt8{
+                if name == "Electrode Selection"{
+                    let data = UInt8(value, radix: 2) ?? nil
+                    if data == nil {
+                        let message = "Value Field must be valid 8-bit binary input"
+                        showErrorMessage(message: message)
+                    }
+                    else{
+                        var d = Data(count: 1)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    }
+                }
+                else if encodingType is UInt8{
                     let data = UInt8(value) ?? nil
                     if isValidValue(value: data, characteristicName: name){
                         var d = Data(count: 1)
@@ -258,6 +272,14 @@ class DashboardViewController: UIViewController{
             }
         }
         return true
+    }
+    
+    private func sendDataToFirmware(data: Any, numOfBytes: Int, characteristicName name: String){
+        var d = Data(count: numOfBytes)
+        d = withUnsafeBytes(of: data) { Data($0) }
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        CHARACTERISTIC_VALUE.updateValue(data as! String, forKey: name)
     }
     
     @IBAction func startMeasurementClicked(_ sender: Any) {

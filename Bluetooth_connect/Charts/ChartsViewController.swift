@@ -315,6 +315,7 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
         }
         
         if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
+            print("Incoming data.....")
             let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
             
             if decodingType is UInt8{

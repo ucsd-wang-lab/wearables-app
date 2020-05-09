@@ -58,7 +58,7 @@ var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
                                               "Sample Period": "xxxx",
                                               "Sample Count": "xxx",
                                               "Gain": "xxxx",
-                                              "Electrode Mask": "xxxx xxxx"
+                                              "Electrode Mask": "xxxxxxxx"
                                             ]
 var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
                                                  "Firmware Revision": -1,
@@ -126,7 +126,7 @@ class CharacteristicsUUID{
         
         // Ampero Output Data Service
         UUIDtoCharacteristicName.updateValue("Data Characteristic - current", forKey: "808C72E4-175E-4595-8CF1-AB07E49A8331")
-        UUIDtoCharacteristicName.updateValue("Queue ID", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
+//        UUIDtoCharacteristicName.updateValue("Queue ID", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
     }
     
     private func setupCharacteristicNametoUUID(){
@@ -156,7 +156,7 @@ class CharacteristicsUUID{
         
         // Ampero Output Data Service
         characteristicNametoUUID.updateValue("808C72E4-175E-4595-8CF1-AB07E49A8331", forKey: "Data Characteristic - current")
-        characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Queue ID")
+//        characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Queue ID")
     }
     
     private func setCharacteristicPropery(){
@@ -186,7 +186,7 @@ class CharacteristicsUUID{
         
         // Ampero Output Data Service
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - current")
-        characteristicProperty.updateValue("Read", forKey: "Queue ID")
+//        characteristicProperty.updateValue("Read", forKey: "Queue ID")
     }
     
     private func setCharacteristicDataType(){
@@ -219,7 +219,7 @@ class CharacteristicsUUID{
         
         // Ampero Output Data Service
         characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - current")
-        characteristicDataType.updateValue(UInt8(), forKey: "Queue ID")
+//        characteristicDataType.updateValue(UInt8(), forKey: "Queue ID")
     }
     
     private func setCharacteristicValue(){

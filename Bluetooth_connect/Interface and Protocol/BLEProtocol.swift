@@ -24,7 +24,7 @@ protocol BLEDiscoveredObserver{
     var id: Int{ get }
     @objc optional func deviceDisconnected(with device: String)
     @objc optional func deviceConnected(with device: String)
-    @objc optional func deviceFailToConnect(with device: String)
+    @objc optional func deviceFailToConnect(with device: String, error err: Error?)
 }
 
 protocol BLEServiceObserver {

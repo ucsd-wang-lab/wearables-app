@@ -44,6 +44,13 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         BluetoothInterface.instance.initVar()
         BluetoothInterface.instance.startScan()
         
+        let a1 = UInt8("10100101", radix: 2)
+        if a1 != nil{
+            print("\n\nA1 = ", a1!)
+        }
+        else{
+            print("\n\nA1 is nil....")
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -85,6 +92,14 @@ extension BTSelectionScreen: BLEDiscoveredObserver, BLEStatusObserver{
 //        UIView.transition(with: bluetoothTableView, duration: 1.0, options: .transitionCrossDissolve, animations: {self.bluetoothTableView.reloadData()}, completion: nil)
 
         bluetoothTableView.reloadData()
+    }
+    
+    func deviceFailToConnect(with device: String, error err: Error?) {
+        
+        let alert = UIAlertController(title: "Error Connecting to \(device)!!", message: err.debugDescription, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
         
     func deviceConnected(with device: String) {
