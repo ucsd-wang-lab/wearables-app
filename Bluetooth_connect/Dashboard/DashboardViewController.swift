@@ -33,7 +33,7 @@ class DashboardViewController: UIViewController{
                                         1: ["Potential", "Initial Delay", "Sample Period",
                                             "Sample Count", "Gain", "Electrode Mask"]
                                         ]
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,6 +49,7 @@ class DashboardViewController: UIViewController{
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLECharacteristicObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
+        
     }
     
     // when touched anywhere on the screen
@@ -63,7 +64,7 @@ class DashboardViewController: UIViewController{
     
     // objective-c function for when keyboard appears
     @objc func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y = -(self.view.frame.width * 0.40)
+        self.view.frame.origin.y = -(self.view.frame.width * 0.45)
     }
     
     // objective-c function for when keyboard disappear
@@ -83,7 +84,8 @@ class DashboardViewController: UIViewController{
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 65
+//        return 65
+        return 55
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -104,7 +106,6 @@ class DashboardViewController: UIViewController{
         let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
         cell.key_label.text = section_mapping[indexPath.section]![indexPath.row]
         cell.value_label.text = CHARACTERISTIC_VALUE[section_mapping[indexPath.section]![indexPath.row]]
-
 
         cell.value_label.delegate = self
         cell.suffix_label.text = suffix_mapping[section_mapping[indexPath.section]![indexPath.row]]
@@ -155,11 +156,6 @@ class DashboardViewController: UIViewController{
       
         txtNumber.inputAccessoryView = doneToolbar
     }
-        
-    private func readCharacteristicValue(characteristicName: String){
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
-        BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-    }
 
     @objc func saveClicked(_ sender: Any){
         let button = sender as! UIBarButtonItem
@@ -167,7 +163,6 @@ class DashboardViewController: UIViewController{
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
         let indexPath = IndexPath(item: button.tag, section: 1)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
-        
         if let value = cell.value_label.text{
             if value == ""{
                 showErrorMessage(message: "Value Field Cannot be empty")
@@ -325,7 +320,8 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
         if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
 
            if CHARACTERISTIC_VALUE[name] != nil{
-               readCharacteristicValue(characteristicName: name)
+                let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
            }
         }
     }
@@ -333,33 +329,40 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
     // Characteristic Value Update Observer
     func update(with characteristicUUIDString: String, with value: Data) {
         if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
-           let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
+            print("uuid = ", characteristicUUIDString)
+            let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
            
-           if decodingType is UInt8{
-               let data = value.uint8
-               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-               self.dashboardTableView.reloadData()
-           }
-           else if decodingType is UInt16{
-               let data = value.uint16
-               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-               self.dashboardTableView.reloadData()
-           }
-           else if decodingType is Int16{
-               let data = value.int16
-               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-               self.dashboardTableView.reloadData()
-           }
-           else if decodingType is Int32{
-               let data = value.int32
-               CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
-               self.dashboardTableView.reloadData()
-           }
-           else if decodingType is String.Encoding.RawValue{
-               let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
-               CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
-               self.dashboardTableView.reloadData()
-           }
+            if decodingType is UInt8{
+                let data = value.uint8
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is UInt16{
+                let data = value.uint16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is Int16{
+                let data = value.int16
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is Int32{
+                let data = value.int32
+                CHARACTERISTIC_VALUE.updateValue(String(data), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            else if decodingType is String.Encoding.RawValue{
+                let data = String.init(data: value , encoding: String.Encoding.utf8) ?? "nil"
+                CHARACTERISTIC_VALUE.updateValue(data, forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
+            
+            if characteristicUUIDString == "Electrode Mask"{
+                let data = value.uint8
+                CHARACTERISTIC_VALUE.updateValue(String(data, radix: 2), forKey: characteristicUUIDString)
+                self.dashboardTableView.reloadData()
+            }
         }
     }
        

@@ -117,7 +117,7 @@ class CharacteristicsUUID{
         UUIDtoCharacteristicName.updateValue("Start/Stop Queue", forKey: "aea9035c-96e9-4bca-bee4-4a1d3961bfef".uppercased())
         
         // Ampero Configuration Service
-        UUIDtoCharacteristicName.updateValue("Electrode Selection", forKey: "aea9435c-96e9-4bca-bee4-4a1d3961bfef".uppercased())
+        UUIDtoCharacteristicName.updateValue("Electrode Mask", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
         UUIDtoCharacteristicName.updateValue("Potential", forKey: "AB1745C8-FAAC-4858-874D-139AEE7EE06C")
         UUIDtoCharacteristicName.updateValue("Initial Delay", forKey: "08F8BA7E-E228-4EF5-9420-753642BBB087")
         UUIDtoCharacteristicName.updateValue("Sample Count", forKey: "F539D25E-1C00-44FE-AE81-10F1FCF7A634")
@@ -147,7 +147,7 @@ class CharacteristicsUUID{
         characteristicNametoUUID.updateValue("aea9035c-96e9-4bca-bee4-4a1d3961bfef".uppercased(), forKey: "Start/Stop Queue")
         
         // Ampero Configuration Service
-        characteristicNametoUUID.updateValue("aea9435c-96e9-4bca-bee4-4a1d3961bfef".uppercased(), forKey: "Electrode Selection")
+        characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Electrode Mask")
         characteristicNametoUUID.updateValue("AB1745C8-FAAC-4858-874D-139AEE7EE06C", forKey: "Potential")
         characteristicNametoUUID.updateValue("08F8BA7E-E228-4EF5-9420-753642BBB087", forKey: "Initial Delay")
         characteristicNametoUUID.updateValue("F539D25E-1C00-44FE-AE81-10F1FCF7A634", forKey: "Sample Count")
@@ -177,7 +177,7 @@ class CharacteristicsUUID{
         characteristicProperty.updateValue("Read/Write", forKey: "Start/Stop Queue")
         
         // Ampero Configuration Service
-        characteristicProperty.updateValue("Read/Write", forKey: "Electrode Selection")
+        characteristicProperty.updateValue("Read/Write", forKey: "Electrode Mask")
         characteristicProperty.updateValue("Read/Write", forKey: "Potential")
         characteristicProperty.updateValue("Read/Write", forKey: "Initial Delay")
         characteristicProperty.updateValue("Read/Write", forKey: "Sample Count")
@@ -210,7 +210,7 @@ class CharacteristicsUUID{
         characteristicDataType.updateValue(UInt8(), forKey: "Start/Stop Queue")
         
         // Ampero Configuration Service
-        characteristicDataType.updateValue(UInt8(), forKey: "Electrode Selection")
+        characteristicDataType.updateValue(UInt8(), forKey: "Electrode Mask")
         characteristicDataType.updateValue(Int16(), forKey: "Potential")
         characteristicDataType.updateValue(UInt16(), forKey: "Initial Delay")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Count")
