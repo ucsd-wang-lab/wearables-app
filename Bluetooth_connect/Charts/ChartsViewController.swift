@@ -13,16 +13,18 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class ChartsViewController: UIViewController {
-    var id: Int = 2
+    var id: Int = 3
 
     @IBOutlet weak var graphView: LineChartView!
     @IBOutlet weak var stopStartButton: UIButton!
+    @IBOutlet weak var chartsTitle: UILabel!
     
     var chartData = [Double]()
     let db = Firestore.firestore()
     var spinner: UIActivityIndicatorView!
     
     var deviceName: String?
+    var chartTitle: String?
     var doQuit: Bool!
     var sampleCount = 0
     
@@ -35,6 +37,9 @@ class ChartsViewController: UIViewController {
         BluetoothInterface.instance.attachBLEStatusObserver(id: self.id, observer: self)
         BluetoothInterface.instance.attachBLEValueObserver(id: self.id, observer: self)
         
+        if let title = chartTitle{
+            chartsTitle.text = title
+        }
     }
     
     func customizeLoadingIcon(){

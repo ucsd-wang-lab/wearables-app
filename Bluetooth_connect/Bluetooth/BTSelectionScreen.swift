@@ -43,14 +43,6 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         bluetoothTableView.reloadData()
         BluetoothInterface.instance.initVar()
         BluetoothInterface.instance.startScan()
-        
-        let a1 = UInt8("10100101", radix: 2)
-        if a1 != nil{
-            print("\n\nA1 = ", a1!)
-        }
-        else{
-            print("\n\nA1 is nil....")
-        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -101,10 +93,10 @@ extension BTSelectionScreen: BLEDiscoveredObserver, BLEStatusObserver{
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
         self.present(alert, animated: true)
     }
-        
+    
     func deviceConnected(with device: String) {
-        let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+        let storyboard = UIStoryboard(name: "MeasurementSelection", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! MeasurementSelection
         controller.modalPresentationStyle = .fullScreen
         controller.deviceName = device
         self.present(controller, animated: true) {
@@ -114,6 +106,19 @@ extension BTSelectionScreen: BLEDiscoveredObserver, BLEStatusObserver{
             BluetoothInterface.instance.stopScan()
         }
     }
+    
+//    func deviceConnected(with device: String) {
+//        let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+//        let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+//        controller.modalPresentationStyle = .fullScreen
+//        controller.deviceName = device
+//        self.present(controller, animated: true) {
+//            self.bleDeviceList.removeAll()
+//            BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id)
+//            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+//            BluetoothInterface.instance.stopScan()
+//        }
+//    }
         
     func didBTEnable(with value: Bool) {
         if value == false{

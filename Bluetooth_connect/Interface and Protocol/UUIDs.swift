@@ -95,8 +95,8 @@ class CharacteristicsUUID{
         setupCharacteristicNametoUUID()
         setupUUIDtoCharacteristicName()
         setCharacteristicPropery()
-        setCharacteristicDataType()
-        setCharacteristicValue()
+//        setCharacteristicDataType()
+//        setCharacteristicValue()
     }
     
     private func setupUUIDtoCharacteristicName(){
@@ -127,6 +127,10 @@ class CharacteristicsUUID{
         // Ampero Output Data Service
         UUIDtoCharacteristicName.updateValue("Data Characteristic - current", forKey: "808C72E4-175E-4595-8CF1-AB07E49A8331")
 //        UUIDtoCharacteristicName.updateValue("Queue ID", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
+        
+        // Potentiometric Data Service
+        UUIDtoCharacteristicName.updateValue("Start/Stop Potentiometry", forKey: "2e0b45c2-e649-4591-ae5e-840960863efa".uppercased())
+        UUIDtoCharacteristicName.updateValue("Data Characteristic - Potential", forKey: "3e0152be-4183-4b6b-bd13-920322432016".uppercased())
     }
     
     private func setupCharacteristicNametoUUID(){
@@ -157,6 +161,10 @@ class CharacteristicsUUID{
         // Ampero Output Data Service
         characteristicNametoUUID.updateValue("808C72E4-175E-4595-8CF1-AB07E49A8331", forKey: "Data Characteristic - current")
 //        characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Queue ID")
+        
+        // Potentiometric Data Service
+        characteristicNametoUUID.updateValue("2e0b45c2-e649-4591-ae5e-840960863efa".uppercased(), forKey:"Start/Stop Potentiometry")
+        characteristicNametoUUID.updateValue("3e0152be-4183-4b6b-bd13-920322432016".uppercased(), forKey: "Data Characteristic - Potential")
     }
     
     private func setCharacteristicPropery(){
@@ -187,6 +195,10 @@ class CharacteristicsUUID{
         // Ampero Output Data Service
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - current")
 //        characteristicProperty.updateValue("Read", forKey: "Queue ID")
+        
+        // Potentiometric Data Service
+        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
+        characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - Potential")
     }
     
     private func setCharacteristicDataType(){
@@ -246,28 +258,28 @@ class CharacteristicsUUID{
         return characteristicNametoUUID[characteristicName]
     }
     
-    func getCharacteristicProperty(characteristic: String, isUUID: Bool) -> String?{
-        if isUUID{
-            if let name = getCharacteristicName(characteristicUUID: characteristic){
-                return characteristicProperty[name]
-            }
-        }
-        else{
-            return characteristicProperty[characteristic]
-
-        }
-        return nil
-    }
+//    func getCharacteristicProperty(characteristic: String, isUUID: Bool) -> String?{
+//        if isUUID{
+//            if let name = getCharacteristicName(characteristicUUID: characteristic){
+//                return characteristicProperty[name]
+//            }
+//        }
+//        else{
+//            return characteristicProperty[characteristic]
+//
+//        }
+//        return nil
+//    }
     
     func getCharacteristicDataType(characteristicName: String) -> Any?{
         return characteristicDataType[characteristicName]
     }
     
-    func getCharacteristicValue(characteristicName: String) -> String?{
-        return characteristicValue[characteristicName]
-    }
-    
-    func updateCharacteristicValue(characteristicName: String, value: String){
-        characteristicValue.updateValue(value, forKey: characteristicName)
-    }
+//    func getCharacteristicValue(characteristicName: String) -> String?{
+//        return characteristicValue[characteristicName]
+//    }
+//
+//    func updateCharacteristicValue(characteristicName: String, value: String){
+//        characteristicValue.updateValue(value, forKey: characteristicName)
+//    }
 }

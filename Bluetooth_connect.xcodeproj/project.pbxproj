@@ -24,6 +24,10 @@
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
 		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
+		5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */; };
+		5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */; };
+		5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */; };
+		5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50E2468D2F6006626A0 /* InfoCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +63,10 @@
 		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
 		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MeasurementSelection.storyboard; sourceTree = "<group>"; };
+		5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCell.swift; sourceTree = "<group>"; };
+		5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementSelection.swift; sourceTree = "<group>"; };
+		5EB6F50E2468D2F6006626A0 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
 		98449944E49349783A1D760F /* Pods-Bluetooth_connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.debug.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +108,7 @@
 				5EB689692435019E0017A1FC /* Interface and Protocol */,
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
+				5EB6F5092468CCFA006626A0 /* MeasurementSelection */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
 				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
@@ -156,6 +165,17 @@
 				5E697151243556DE0060FE7C /* UUIDs.swift */,
 			);
 			path = "Interface and Protocol";
+			sourceTree = "<group>";
+		};
+		5EB6F5092468CCFA006626A0 /* MeasurementSelection */ = {
+			isa = PBXGroup;
+			children = (
+				5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */,
+				5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */,
+				5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */,
+				5EB6F50E2468D2F6006626A0 /* InfoCell.swift */,
+			);
+			path = MeasurementSelection;
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {
@@ -229,6 +249,7 @@
 			files = (
 				0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */,
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
+				5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */,
 				5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */,
 				0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */,
 				5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */,
@@ -286,12 +307,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E697152243556DE0060FE7C /* UUIDs.swift in Sources */,
+				5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */,
 				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
+				5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
 				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
 				5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */,
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
 				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,
+				5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,
@@ -442,7 +466,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -465,7 +489,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";

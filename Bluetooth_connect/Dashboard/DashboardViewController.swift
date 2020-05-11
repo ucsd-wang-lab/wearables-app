@@ -10,12 +10,13 @@ import UIKit
 
 class DashboardViewController: UIViewController{
     
-    var id: Int = 1
+    var id: Int = 2
     
     @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var dashboardTableView: UITableView!
     
     var deviceName: String?
+    var measurementType: String?
 
     var suffix_mapping: [String: String] = ["Battery Level": " %",
                                             "Firmware Revision": "",
@@ -34,6 +35,8 @@ class DashboardViewController: UIViewController{
                                             "Sample Count", "Gain", "Electrode Mask"]
                                         ]
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,7 +47,9 @@ class DashboardViewController: UIViewController{
         dashboardTableView.delegate = self
         dashboardTableView.dataSource = self
         
-        deviceNameLabel.text = deviceName
+        if let measurement = measurementType{
+            deviceNameLabel.text = measurement
+        }
         
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLECharacteristicObserver(id: id, observer: self)
@@ -163,6 +168,7 @@ class DashboardViewController: UIViewController{
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
         let indexPath = IndexPath(item: button.tag, section: 1)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
+        
         if let value = cell.value_label.text{
             if value == ""{
                 showErrorMessage(message: "Value Field Cannot be empty")
@@ -287,7 +293,18 @@ class DashboardViewController: UIViewController{
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {
-        BluetoothInterface.instance.disconnect()
+//        BluetoothInterface.instance.disconnect()
+       
+        let storyboard = UIStoryboard(name: "MeasurementSelection", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController() as! MeasurementSelection
+        controller.deviceName = deviceName
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true) {
+            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+            BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+            BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+        }
+    
     }
     
     private func showErrorMessage(message: String){
@@ -329,7 +346,6 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
     // Characteristic Value Update Observer
     func update(with characteristicUUIDString: String, with value: Data) {
         if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
-            print("uuid = ", characteristicUUIDString)
             let decodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicUUIDString)
            
             if decodingType is UInt8{
@@ -369,16 +385,18 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
     func writeResponseReceived(with characteristicUUIDString: String){
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
         if name == "Start/Stop Queue"{
-           let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-           let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
-           controller.modalPresentationStyle = .fullScreen
-           controller.deviceName = self.deviceName
-           self.present(controller, animated: true) {
-               // do nothing....
-               BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-               BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-               BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-           }
+            let storyboard = UIStoryboard(name: "Charts", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = self.deviceName
+            controller.chartTitle = "Amperometry"
+            
+            self.present(controller, animated: true) {
+                // do nothing....
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            }
         }
     }
 }

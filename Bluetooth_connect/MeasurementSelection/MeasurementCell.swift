@@ -1,24 +1,25 @@
 //
-//  BluetoothCell.swift
+//  MeasurementCell.swift
 //  Bluetooth_connect
 //
-//  Created by Ravi Patel on 3/24/20.
+//  Created by Ravi Patel on 5/10/20.
 //  Copyright © 2020 neel shah. All rights reserved.
 //
 
 import UIKit
 
-class BluetoothCell: UITableViewCell, UITableViewDelegate{
+class MeasurementCell: UITableViewCell {
     
-//    @IBOutlet weak var deviceNameLabel: UILabel!
-    @IBOutlet weak var deviceNameLabel: UILabel!
-    
+    @IBOutlet weak var measurement: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.layer.borderWidth = 2.0
+        // Initialization code
     }
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
     }
+
 }
