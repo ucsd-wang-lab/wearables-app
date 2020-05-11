@@ -154,8 +154,8 @@ class ChartsViewController: UIViewController {
                 composer.mailComposeDelegate = self
 //                composer.setToRecipients(["rap004@ucsd.edu"])
                 composer.setSubject("Data Collected: \(timestamp)")
-                composer.setMessageBody("Attached is the data collected on: \(timestamp)", isHTML: true)
-                composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "data_\(timestamp).csv")
+                composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(timestamp)", isHTML: true)
+                composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(timestamp).csv")
 
                 self.present(composer, animated: true)
             }
@@ -313,7 +313,7 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
     
     // For when current data is recorded
     func update(with characteristicUUIDString: String, with value: Data) {
-        if characteristicUUIDString == "Data Characteristic - current"{
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
             print("data = ", data)
             updatChart(value: Double(data))
@@ -352,6 +352,8 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
         if name == "Start/Stop Queue" && doQuit == true{
             let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
             let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+            controller.deviceName = deviceName
+            controller.measurementType = chartTitle
             controller.modalPresentationStyle = .fullScreen
             controller.deviceName = self.deviceName
             self.present(controller, animated: true) {

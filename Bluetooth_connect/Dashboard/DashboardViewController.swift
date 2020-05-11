@@ -36,6 +36,9 @@ class DashboardViewController: UIViewController{
                                         ]
     
     
+    var getMeasurementID: [String: String] = ["Amperometry": "Start/Stop Queue",
+                                              "Potentiometry": "Start/Stop Potentiometry"]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +52,9 @@ class DashboardViewController: UIViewController{
         
         if let measurement = measurementType{
             deviceNameLabel.text = measurement
+        }
+        else{
+            deviceNameLabel.text = "Amperometry"
         }
         
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
@@ -288,8 +294,14 @@ class DashboardViewController: UIViewController{
         var d: Data = Data(count: 1)
 //        d[0] = data
         d = withUnsafeBytes(of: data) { Data($0) }
-        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)        
+//        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+//        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        if let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: getMeasurementID[deviceNameLabel.text!]!){
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else{
+            showErrorMessage(message: "Enable to start measurement\nContact Developer")
+        }
     }
     
     @IBAction func disconnectClicked(_ sender: Any) {
@@ -384,12 +396,12 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
        
     func writeResponseReceived(with characteristicUUIDString: String){
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
-        if name == "Start/Stop Queue"{
+        if name == "Start/Stop Queue" || name == "Start/Stop Potentiometry"{
             let storyboard = UIStoryboard(name: "Charts", bundle: nil)
             let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
             controller.modalPresentationStyle = .fullScreen
             controller.deviceName = self.deviceName
-            controller.chartTitle = "Amperometry"
+            controller.chartTitle = measurementType
             
             self.present(controller, animated: true) {
                 // do nothing....
