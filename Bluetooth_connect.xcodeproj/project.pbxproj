@@ -32,6 +32,7 @@
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
 		5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */; };
 		5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D5246FDB2200279AAE /* RenameViewController.swift */; };
+		5EF901D8246FE74600279AAE /* bluetooth_animation_modified.json in Resources */ = {isa = PBXBuildFile; fileRef = 5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -75,6 +76,7 @@
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
 		5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableViewController.swift; sourceTree = "<group>"; };
 		5EF901D5246FDB2200279AAE /* RenameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
+		5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bluetooth_animation_modified.json; path = icons/bluetooth_animation_modified.json; sourceTree = SOURCE_ROOT; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
 		98449944E49349783A1D760F /* Pods-Bluetooth_connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.debug.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +128,7 @@
 				5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */,
 				5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */,
 				5EF901D5246FDB2200279AAE /* RenameViewController.swift */,
+				5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */,
 			);
 			path = Bluetooth_connect;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EF901D8246FE74600279AAE /* bluetooth_animation_modified.json in Resources */,
 				0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */,
 				5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */,
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
