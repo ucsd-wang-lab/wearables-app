@@ -27,11 +27,6 @@ protocol BLEDiscoveredObserver{
     @objc optional func deviceFailToConnect(with device: String, error err: Error?)
 }
 
-//protocol BLEServiceObserver {
-//    var id : Int { get } // property to get an id
-//    func update<T>(with uuid: String, with service: T)   // didDiscoveredService
-//}
-
 protocol BLECharacteristicObserver {
     var id : Int { get } // property to get an id
     func characteristicDiscovered(with characteristicUUIDString: String)   // didDiscoveredCharacteristics

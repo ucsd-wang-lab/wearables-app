@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,17 +23,25 @@
                                 </constraints>
                             </imageView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Microneedle" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rt3-IB-ZMJ">
-                                <rect key="frame" x="165" y="518" width="84" height="18"/>
+                                <rect key="frame" x="150" y="518" width="114" height="24"/>
                                 <color key="textColor" red="0.98885113000000002" green="0.35966888070000003" blue="0.2352283597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="UC San Diego" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aQn-AY-amZ">
+                                <rect key="frame" x="172.5" y="823.5" width="69" height="13.5"/>
+                                <color key="textColor" red="0.98885113000000002" green="0.35966888070000003" blue="0.2352283597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="17C-Mh-5z9" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="SnH-RO-DCD"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="aQn-AY-amZ" secondAttribute="bottom" constant="25" id="UHa-c7-v5N"/>
                             <constraint firstItem="Rt3-IB-ZMJ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="a9p-rw-OXa"/>
                             <constraint firstItem="17C-Mh-5z9" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="mEI-Ua-1yf"/>
+                            <constraint firstItem="aQn-AY-amZ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="niW-EO-aXa"/>
                             <constraint firstItem="Rt3-IB-ZMJ" firstAttribute="top" secondItem="17C-Mh-5z9" secondAttribute="bottom" constant="10" id="xuW-cP-EP9"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

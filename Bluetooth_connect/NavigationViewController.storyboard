@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BbF-bT-rck">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Connect-->
+        <scene sceneID="JQr-2J-Ktb">
+            <objects>
+                <viewController id="fno-hO-bBH" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sVz-VQ-7PL">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click to find nearby devices" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HVS-u2-unS">
+                                <rect key="frame" x="129" y="526.5" width="156.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.19215686274509802" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="if1-Hn-KKX">
+                                <rect key="frame" x="156.5" y="397.5" width="101" height="101"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="101" id="4ie-Df-Ir9"/>
+                                    <constraint firstAttribute="height" constant="101" id="Vzf-IH-DuU"/>
+                                </constraints>
+                                <state key="normal" image="BluetoothButton" backgroundImage="BluetoothButton"/>
+                                <connections>
+                                    <segue destination="NXy-xA-hrJ" kind="show" id="tNU-rf-fLt"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="HVS-u2-unS" firstAttribute="centerX" secondItem="sVz-VQ-7PL" secondAttribute="centerX" id="NPt-3S-V6H"/>
+                            <constraint firstItem="HVS-u2-unS" firstAttribute="top" secondItem="if1-Hn-KKX" secondAttribute="bottom" constant="28" id="dLQ-oS-63R"/>
+                            <constraint firstItem="if1-Hn-KKX" firstAttribute="centerY" secondItem="sVz-VQ-7PL" secondAttribute="centerY" id="fax-i6-JA1"/>
+                            <constraint firstItem="if1-Hn-KKX" firstAttribute="centerX" secondItem="sVz-VQ-7PL" secondAttribute="centerX" id="qEa-G0-bUl"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4Wo-4O-6Kt"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Connect" id="DhZ-pN-dhM"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Whl-Ke-Clg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1199" y="-190"/>
+        </scene>
+        <!--Devices-->
+        <scene sceneID="gjl-Vd-8l9">
+            <objects>
+                <tableViewController id="NXy-xA-hrJ" customClass="BluetoothTableViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="T2f-lE-rYI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="firstCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="firstCell" id="R5n-js-P8e">
+                                <rect key="frame" x="0.0" y="28" width="414" height="44.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="R5n-js-P8e" id="9ad-SR-90f">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Devices within range" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjM-2A-tEF">
+                                            <rect key="frame" x="20" y="11" width="374" height="22.5"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
+                                            <color key="textColor" red="0.19215686274509802" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="tintColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="xjM-2A-tEF" firstAttribute="top" secondItem="9ad-SR-90f" secondAttribute="topMargin" id="RTT-b0-wdr"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="xjM-2A-tEF" secondAttribute="trailing" id="hYZ-zc-LZK"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="xjM-2A-tEF" secondAttribute="bottom" id="xr5-Bs-6nR"/>
+                                        <constraint firstItem="xjM-2A-tEF" firstAttribute="leading" secondItem="9ad-SR-90f" secondAttribute="leadingMargin" id="yaF-Em-c22"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BluetoothCell" id="egx-6a-Dm7" customClass="BluetoothCell" customModule="Microneedle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72.5" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="egx-6a-Dm7" id="QOg-a0-fMq">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Microneedle Sensor ##" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oBG-gI-ex9">
+                                            <rect key="frame" x="20" y="0.0" width="342" height="44"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yOd-L9-aN9">
+                                            <rect key="frame" x="370" y="1" width="11" height="41"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.19215686274509802" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="arrow_label" destination="yOd-L9-aN9" id="H76-jo-lJo"/>
+                                    <outlet property="deviceNameLabel" destination="oBG-gI-ex9" id="l5n-te-1ko"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="NXy-xA-hrJ" id="u1O-4N-8OW"/>
+                            <outlet property="delegate" destination="NXy-xA-hrJ" id="3sY-id-X0K"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Devices" id="h5U-u8-Ul2"/>
+                    <connections>
+                        <segue destination="eVa-J8-UL6" kind="show" id="7Qu-D9-Bn4"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kPK-3x-KbP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2134.7826086956525" y="-190.17857142857142"/>
+        </scene>
+        <!--Rename-->
+        <scene sceneID="2SB-Dc-lbD">
+            <objects>
+                <viewController id="eVa-J8-UL6" customClass="RenameViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jpo-A8-9Rm">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter a name for your device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tdz-Gs-4iV">
+                                <rect key="frame" x="44" y="131" width="327" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SN4-xm-T7f">
+                                <rect key="frame" x="44" y="209" width="327" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P7k-LE-NUS">
+                                <rect key="frame" x="300" y="759" width="32" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Next"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Fhb-wp-SKE"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Rename" id="MM3-EA-j9t"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H5c-DJ-li9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3063.768115942029" y="-190.17857142857142"/>
+        </scene>
+        <!--Navigation View Controller-->
+        <scene sceneID="uud-fC-gNt">
+            <objects>
+                <navigationController id="BbF-bT-rck" customClass="NavigationViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" backIndicatorImage="arrowshape.turn.up.left.2.fill" catalog="system" id="Npy-4Y-IJw">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.99215686274509807" green="0.36078431372549019" blue="0.23529411764705882" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fno-hO-bBH" kind="relationship" relationship="rootViewController" id="Uk7-Q8-Jte"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6OR-u2-ZkK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="225" y="-189"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="BluetoothButton" width="101.5" height="101.5"/>
+        <image name="arrowshape.turn.up.left.2.fill" catalog="system" width="128" height="87"/>
+    </resources>
+</document>

@@ -10,15 +10,24 @@ import UIKit
 
 class BluetoothCell: UITableViewCell, UITableViewDelegate{
     
-//    @IBOutlet weak var deviceNameLabel: UILabel!
     @IBOutlet weak var deviceNameLabel: UILabel!
+    @IBOutlet weak var arrow_label: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.layer.borderWidth = 2.0
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+        
+        let width = contentView.frame.width
+        let height = contentView.frame.height
+        
+        let deviceNameLabelRect = CGRect(x: deviceNameLabel.frame.minX, y: deviceNameLabel.frame.minY,
+                                         width: width * 0.75, height: height)
+        deviceNameLabel.frame = deviceNameLabelRect
+        
+        let arrow_label_rect = CGRect(x: deviceNameLabel.frame.maxX, y: deviceNameLabel.frame.minY,
+                                      width: width * 0.2, height: height)
+        arrow_label.frame = arrow_label_rect
+        
+//        deviceNameLabel.backgroundColor = .red
+//        arrow_label.backgroundColor = .orange
     }
 }
