@@ -7,7 +7,4 @@ target 'Bluetooth_connect' do
 
   # Pods for Bluetooth_connect
   pod 'Charts'
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Firestore'
-  pod 'FirebaseFirestoreSwift'
 end

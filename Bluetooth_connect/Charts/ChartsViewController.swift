@@ -8,9 +8,6 @@
 
 import Charts
 import MessageUI
-import Firebase
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 class ChartsViewController: UIViewController {
     var id: Int = 3
@@ -20,7 +17,6 @@ class ChartsViewController: UIViewController {
     @IBOutlet weak var chartsTitle: UILabel!
     
     var chartData = [Double]()
-    let db = Firestore.firestore()
     var spinner: UIActivityIndicatorView!
     
     var deviceName: String?
@@ -123,44 +119,28 @@ class ChartsViewController: UIViewController {
             int_data.updateValue(chartData[i], forKey: i)
         }
         
-        // Updating the database
-        var ref: DocumentReference? = nil
-        ref = db.collection("Data").addDocument(data: data) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
-                self.spinner.stopAnimating()
-                let alert = UIAlertController(title: "Error!!", message: "Error Saving Data! Ensure internet is accessible.", preferredStyle: .alert)
-
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
-            } else {
-                print("Document added with ID: \(ref!.documentID)")
-
-                self.spinner.stopAnimating()
-                self.customizeChart()
-                self.chartData.removeAll()
-                data["Timestamp"] = nil
-                let csvString = self.createCSV(from: int_data, currentTime: timestamp)
-                
-                guard MFMailComposeViewController.canSendMail() else{
-                    let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
-
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
-                    return
-                }
-
-                let composer = MFMailComposeViewController()
-                composer.mailComposeDelegate = self
-//                composer.setToRecipients(["rap004@ucsd.edu"])
-                composer.setSubject("Data Collected: \(timestamp)")
-                composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(timestamp)", isHTML: true)
-                composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(timestamp).csv")
-
-                self.present(composer, animated: true)
-            }
-        }
+        self.spinner.stopAnimating()
+        self.customizeChart()
+        self.chartData.removeAll()
+        data["Timestamp"] = nil
+        let csvString = self.createCSV(from: int_data, currentTime: timestamp)
         
+        guard MFMailComposeViewController.canSendMail() else{
+            let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+
+        let composer = MFMailComposeViewController()
+        composer.mailComposeDelegate = self
+//                composer.setToRecipients(["rap004@ucsd.edu"])
+        composer.setSubject("Data Collected: \(timestamp)")
+        composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(timestamp)", isHTML: true)
+        composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(timestamp).csv")
+
+        self.present(composer, animated: true)
     }
     
     private func createCSV(from dataArray:[Int: Any], currentTime: String) -> String{
