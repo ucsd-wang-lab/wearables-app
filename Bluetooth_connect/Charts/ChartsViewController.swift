@@ -23,6 +23,7 @@ class ChartsViewController: UIViewController {
     var chartTitle: String?
     var doQuit: Bool!
     var sampleCount = 0
+    var currentTime: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,8 @@ class ChartsViewController: UIViewController {
         if let title = chartTitle{
             chartsTitle.text = title
         }
+        
+        currentTime = get_current_time()
     }
     
     func customizeLoadingIcon(){
@@ -76,20 +79,41 @@ class ChartsViewController: UIViewController {
         graphView.noDataTextColor = .orange
         graphView.leftAxis.drawGridLinesEnabled = false
         graphView.leftAxis.labelTextColor = .orange
+        graphView.leftAxis.labelPosition = .insideChart
         graphView.rightAxis.enabled = false
+        
         graphView.xAxis.drawGridLinesEnabled = false
         graphView.xAxis.labelPosition = .bottom
         graphView.xAxis.labelTextColor = .orange
-        graphView.legend.enabled = false
+        graphView.xAxis.valueFormatter = AxisLabel()
+        graphView.legend.enabled = true
 //        graphView.data?.setDrawValues(false)
     }
     
     func updatChart(value: Double){
         doQuit = false
+        let num_of_lines = graphView.data?.dataSetCount ?? 1
         chartData.append(value)
         let newValue = ChartDataEntry(x: Double(chartData.count - 1), y: value)
-        graphView.data?.addEntry(newValue, dataSetIndex: 0)
+        
+        graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
         graphView.notifyDataSetChanged()
+    }
+    
+    // This function creates a new line to be added to the line chart data
+    func updateChart(){
+        let lineChartEntry = [ChartDataEntry]()
+        let line = LineChartDataSet(entries: lineChartEntry)
+        
+        let color = UIColor.random
+        line.colors = [color]
+        line.circleColors = [color]
+        line.circleHoleColor = color
+        line.circleRadius = 2.5
+        
+       
+        graphView.data?.dataSets.append(line)
+        graphView.data?.setDrawValues(false)
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {
@@ -101,6 +125,7 @@ class ChartsViewController: UIViewController {
         d[0] = data
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        updateChart()
     }
     
     
@@ -109,21 +134,16 @@ class ChartsViewController: UIViewController {
         spinner.startAnimating()
 
         // Preparing for storage
-        var data:[String:Any] = [:]
         var int_data:[Int: Any] = [:]
-        let timestamp = get_current_time()
-        data.updateValue(timestamp, forKey: "Timestamp")
         for i in 0..<chartData.count{
             print("data: ", i, "\t", chartData[i])
-            data.updateValue(chartData[i], forKey: String(i))
             int_data.updateValue(chartData[i], forKey: i)
         }
         
         self.spinner.stopAnimating()
-        self.customizeChart()
         self.chartData.removeAll()
-        data["Timestamp"] = nil
-        let csvString = self.createCSV(from: int_data, currentTime: timestamp)
+        let csvString = self.createCSV(from: int_data, currentTime: currentTime)
+        self.customizeChart()
         
         guard MFMailComposeViewController.canSendMail() else{
             let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
@@ -135,10 +155,10 @@ class ChartsViewController: UIViewController {
 
         let composer = MFMailComposeViewController()
         composer.mailComposeDelegate = self
-//                composer.setToRecipients(["rap004@ucsd.edu"])
-        composer.setSubject("Data Collected: \(timestamp)")
-        composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(timestamp)", isHTML: true)
-        composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(timestamp).csv")
+        composer.setToRecipients(["rap004@ucsd.edu"])
+        composer.setSubject("Data Collected: \(currentTime ?? "Couldn't get current time")")
+        composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(currentTime ?? "Couldn't get current time")", isHTML: true)
+        composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(currentTime ?? "Couldn't get current time").csv")
 
         self.present(composer, animated: true)
     }
@@ -151,17 +171,32 @@ class ChartsViewController: UIViewController {
         csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count"]!)\n")
         csvString.append("Gain,\(CHARACTERISTIC_VALUE["Gain"]!),x\n")
         csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
-        csvString.append("x,y\n")
+//        csvString.append("x,y\n")
         
-        let sortedKeys = Array(dataArray.keys).sorted(by: <)
-                
-        for key in sortedKeys {
-            print("keys = ", key)
-            csvString.append("\(key),\(String(describing: dataArray[key]!))\n")
+//        let sortedKeys = Array(dataArray.keys).sorted(by: <)
+//
+//        for key in sortedKeys {
+//            print("keys = ", key)
+//            csvString.append("\(key),\(String(describing: dataArray[key]!))\n")
+//
+//        }
+        
+        let num_of_lines = graphView.data?.dataSetCount ?? 0
+        for i in 0..<num_of_lines{
+            csvString.append("Measurement,\(i + 1)\n")
+            csvString.append("x,y\n")
             
+            let data = graphView.data?.dataSets[i]
+            let num_of_points = data?.entryCount ?? 0
+            for j in 0..<num_of_points{
+                let x = data?.entryForIndex(j)!.x
+                let y = data?.entryForIndex(j)!.y
+                csvString.append("\(String(describing: x!)),\(String(describing: y!))\n")
+            }
+            csvString.append("\n")
         }
-        print("csvString = \n\(csvString)")
         
+        print("csvString = \n\(csvString)")
         return csvString
     }
     
@@ -343,4 +378,12 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
             }
         }
     }
+}
+
+class AxisLabel: IAxisValueFormatter{
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        return "X"
+    }
+    
+    
 }

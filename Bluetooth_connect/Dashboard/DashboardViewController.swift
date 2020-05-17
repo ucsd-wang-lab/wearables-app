@@ -171,10 +171,11 @@ class DashboardViewController: UIViewController{
     @objc func saveClicked(_ sender: Any){
         let button = sender as! UIBarButtonItem
         let name = section_mapping[1]![button.tag]
+        print("name = ", name)
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
         let indexPath = IndexPath(item: button.tag, section: 1)
         let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
-        
+                
         if let value = cell.value_label.text{
             if value == ""{
                 showErrorMessage(message: "Value Field Cannot be empty")
