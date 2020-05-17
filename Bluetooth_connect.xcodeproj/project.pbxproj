@@ -23,6 +23,8 @@
 		5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6736982437F88800FA03E9 /* TypeExtension.swift */; };
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
 		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
+		5E7ED5782471B2C900950064 /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7ED5772471B2C900950064 /* BluetoothViewController.swift */; };
+		5E7ED57E2471EBE700950064 /* BluetoothAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
 		5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */; };
 		5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */; };
@@ -32,7 +34,6 @@
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
 		5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */; };
 		5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D5246FDB2200279AAE /* RenameViewController.swift */; };
-		5EF901D8246FE74600279AAE /* bluetooth_animation_modified.json in Resources */ = {isa = PBXBuildFile; fileRef = 5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -67,6 +68,8 @@
 		5E6736982437F88800FA03E9 /* TypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtension.swift; sourceTree = "<group>"; };
 		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
 		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
+		5E7ED5772471B2C900950064 /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
+		5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = BluetoothAnimation.json; path = icons/BluetoothAnimation.json; sourceTree = SOURCE_ROOT; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MeasurementSelection.storyboard; sourceTree = "<group>"; };
 		5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCell.swift; sourceTree = "<group>"; };
@@ -76,7 +79,6 @@
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
 		5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableViewController.swift; sourceTree = "<group>"; };
 		5EF901D5246FDB2200279AAE /* RenameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
-		5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bluetooth_animation_modified.json; path = icons/bluetooth_animation_modified.json; sourceTree = SOURCE_ROOT; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
 		98449944E49349783A1D760F /* Pods-Bluetooth_connect.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.debug.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,9 +128,10 @@
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */,
 				5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */,
+				5E7ED5772471B2C900950064 /* BluetoothViewController.swift */,
 				5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */,
 				5EF901D5246FDB2200279AAE /* RenameViewController.swift */,
-				5EF901D7246FE74600279AAE /* bluetooth_animation_modified.json */,
+				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
 			);
 			path = Bluetooth_connect;
 			sourceTree = "<group>";
@@ -262,7 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EF901D8246FE74600279AAE /* bluetooth_animation_modified.json in Resources */,
+				5E7ED57E2471EBE700950064 /* BluetoothAnimation.json in Resources */,
 				0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */,
 				5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */,
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
@@ -338,6 +341,7 @@
 				5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */,
+				5E7ED5782471B2C900950064 /* BluetoothViewController.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,7 +11,7 @@
         <!--Connect-->
         <scene sceneID="JQr-2J-Ktb">
             <objects>
-                <viewController id="fno-hO-bBH" sceneMemberID="viewController">
+                <viewController id="fno-hO-bBH" customClass="BluetoothViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sVz-VQ-7PL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -33,21 +33,34 @@
                                     <segue destination="NXy-xA-hrJ" kind="show" id="tNU-rf-fLt"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3id-0L-i34" customClass="LottieView" customModule="Lottie">
+                                <rect key="frame" x="32" y="161" width="350" height="186.5"/>
+                                <color key="backgroundColor" systemColor="systemGray3Color" red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="3id-0L-i34" secondAttribute="height" multiplier="15:8" id="gti-pd-fWm"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="if1-Hn-KKX" firstAttribute="top" secondItem="3id-0L-i34" secondAttribute="bottom" constant="50" id="8YC-Qw-Voj"/>
+                            <constraint firstItem="3id-0L-i34" firstAttribute="centerX" secondItem="sVz-VQ-7PL" secondAttribute="centerX" id="B6y-Kb-tXc"/>
                             <constraint firstItem="HVS-u2-unS" firstAttribute="centerX" secondItem="sVz-VQ-7PL" secondAttribute="centerX" id="NPt-3S-V6H"/>
                             <constraint firstItem="HVS-u2-unS" firstAttribute="top" secondItem="if1-Hn-KKX" secondAttribute="bottom" constant="28" id="dLQ-oS-63R"/>
                             <constraint firstItem="if1-Hn-KKX" firstAttribute="centerY" secondItem="sVz-VQ-7PL" secondAttribute="centerY" id="fax-i6-JA1"/>
                             <constraint firstItem="if1-Hn-KKX" firstAttribute="centerX" secondItem="sVz-VQ-7PL" secondAttribute="centerX" id="qEa-G0-bUl"/>
+                            <constraint firstItem="3id-0L-i34" firstAttribute="top" secondItem="4Wo-4O-6Kt" secondAttribute="top" constant="73" id="ud6-6W-x1n"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4Wo-4O-6Kt"/>
                     </view>
                     <navigationItem key="navigationItem" title="Connect" id="DhZ-pN-dhM"/>
+                    <connections>
+                        <outlet property="lottie_view" destination="3id-0L-i34" id="ZrX-E7-w4p"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Whl-Ke-Clg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1199" y="-190"/>
+            <point key="canvasLocation" x="1198.5507246376812" y="-190.17857142857142"/>
         </scene>
         <!--Devices-->
         <scene sceneID="gjl-Vd-8l9">
