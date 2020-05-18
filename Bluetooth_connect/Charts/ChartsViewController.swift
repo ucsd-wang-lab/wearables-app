@@ -58,7 +58,7 @@ class ChartsViewController: UIViewController {
     func customizeChart(){
         graphView.data = nil
         let lineChartEntry = [ChartDataEntry]()
-        let line = LineChartDataSet(entries: lineChartEntry)
+        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement 1")
         line.colors = [.orange]
         line.circleColors = [.orange]
         line.circleHoleColor = .orange
@@ -85,9 +85,8 @@ class ChartsViewController: UIViewController {
         graphView.xAxis.drawGridLinesEnabled = false
         graphView.xAxis.labelPosition = .bottom
         graphView.xAxis.labelTextColor = .orange
-        graphView.xAxis.valueFormatter = AxisLabel()
+//        graphView.xAxis.valueFormatter = XAxisLabel()
         graphView.legend.enabled = true
-//        graphView.data?.setDrawValues(false)
     }
     
     func updatChart(value: Double){
@@ -102,15 +101,15 @@ class ChartsViewController: UIViewController {
     
     // This function creates a new line to be added to the line chart data
     func updateChart(){
+        let num_of_lines = graphView.data?.dataSetCount ?? 1
         let lineChartEntry = [ChartDataEntry]()
-        let line = LineChartDataSet(entries: lineChartEntry)
-        
+        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(num_of_lines + 1)")
+
         let color = UIColor.random
         line.colors = [color]
         line.circleColors = [color]
         line.circleHoleColor = color
         line.circleRadius = 2.5
-        
        
         graphView.data?.dataSets.append(line)
         graphView.data?.setDrawValues(false)
@@ -155,7 +154,7 @@ class ChartsViewController: UIViewController {
 
         let composer = MFMailComposeViewController()
         composer.mailComposeDelegate = self
-        composer.setToRecipients(["rap004@ucsd.edu"])
+//        composer.setToRecipients(["rap004@ucsd.edu"])
         composer.setSubject("Data Collected: \(currentTime ?? "Couldn't get current time")")
         composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(currentTime ?? "Couldn't get current time")", isHTML: true)
         composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(currentTime ?? "Couldn't get current time").csv")
@@ -171,15 +170,6 @@ class ChartsViewController: UIViewController {
         csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count"]!)\n")
         csvString.append("Gain,\(CHARACTERISTIC_VALUE["Gain"]!),x\n")
         csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
-//        csvString.append("x,y\n")
-        
-//        let sortedKeys = Array(dataArray.keys).sorted(by: <)
-//
-//        for key in sortedKeys {
-//            print("keys = ", key)
-//            csvString.append("\(key),\(String(describing: dataArray[key]!))\n")
-//
-//        }
         
         let num_of_lines = graphView.data?.dataSetCount ?? 0
         for i in 0..<num_of_lines{
@@ -380,7 +370,7 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
     }
 }
 
-class AxisLabel: IAxisValueFormatter{
+class XAxisLabel: IAxisValueFormatter{
     func stringForValue(_ value: Double, axis: AxisBase?) -> String {
         return "X"
     }
