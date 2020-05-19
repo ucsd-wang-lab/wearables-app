@@ -21,9 +21,12 @@ class BluetoothViewController: UIViewController {
         
         lottie_animation = AnimationView(name: "BluetoothAnimation")
         lottie_animation.frame = CGRect(x: 0, y: 0, width: self.lottie_view.bounds.width, height: self.lottie_view.bounds.height)
-                
-        self.lottie_view.addSubview(lottie_animation)
         self.lottie_view.backgroundColor = .clear
+
+//        self.lottie_view.addSubview(lottie_animation)
+        
+        let backBarButtton = UIBarButtonItem(title: "Scan", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem = backBarButtton
     }
     
     

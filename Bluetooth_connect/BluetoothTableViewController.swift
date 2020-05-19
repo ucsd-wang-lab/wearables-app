@@ -17,15 +17,15 @@ class BluetoothTableViewController: UITableViewController {
         // viewDidLoad() only gets called once
         super.viewDidLoad()
         
-        let backBarButtton = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backBarButtton
-        
-        self.tableView.tableFooterView = UIView()
+        self.tableView.tableFooterView = UIView()       // Show no empty cell at the bottom
         self.clearsSelectionOnViewWillAppear = true
         self.refreshControl = UIRefreshControl()
         
         
         self.refreshControl?.addTarget(self, action: #selector(refreshBluetoothTableView), for: .valueChanged)
+        
+        let backBarButtton = UIBarButtonItem(title: "Disconnect", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem = backBarButtton
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -38,7 +38,6 @@ class BluetoothTableViewController: UITableViewController {
         BluetoothInterface.instance.attachBLEDiscoveredObserver(id: self.id, observer: self)
         BluetoothInterface.instance.initVar()
         BluetoothInterface.instance.startScan()
-        
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -93,8 +92,8 @@ extension BluetoothTableViewController: BLEDiscoveredObserver, BLEStatusObserver
     
     // This function is called when the phone connect to a peripheral
     func deviceConnected(with device: String) {
-        let newViewController = RenameViewController()
-        self.navigationController?.pushViewController(newViewController, animated: true)
+        performSegue(withIdentifier: "toRenameController", sender: self)
+
     }
     
     // This function is called when a new peripheral is discovered

@@ -30,7 +30,7 @@
                                 </constraints>
                                 <state key="normal" image="BluetoothButton" backgroundImage="BluetoothButton"/>
                                 <connections>
-                                    <segue destination="NXy-xA-hrJ" kind="show" id="tNU-rf-fLt"/>
+                                    <segue destination="NXy-xA-hrJ" kind="show" id="ycw-yL-Jgq"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3id-0L-i34" customClass="LottieView" customModule="Lottie">
@@ -131,7 +131,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Devices" id="h5U-u8-Ul2"/>
                     <connections>
-                        <segue destination="eVa-J8-UL6" kind="show" id="7Qu-D9-Bn4"/>
+                        <segue destination="eVa-J8-UL6" kind="show" identifier="toRenameController" id="uzg-iF-fxW"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kPK-3x-KbP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -146,29 +146,49 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter a name for your device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tdz-Gs-4iV">
-                                <rect key="frame" x="44" y="131" width="327" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a name for your device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tdz-Gs-4iV">
+                                <rect key="frame" x="43.5" y="128" width="327" height="33"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SN4-xm-T7f">
-                                <rect key="frame" x="44" y="209" width="327" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter name" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SN4-xm-T7f">
+                                <rect key="frame" x="40" y="211" width="324" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P7k-LE-NUS">
-                                <rect key="frame" x="300" y="759" width="32" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Next"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P7k-LE-NUS">
+                                <rect key="frame" x="279" y="758" width="85" height="54"/>
+                                <color key="backgroundColor" red="0.98039215686274506" green="0.47058823529411764" blue="0.37254901960784315" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="Deg-U5-jaO"/>
+                                    <constraint firstAttribute="width" constant="85" id="xRO-Lp-TMI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Next">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextButtonClicked:" destination="eVa-J8-UL6" eventType="touchUpInside" id="iOh-nF-Wd3"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Fhb-wp-SKE" firstAttribute="bottom" secondItem="P7k-LE-NUS" secondAttribute="bottom" constant="50" id="CbQ-HH-e7u"/>
+                            <constraint firstItem="Tdz-Gs-4iV" firstAttribute="centerX" secondItem="Jpo-A8-9Rm" secondAttribute="centerX" id="X1L-9L-Pku"/>
+                            <constraint firstItem="Fhb-wp-SKE" firstAttribute="trailing" secondItem="P7k-LE-NUS" secondAttribute="trailing" constant="50" id="qFf-WJ-kg5"/>
+                            <constraint firstItem="Tdz-Gs-4iV" firstAttribute="top" secondItem="Fhb-wp-SKE" secondAttribute="top" constant="40" id="rKn-cU-PMm"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Fhb-wp-SKE"/>
                     </view>
                     <navigationItem key="navigationItem" title="Rename" id="MM3-EA-j9t"/>
+                    <connections>
+                        <outlet property="infoLabel" destination="Tdz-Gs-4iV" id="NyM-XT-vPa"/>
+                        <outlet property="nameTextField" destination="SN4-xm-T7f" id="Hbh-5X-OGX"/>
+                        <outlet property="nextButton" destination="P7k-LE-NUS" id="BYt-z3-JeV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H5c-DJ-li9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
