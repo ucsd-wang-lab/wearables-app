@@ -186,7 +186,7 @@ class DashboardViewController: UIViewController{
                 cell.value_label.becomeFirstResponder()
             }
             else{
-                if name == "Electrode Selection"{
+                if name == "Electrode Mask"{
                     let data = UInt8(value, radix: 2) ?? nil
                     if data == nil {
                         let message = "Value Field must be valid 8-bit binary input"
@@ -248,7 +248,7 @@ class DashboardViewController: UIViewController{
         let type = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicName)
         let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[characteristicName]!
         let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[characteristicName]!
-        
+                
         if value == nil{
             let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
             showErrorMessage(message: message)

@@ -93,7 +93,7 @@ class ChartsViewController: UIViewController {
         doQuit = false
         let num_of_lines = graphView.data?.dataSetCount ?? 1
         chartData.append(value)
-        let newValue = ChartDataEntry(x: Double(chartData.count - 1), y: value)
+        let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value)
         
         graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
         graphView.notifyDataSetChanged()
