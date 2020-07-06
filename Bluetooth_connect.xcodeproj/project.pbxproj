@@ -32,6 +32,7 @@
 		5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50E2468D2F6006626A0 /* InfoCell.swift */; };
 		5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */; };
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
+		5EF2980624B3050F006394CA /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980524B3050F006394CA /* PulseAnimation.swift */; };
 		5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */; };
 		5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D5246FDB2200279AAE /* RenameViewController.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		5EB6F50E2468D2F6006626A0 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
+		5EF2980524B3050F006394CA /* PulseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseAnimation.swift; sourceTree = "<group>"; };
 		5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableViewController.swift; sourceTree = "<group>"; };
 		5EF901D5246FDB2200279AAE /* RenameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				0FC47D3F22DE8E32006E931E /* AppDelegate.swift */,
+				5EF2980424B304E3006394CA /* HelperFiles */,
 				5EB689692435019E0017A1FC /* Interface and Protocol */,
 				5E22529D242AD1C400A676CB /* Charts */,
 				5E225294242AB6BE00A676CB /* Dashboard */,
@@ -194,6 +197,14 @@
 				5EB6F50E2468D2F6006626A0 /* InfoCell.swift */,
 			);
 			path = MeasurementSelection;
+			sourceTree = "<group>";
+		};
+		5EF2980424B304E3006394CA /* HelperFiles */ = {
+			isa = PBXGroup;
+			children = (
+				5EF2980524B3050F006394CA /* PulseAnimation.swift */,
+			);
+			path = HelperFiles;
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {
@@ -342,6 +353,7 @@
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */,
 				5E7ED5782471B2C900950064 /* BluetoothViewController.swift in Sources */,
+				5EF2980624B3050F006394CA /* PulseAnimation.swift in Sources */,
 				5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -44,10 +44,10 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if let name = peripheral.name  {
-            notifyBLEObserver(bleName: name, device: peripheral)
+//            notifyBLEObserver(bleName: name, device: peripheral)
             if name.contains("Microneedle"){
                 // do nothing
-//                notifyBLEObserver(bleName: name, device: peripheral)
+                notifyBLEObserver(bleName: name, device: peripheral)
             }
         }
         

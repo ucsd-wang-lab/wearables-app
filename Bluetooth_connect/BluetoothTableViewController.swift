@@ -87,13 +87,12 @@ class BluetoothTableViewController: UITableViewController {
 
 extension BluetoothTableViewController: BLEDiscoveredObserver, BLEStatusObserver{
     var id: Int {
-        1
+        2
     }
     
     // This function is called when the phone connect to a peripheral
     func deviceConnected(with device: String) {
         performSegue(withIdentifier: "toRenameController", sender: self)
-
     }
     
     // This function is called when a new peripheral is discovered
