@@ -44,7 +44,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if let name = peripheral.name  {
-            print("Device found: \(name)")
             if name.contains("Microneedle"){
                 notifyBLEObserver(bleName: name, device: peripheral)
                 if self.autoConnect{
@@ -59,7 +58,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         self.centralManager?.stopScan()
         self.connectedPeripheral = peripheral
         self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
-        print("connected to: \(peripheral.name!)")
+//        print("connected to: \(peripheral.name!)")
         self.notifyBLEStatusConnect(bleName: peripheral.name!)
         self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
         
