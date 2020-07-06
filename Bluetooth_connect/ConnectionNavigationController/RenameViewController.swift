@@ -30,6 +30,9 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
         nameTextField.layer.addSublayer(bottomLine)
         
         nextButton.layer.cornerRadius = 10
+        
+        let backBarButtton = UIBarButtonItem(title: "Disconnect", style: .plain, target: self, action: nil)
+        navigationItem.backBarButtonItem = backBarButtton
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -71,7 +74,12 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func nextButtonClicked(_ sender: Any) {
-        // do nothing...
+        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+        let controller = storyboard.instantiateInitialViewController()!
+        controller.modalPresentationStyle = .fullScreen
+        self.present(controller, animated: true) {
+            // do nothing
+        }
     }
     
     

@@ -33,6 +33,9 @@
 		5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */; };
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
 		5EF2980624B3050F006394CA /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980524B3050F006394CA /* PulseAnimation.swift */; };
+		5EF2980924B3117A006394CA /* TestingNavigationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */; };
+		5EF2980B24B31819006394CA /* Delay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2980A24B31819006394CA /* Delay.storyboard */; };
+		5EF2980D24B31858006394CA /* DelayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980C24B31858006394CA /* DelayViewController.swift */; };
 		5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */; };
 		5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D5246FDB2200279AAE /* RenameViewController.swift */; };
 /* End PBXBuildFile section */
@@ -79,6 +82,9 @@
 		5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
 		5EF2980524B3050F006394CA /* PulseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseAnimation.swift; sourceTree = "<group>"; };
+		5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TestingNavigationController.storyboard; sourceTree = "<group>"; };
+		5EF2980A24B31819006394CA /* Delay.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Delay.storyboard; sourceTree = "<group>"; };
+		5EF2980C24B31858006394CA /* DelayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayViewController.swift; sourceTree = "<group>"; };
 		5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableViewController.swift; sourceTree = "<group>"; };
 		5EF901D5246FDB2200279AAE /* RenameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,14 +132,13 @@
 				5EB6F5092468CCFA006626A0 /* MeasurementSelection */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
 				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
+				5EF2980724B30FFE006394CA /* ConnectionNavigationController */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
+				5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */,
+				5EF2980A24B31819006394CA /* Delay.storyboard */,
+				5EF2980C24B31858006394CA /* DelayViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
-				5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */,
-				5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */,
-				5E7ED5772471B2C900950064 /* BluetoothViewController.swift */,
-				5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */,
-				5EF901D5246FDB2200279AAE /* RenameViewController.swift */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
 			);
 			path = Bluetooth_connect;
@@ -205,6 +210,18 @@
 				5EF2980524B3050F006394CA /* PulseAnimation.swift */,
 			);
 			path = HelperFiles;
+			sourceTree = "<group>";
+		};
+		5EF2980724B30FFE006394CA /* ConnectionNavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */,
+				5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */,
+				5E7ED5772471B2C900950064 /* BluetoothViewController.swift */,
+				5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */,
+				5EF901D5246FDB2200279AAE /* RenameViewController.swift */,
+			);
+			path = ConnectionNavigationController;
 			sourceTree = "<group>";
 		};
 		84225A837B8A34882A5F3034 /* Frameworks */ = {
@@ -282,7 +299,9 @@
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
 				5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */,
 				5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */,
+				5EF2980B24B31819006394CA /* Delay.storyboard in Resources */,
 				0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */,
+				5EF2980924B3117A006394CA /* TestingNavigationController.storyboard in Resources */,
 				5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */,
 				5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */,
 			);
@@ -341,6 +360,7 @@
 				5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */,
 				5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */,
 				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
+				5EF2980D24B31858006394CA /* DelayViewController.swift in Sources */,
 				5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
 				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
