@@ -334,15 +334,19 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
     // Status Observer
     func deviceDisconnected(with device: String) {
         if device == self.deviceName{
-           let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
-           let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
-           controller.modalPresentationStyle = .fullScreen
-           self.present(controller, animated: true) {
-               // do nothing....
-               BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-               BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-               BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
-           }
+            BluetoothInterface.instance.disconnect()
+            BluetoothInterface.instance.autoConnect = true
+            BluetoothInterface.instance.startScan()
+            
+//           let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+//           let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+//           controller.modalPresentationStyle = .fullScreen
+//           self.present(controller, animated: true) {
+//               // do nothing....
+//               BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+//               BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+//               BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+//           }
         }
     }
        

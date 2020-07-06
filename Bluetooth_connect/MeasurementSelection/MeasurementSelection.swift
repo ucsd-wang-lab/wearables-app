@@ -22,6 +22,7 @@ class MeasurementSelection: UIViewController {
     let tableCellHeight = 65
     let measurement = ["Amperometry", "Potentiometry"]
     let key = ["Battery Level", "Firmware Revision"]
+    private var switchScreen = false
     
     var deviceName: String?
     override func viewDidLoad() {
@@ -95,6 +96,7 @@ class MeasurementSelection: UIViewController {
     
     @IBAction func disconnectButtonClicked(_ sender: Any) {
         BluetoothInterface.instance.disconnect()
+        switchScreen = true
     }
 }
 
@@ -180,14 +182,21 @@ extension MeasurementSelection: UITableViewDelegate, UITableViewDataSource, BLES
     
     func deviceDisconnected(with device: String) {
         if device == self.deviceName{
-            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)                
+            if switchScreen{
+                let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+                let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+                controller.modalPresentationStyle = .fullScreen
+                self.present(controller, animated: true) {
+                    // do nothing....
+                    BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                    BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                    BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+                }
+            }
+            else{
+                BluetoothInterface.instance.disconnect()
+                BluetoothInterface.instance.autoConnect = true
+                BluetoothInterface.instance.startScan()
             }
         }
     }

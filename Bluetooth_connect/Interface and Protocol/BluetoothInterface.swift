@@ -44,8 +44,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if let name = peripheral.name  {
+            print("Device found: \(name)")
             if name.contains("Microneedle"){
                 notifyBLEObserver(bleName: name, device: peripheral)
+                if self.autoConnect{
+                    connect(peripheral: peripheral)
+                }
             }
         }
         
@@ -53,13 +57,19 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.centralManager?.stopScan()
-        if nil == self.connectedPeripheral {
-            self.connectedPeripheral = peripheral
-            self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
-            print("connected to: \(peripheral.name!)")
-            self.notifyBLEStatusConnect(bleName: peripheral.name!)
-            self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
-        }
+        self.connectedPeripheral = peripheral
+        self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
+        print("connected to: \(peripheral.name!)")
+        self.notifyBLEStatusConnect(bleName: peripheral.name!)
+        self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
+        
+//        if nil == self.connectedPeripheral {
+//            self.connectedPeripheral = peripheral
+//            self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
+//            print("connected to: \(peripheral.name!)")
+//            self.notifyBLEStatusConnect(bleName: peripheral.name!)
+//            self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
+//        }
         
     }
     
@@ -178,6 +188,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     public func disconnect(){
         self.centralManager.cancelPeripheralConnection(self.connectedPeripheral)
+//        self.connectedPeripheral = nil
+        self.serviceDictionary.removeAll()
+        self.characteristicDictionary.removeAll()
     }
     
     var connectedPeripheral: CBPeripheral!
@@ -186,6 +199,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     private var centralManager: CBCentralManager!
     private var serviceDictionary: [CBService: [CBCharacteristic]]!
     private var characteristicDictionary: [String: CBCharacteristic] = [:]
+    public var autoConnect:Bool = false
     
     /// #################################################################################
     /// #################################################################################
