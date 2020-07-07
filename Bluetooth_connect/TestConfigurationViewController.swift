@@ -1,19 +1,18 @@
 //
-//  DelayViewController.swift
+//  TestConfigurationViewController.swift
 //  Bluetooth_connect
 //
-//  Created by Ravi Patel on 7/6/20.
+//  Created by Ravi Patel on 7/7/20.
 //  Copyright © 2020 neel shah. All rights reserved.
 //
 
 import UIKit
 
-class DelayViewController: UIViewController {
+class TestConfigurationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
     
 

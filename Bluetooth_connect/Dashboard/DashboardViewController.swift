@@ -106,8 +106,6 @@ class DashboardViewController: UIViewController{
         }
     }
     
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section_mapping[section]?.count ?? 0
 //        return keys.count

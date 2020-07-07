@@ -10,12 +10,14 @@
 		0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC47D3F22DE8E32006E931E /* AppDelegate.swift */; };
 		0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4622DE8E37006E931E /* Assets.xcassets */; };
 		0FC47D4A22DE8E37006E931E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */; };
+		5E09C78824B4708100FE6808 /* TestConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E09C78724B4708100FE6808 /* TestConfigurationViewController.swift */; };
 		5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E225295242AB6CE00A676CB /* Dashboard.storyboard */; };
 		5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E225297242AB6EE00A676CB /* DashboardViewController.swift */; };
 		5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */; };
 		5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E22529E242AD1ED00A676CB /* Charts.storyboard */; };
 		5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2252A0242AD22B00A676CB /* ChartsViewController.swift */; };
 		5E2BF12E24439BE200159DB6 /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
+		5E2D5F8C24B4609F009A68F1 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D5F8B24B4609F009A68F1 /* TestTableViewCell.swift */; };
 		5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */; };
 		5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */; };
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
@@ -30,12 +32,12 @@
 		5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */; };
 		5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */; };
 		5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50E2468D2F6006626A0 /* InfoCell.swift */; };
+		5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */; };
 		5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */; };
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
 		5EF2980624B3050F006394CA /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980524B3050F006394CA /* PulseAnimation.swift */; };
 		5EF2980924B3117A006394CA /* TestingNavigationController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */; };
-		5EF2980B24B31819006394CA /* Delay.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2980A24B31819006394CA /* Delay.storyboard */; };
-		5EF2980D24B31858006394CA /* DelayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980C24B31858006394CA /* DelayViewController.swift */; };
+		5EF2980D24B31858006394CA /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980C24B31858006394CA /* DeviceViewController.swift */; };
 		5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */; };
 		5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF901D5246FDB2200279AAE /* RenameViewController.swift */; };
 /* End PBXBuildFile section */
@@ -60,11 +62,13 @@
 		0FC47D4922DE8E37006E931E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0FC47D4B22DE8E37006E931E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bluetooth_connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E09C78724B4708100FE6808 /* TestConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConfigurationViewController.swift; sourceTree = "<group>"; };
 		5E225295242AB6CE00A676CB /* Dashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dashboard.storyboard; sourceTree = "<group>"; };
 		5E225297242AB6EE00A676CB /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEditableCell.swift; sourceTree = "<group>"; };
 		5E22529E242AD1ED00A676CB /* Charts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Charts.storyboard; sourceTree = "<group>"; };
 		5E2252A0242AD22B00A676CB /* ChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
+		5E2D5F8B24B4609F009A68F1 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 		5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTSelectionScreen.swift; sourceTree = "<group>"; };
 		5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothInterface.swift; sourceTree = "<group>"; };
 		5E30DF7D242AA552007D8277 /* BluetoothCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCell.swift; sourceTree = "<group>"; };
@@ -79,12 +83,12 @@
 		5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCell.swift; sourceTree = "<group>"; };
 		5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementSelection.swift; sourceTree = "<group>"; };
 		5EB6F50E2468D2F6006626A0 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
+		5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayConfigurationViewController.swift; sourceTree = "<group>"; };
 		5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
 		5EF2980524B3050F006394CA /* PulseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseAnimation.swift; sourceTree = "<group>"; };
 		5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TestingNavigationController.storyboard; sourceTree = "<group>"; };
-		5EF2980A24B31819006394CA /* Delay.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Delay.storyboard; sourceTree = "<group>"; };
-		5EF2980C24B31858006394CA /* DelayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayViewController.swift; sourceTree = "<group>"; };
+		5EF2980C24B31858006394CA /* DeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
 		5EF901D3246FBFBF00279AAE /* BluetoothTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTableViewController.swift; sourceTree = "<group>"; };
 		5EF901D5246FDB2200279AAE /* RenameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameViewController.swift; sourceTree = "<group>"; };
 		92B2EE53254346B9313F7F01 /* Pods-Bluetooth_connect.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bluetooth_connect.release.xcconfig"; path = "Target Support Files/Pods-Bluetooth_connect/Pods-Bluetooth_connect.release.xcconfig"; sourceTree = "<group>"; };
@@ -135,8 +139,10 @@
 				5EF2980724B30FFE006394CA /* ConnectionNavigationController */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */,
-				5EF2980A24B31819006394CA /* Delay.storyboard */,
-				5EF2980C24B31858006394CA /* DelayViewController.swift */,
+				5E2D5F8B24B4609F009A68F1 /* TestTableViewCell.swift */,
+				5EF2980C24B31858006394CA /* DeviceViewController.swift */,
+				5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */,
+				5E09C78724B4708100FE6808 /* TestConfigurationViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
@@ -299,7 +305,6 @@
 				5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */,
 				5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */,
 				5E225296242AB6CE00A676CB /* Dashboard.storyboard in Resources */,
-				5EF2980B24B31819006394CA /* Delay.storyboard in Resources */,
 				0FC47D4722DE8E37006E931E /* Assets.xcassets in Resources */,
 				5EF2980924B3117A006394CA /* TestingNavigationController.storyboard in Resources */,
 				5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */,
@@ -358,9 +363,12 @@
 			files = (
 				5E697152243556DE0060FE7C /* UUIDs.swift in Sources */,
 				5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */,
+				5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */,
+				5E09C78824B4708100FE6808 /* TestConfigurationViewController.swift in Sources */,
 				5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */,
 				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
-				5EF2980D24B31858006394CA /* DelayViewController.swift in Sources */,
+				5E2D5F8C24B4609F009A68F1 /* TestTableViewCell.swift in Sources */,
+				5EF2980D24B31858006394CA /* DeviceViewController.swift in Sources */,
 				5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
 				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
