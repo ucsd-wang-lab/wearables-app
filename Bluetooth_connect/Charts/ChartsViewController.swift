@@ -131,17 +131,10 @@ class ChartsViewController: UIViewController {
     @IBAction func saveButtonClicked(_ sender: Any) {
         print("Save Button clicked....")
         spinner.startAnimating()
-
-        // Preparing for storage
-        var int_data:[Int: Any] = [:]
-        for i in 0..<chartData.count{
-            print("data: ", i, "\t", chartData[i])
-            int_data.updateValue(chartData[i], forKey: i)
-        }
         
         self.spinner.stopAnimating()
         self.chartData.removeAll()
-        let csvString = self.createCSV(from: int_data, currentTime: currentTime)
+        let csvString = self.createCSV(currentTime: currentTime)
         self.customizeChart()
         
         guard MFMailComposeViewController.canSendMail() else{
@@ -162,7 +155,7 @@ class ChartsViewController: UIViewController {
         self.present(composer, animated: true)
     }
     
-    private func createCSV(from dataArray:[Int: Any], currentTime: String) -> String{
+    private func createCSV(currentTime: String) -> String{
         var csvString = "\("Timestamp"),\(currentTime)\n\n"
         csvString.append("Potential,\(CHARACTERISTIC_VALUE["Potential"]!),mV\n")
         csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay"]!),ms\n")
