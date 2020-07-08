@@ -33,6 +33,7 @@
 		5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */; };
 		5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50E2468D2F6006626A0 /* InfoCell.swift */; };
 		5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */; };
+		5ECBDECB24B55EBC0096F688 /* TestConfigTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */; };
 		5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */; };
 		5EE0B461246FAD9A003CE092 /* NavigationViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */; };
 		5EF2980624B3050F006394CA /* PulseAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2980524B3050F006394CA /* PulseAnimation.swift */; };
@@ -84,6 +85,7 @@
 		5EB6F50C2468D0E8006626A0 /* MeasurementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementSelection.swift; sourceTree = "<group>"; };
 		5EB6F50E2468D2F6006626A0 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayConfigurationViewController.swift; sourceTree = "<group>"; };
+		5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConfigTableViewCell.swift; sourceTree = "<group>"; };
 		5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		5EE0B460246FAD9A003CE092 /* NavigationViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NavigationViewController.storyboard; sourceTree = "<group>"; };
 		5EF2980524B3050F006394CA /* PulseAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PulseAnimation.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				5EF2980C24B31858006394CA /* DeviceViewController.swift */,
 				5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */,
 				5E09C78724B4708100FE6808 /* TestConfigurationViewController.swift */,
+				5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
@@ -366,6 +369,7 @@
 				5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */,
 				5E09C78824B4708100FE6808 /* TestConfigurationViewController.swift in Sources */,
 				5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */,
+				5ECBDECB24B55EBC0096F688 /* TestConfigTableViewCell.swift in Sources */,
 				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
 				5E2D5F8C24B4609F009A68F1 /* TestTableViewCell.swift in Sources */,
 				5EF2980D24B31858006394CA /* DeviceViewController.swift in Sources */,
