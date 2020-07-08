@@ -420,61 +420,66 @@
                                 </segments>
                                 <color key="selectedSegmentTintColor" red="0.25490196078431371" green="0.69411764705882351" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h05-Nd-1LH">
-                                <rect key="frame" x="299" y="817" width="95" height="45"/>
-                                <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="95" id="906-Jk-jyG"/>
-                                    <constraint firstAttribute="height" constant="45" id="Djp-3E-l5R"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="17"/>
-                                <state key="normal" title="Add Test">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="addDelayButtonClicked:" destination="FVm-4c-zU0" eventType="touchUpInside" id="Ivv-35-PUz"/>
-                                    <action selector="addDelayButtonClicked:" destination="wVp-iE-eTs" eventType="touchUpInside" id="wQO-Be-mFn"/>
-                                </connections>
-                            </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zwa-u3-il1">
-                                <rect key="frame" x="20" y="293" width="374" height="514"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="20" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lLd-gV-6Wf">
+                                <rect key="frame" x="20" y="806" width="374" height="36"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Duration: 00:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y41-0O-Xe6">
+                                        <rect key="frame" x="0.0" y="0.0" width="259" height="36"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                                        <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h05-Nd-1LH">
+                                        <rect key="frame" x="279" y="0.0" width="95" height="36"/>
+                                        <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="95" id="bg4-k5-HCY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="17"/>
+                                        <state key="normal" title="Next">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="addDelayButtonClicked:" destination="FVm-4c-zU0" eventType="touchUpInside" id="Ivv-35-PUz"/>
+                                            <action selector="addDelayButtonClicked:" destination="wVp-iE-eTs" eventType="touchUpInside" id="wQO-Be-mFn"/>
+                                            <action selector="nextButtonClicked:" destination="jlq-RA-dZC" eventType="touchUpInside" id="PSj-q8-Fzw"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LDx-fj-d64">
+                                <rect key="frame" x="20" y="293" width="374" height="505"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Duration: 00:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y41-0O-Xe6">
-                                <rect key="frame" x="20" y="822" width="271" height="40"/>
-                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
-                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="iPL-S8-9rs" firstAttribute="trailing" secondItem="zsQ-R4-eWo" secondAttribute="trailingMargin" id="057-so-jf1"/>
                             <constraint firstItem="VMh-7n-1IW" firstAttribute="trailing" secondItem="zsQ-R4-eWo" secondAttribute="trailingMargin" id="8RG-0I-0eN"/>
-                            <constraint firstItem="Zwa-u3-il1" firstAttribute="top" secondItem="17G-qu-20t" secondAttribute="bottom" constant="10" id="8ZA-nb-k5b"/>
+                            <constraint firstItem="x6D-88-opS" firstAttribute="trailing" secondItem="LDx-fj-d64" secondAttribute="trailing" constant="20" id="9zR-l4-Gs1"/>
                             <constraint firstItem="VMh-7n-1IW" firstAttribute="top" secondItem="9Oz-MH-lYT" secondAttribute="bottom" constant="10" id="HIn-yV-DfG"/>
                             <constraint firstItem="iPL-S8-9rs" firstAttribute="leading" secondItem="zsQ-R4-eWo" secondAttribute="leadingMargin" id="KHs-Wa-LeJ"/>
-                            <constraint firstItem="h05-Nd-1LH" firstAttribute="bottom" secondItem="x6D-88-opS" secondAttribute="bottom" id="MgG-qr-Czl"/>
                             <constraint firstItem="17G-qu-20t" firstAttribute="top" secondItem="iPL-S8-9rs" secondAttribute="bottom" constant="10" id="RzQ-Pi-R6k"/>
-                            <constraint firstItem="h05-Nd-1LH" firstAttribute="bottom" secondItem="y41-0O-Xe6" secondAttribute="bottom" id="Uds-xL-zc3"/>
-                            <constraint firstItem="h05-Nd-1LH" firstAttribute="leading" secondItem="y41-0O-Xe6" secondAttribute="trailing" constant="8" id="VsC-Ci-k3L"/>
                             <constraint firstItem="9Oz-MH-lYT" firstAttribute="leading" secondItem="zsQ-R4-eWo" secondAttribute="leadingMargin" id="YAd-9k-GlZ"/>
                             <constraint firstItem="VMh-7n-1IW" firstAttribute="leading" secondItem="zsQ-R4-eWo" secondAttribute="leadingMargin" id="aGG-MZ-jAA"/>
-                            <constraint firstItem="h05-Nd-1LH" firstAttribute="top" secondItem="Zwa-u3-il1" secondAttribute="bottom" constant="10" id="fhk-At-Aif"/>
-                            <constraint firstItem="Zwa-u3-il1" firstAttribute="trailing" secondItem="zsQ-R4-eWo" secondAttribute="trailingMargin" id="gIW-5z-m5b"/>
-                            <constraint firstItem="h05-Nd-1LH" firstAttribute="trailing" secondItem="Zwa-u3-il1" secondAttribute="trailing" id="iHq-6k-Kf8"/>
+                            <constraint firstItem="lLd-gV-6Wf" firstAttribute="bottom" secondItem="zsQ-R4-eWo" secondAttribute="bottomMargin" constant="-20" id="c0X-c5-eni"/>
+                            <constraint firstItem="LDx-fj-d64" firstAttribute="leading" secondItem="x6D-88-opS" secondAttribute="leading" constant="20" id="eTy-lC-pez"/>
                             <constraint firstItem="9Oz-MH-lYT" firstAttribute="top" secondItem="zsQ-R4-eWo" secondAttribute="topMargin" constant="20" id="ieZ-AY-0yn"/>
+                            <constraint firstItem="x6D-88-opS" firstAttribute="trailing" secondItem="lLd-gV-6Wf" secondAttribute="trailing" constant="20" id="jys-1b-RHw"/>
                             <constraint firstItem="9Oz-MH-lYT" firstAttribute="trailing" secondItem="zsQ-R4-eWo" secondAttribute="trailingMargin" id="khp-58-934"/>
+                            <constraint firstItem="LDx-fj-d64" firstAttribute="top" secondItem="17G-qu-20t" secondAttribute="bottom" constant="10" id="kkl-lI-gcf"/>
                             <constraint firstItem="17G-qu-20t" firstAttribute="trailing" secondItem="zsQ-R4-eWo" secondAttribute="trailingMargin" id="meO-t4-9yf"/>
                             <constraint firstItem="17G-qu-20t" firstAttribute="leading" secondItem="zsQ-R4-eWo" secondAttribute="leadingMargin" id="nwd-Ah-df2"/>
                             <constraint firstItem="iPL-S8-9rs" firstAttribute="top" secondItem="VMh-7n-1IW" secondAttribute="bottom" constant="15" id="tzU-Av-1sj"/>
-                            <constraint firstItem="Zwa-u3-il1" firstAttribute="leading" secondItem="zsQ-R4-eWo" secondAttribute="leadingMargin" id="utZ-uQ-y4x"/>
+                            <constraint firstItem="lLd-gV-6Wf" firstAttribute="top" secondItem="LDx-fj-d64" secondAttribute="bottom" constant="8" symbolic="YES" id="xWS-4L-BlV"/>
+                            <constraint firstItem="lLd-gV-6Wf" firstAttribute="leading" secondItem="x6D-88-opS" secondAttribute="leading" constant="20" id="yTv-Fg-Sva"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="x6D-88-opS"/>
                     </view>
                     <navigationItem key="navigationItem" title="Test Configuration" id="7Xl-gE-boP"/>
                     <connections>
-                        <segue destination="onY-Lx-zaN" kind="show" id="oVH-SW-3F2"/>
+                        <outlet property="nextButton" destination="h05-Nd-1LH" id="vlA-Ep-EC4"/>
+                        <segue destination="onY-Lx-zaN" kind="show" identifier="toTestName" id="oVH-SW-3F2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GJ4-v5-2dX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -489,23 +494,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter a name for your test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAG-R5-s3r">
-                                <rect key="frame" x="20" y="120" width="374" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
-                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-4u-Y5j">
-                                <rect key="frame" x="20" y="194" width="374" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogy-Gh-fUr">
-                                <rect key="frame" x="299" y="817" width="95" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="WRU-Wl-y2F">
+                                <rect key="frame" x="20" y="128" width="374" height="101.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a name for your test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAG-R5-s3r">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="27.5"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                                        <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-4u-Y5j">
+                                        <rect key="frame" x="0.0" y="67.5" width="374" height="34"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogy-Gh-fUr">
+                                <rect key="frame" x="299" y="797" width="95" height="45"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ogy-Gh-fUr" secondAttribute="height" multiplier="19:9" id="11N-GY-DM2"/>
+                                    <constraint firstAttribute="width" constant="95" id="Gvz-XP-6SK"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="17"/>
                                 <state key="normal" title="Add Test">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -517,6 +528,13 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="WRU-Wl-y2F" firstAttribute="leading" secondItem="2Z3-5B-4pG" secondAttribute="leading" constant="20" id="2pg-Un-qig"/>
+                            <constraint firstItem="ogy-Gh-fUr" firstAttribute="trailing" secondItem="WRU-Wl-y2F" secondAttribute="trailing" id="DZc-sb-LAS"/>
+                            <constraint firstItem="2Z3-5B-4pG" firstAttribute="trailing" secondItem="WRU-Wl-y2F" secondAttribute="trailing" constant="20" id="UvU-2g-rDC"/>
+                            <constraint firstItem="WRU-Wl-y2F" firstAttribute="top" secondItem="2Z3-5B-4pG" secondAttribute="top" constant="40" id="Wo8-zS-Z5q"/>
+                            <constraint firstItem="ogy-Gh-fUr" firstAttribute="bottom" secondItem="uIk-qG-z7y" secondAttribute="bottomMargin" constant="-20" id="vKk-X5-SXx"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="2Z3-5B-4pG"/>
                     </view>
                     <navigationItem key="navigationItem" title="New Test" id="JnB-lb-Wfq"/>
