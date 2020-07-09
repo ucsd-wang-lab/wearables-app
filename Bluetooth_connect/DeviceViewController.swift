@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AudioToolbox
+
 
 class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
     
@@ -143,6 +145,14 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
+        if #available(iOS 10.0, *) {
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        }
+        else{
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+        }
+        
         return [UIDragItem(itemProvider: NSItemProvider())]
     }
     
