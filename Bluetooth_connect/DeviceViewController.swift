@@ -16,16 +16,13 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     @IBOutlet weak var loopCountTextField: UITextField!
     @IBOutlet weak var batteryLevelLabel: UILabel!
     @IBOutlet weak var deviceNameLabel: UILabel!
+    @IBOutlet weak var delayLabel: UILabel!
     @IBOutlet weak var listOfTestTableView: UITableView!
     
     var sensorName:String?
-    var listOfHrDelay:[Int] = []
-    var listOfMinDelay:[Int] = []
-    var listofSecDelay:[Int] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         loopCountTextField.delegate = self
         let bottomLine = CALayer()
@@ -42,19 +39,12 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         listOfTestTableView.dragDelegate = self
         listOfTestTableView.dropDelegate = self
         listOfTestTableView.dragInteractionEnabled = true
-//        listOfTestTableView.isEditing = true
         
         let tabBarItem = UITabBarItem(title: "Device", image: UIImage(named: "1")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "1sel")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         self.tabBarItem = tabBarItem
 
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(red: 0x31/255, green: 0x30/255, blue: 0x30/255, alpha: 1)], for: .selected)
-        
-        for i in 1...10{
-            listOfHrDelay.append(i)
-            listOfMinDelay.append(i)
-            listofSecDelay.append(i)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -64,6 +54,10 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
             deviceNameLabel.text = name
         }
         self.listOfTestTableView.reloadData()
+        
+        totalHr = 0
+        totalMin = 0
+        totalSec = 0
     }
        
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -151,6 +145,31 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         let hour = config.hour
         let min = config.min
         let sec = config.sec
+        let delayStr = constructDelayString(hour: hour, min: min, sec: sec)
+        
+        cell.cellTitle.text = config.name
+        cell.cellRuntime.text = "Run Time: " + delayStr
+        
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        
+        updateTotalDuration(hour: hour, min: min, sec: sec)
+        return cell
+    }
+    
+    private func updateTotalDuration(hour: Int, min: Int, sec: Int){
+        totalSec += sec
+        totalMin += totalSec / 60
+        totalSec %= 60
+        
+        totalMin += min
+        totalHr += totalMin / 60
+        totalMin %= 60
+        
+        totalHr += hour
+        delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec)
+    }
+    
+    private func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
         var delayStr = ""
         
         if hour < 10{
@@ -173,12 +192,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         else{
             delayStr = delayStr + String(sec) + ":"
         }
-        
-        cell.cellTitle.text = config.name
-        cell.cellRuntime.text = "Run Time: " + delayStr
-        
-        cell.selectionStyle = UITableViewCell.SelectionStyle.none
-        return cell
+        return delayStr
     }
     
     @IBAction func addTestButtonClicked(_ sender: Any) {

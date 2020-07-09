@@ -359,6 +359,7 @@
                         <outlet property="addDelayButton" destination="Wf0-rg-oGA" id="VqB-Mm-YEk"/>
                         <outlet property="addTestButton" destination="fkl-js-8R5" id="aCw-2J-I0i"/>
                         <outlet property="batteryLevelLabel" destination="pPQ-OA-Knb" id="mG0-XN-daS"/>
+                        <outlet property="delayLabel" destination="bAv-dd-T7z" id="1Nw-On-w2j"/>
                         <outlet property="deviceNameLabel" destination="Sxg-f8-687" id="f5a-kf-hyY"/>
                         <outlet property="listOfTestTableView" destination="XCA-52-YTz" id="5Bl-Dz-zbj"/>
                         <outlet property="loopCountTextField" destination="Coq-ax-tPV" id="DGR-35-XbV"/>

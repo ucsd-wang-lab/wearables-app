@@ -49,3 +49,6 @@ enum LeadConfig{
 }
 
 var configsList:[Config] = []
+var totalHr: Int = 0
+var totalMin: Int = 0
+var totalSec: Int = 0
