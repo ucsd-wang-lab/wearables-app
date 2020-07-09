@@ -9,13 +9,13 @@
 import UIKit
 
 class TabBarViewController: UITabBarController {
-
-    var deviceName:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let newBackButton = UIBarButtonItem(title: "Disconnect", style: .plain, target: self, action: #selector(backButtonPressed(sender:)))
         self.navigationItem.leftBarButtonItem = newBackButton
+        
     }
 
     @objc func backButtonPressed(sender: UIBarButtonItem){

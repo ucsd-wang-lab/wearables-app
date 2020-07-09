@@ -23,11 +23,15 @@
 		5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF7D242AA552007D8277 /* BluetoothCell.swift */; };
 		5E30DF81242AA626007D8277 /* BTSelectionScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */; };
 		5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6736982437F88800FA03E9 /* TypeExtension.swift */; };
+		5E685B1224B6E2BE00F74A68 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E685B1124B6E2BE00F74A68 /* GlobalVariables.swift */; };
+		5E685B1424B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */; };
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
 		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
 		5E7ED5782471B2C900950064 /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7ED5772471B2C900950064 /* BluetoothViewController.swift */; };
 		5E7ED57E2471EBE700950064 /* BluetoothAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */; };
+		5E82A02B24B6D9CE00955677 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E82A02A24B6D9CE00955677 /* RunViewController.swift */; };
 		5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA2A74B24B65A910066392D /* TabBarViewController.swift */; };
+		5EB235B924B6F8F2002BD42E /* TestNameConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
 		5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */; };
 		5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */; };
@@ -77,11 +81,15 @@
 		5E30DF7D242AA552007D8277 /* BluetoothCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothCell.swift; sourceTree = "<group>"; };
 		5E30DF80242AA626007D8277 /* BTSelectionScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BTSelectionScreen.storyboard; sourceTree = "<group>"; };
 		5E6736982437F88800FA03E9 /* TypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeExtension.swift; sourceTree = "<group>"; };
+		5E685B1124B6E2BE00F74A68 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDisplayModeTableViewCell.swift; sourceTree = "<group>"; };
 		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
 		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
 		5E7ED5772471B2C900950064 /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
 		5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = BluetoothAnimation.json; path = icons/BluetoothAnimation.json; sourceTree = SOURCE_ROOT; };
+		5E82A02A24B6D9CE00955677 /* RunViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		5EA2A74B24B65A910066392D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNameConfigViewController.swift; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MeasurementSelection.storyboard; sourceTree = "<group>"; };
 		5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCell.swift; sourceTree = "<group>"; };
@@ -151,6 +159,9 @@
 				5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */,
 				5E09C78724B4708100FE6808 /* TestConfigurationViewController.swift */,
 				5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */,
+				5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */,
+				5E82A02A24B6D9CE00955677 /* RunViewController.swift */,
+				5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
@@ -223,6 +234,7 @@
 			children = (
 				5EF2980524B3050F006394CA /* PulseAnimation.swift */,
 				5EB99F3C24B67ADF00C0B84C /* TestAndDelayStructs.swift */,
+				5E685B1124B6E2BE00F74A68 /* GlobalVariables.swift */,
 			);
 			path = HelperFiles;
 			sourceTree = "<group>";
@@ -373,6 +385,9 @@
 				5E697152243556DE0060FE7C /* UUIDs.swift in Sources */,
 				5EB99F3D24B67ADF00C0B84C /* TestAndDelayStructs.swift in Sources */,
 				5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */,
+				5EB235B924B6F8F2002BD42E /* TestNameConfigViewController.swift in Sources */,
+				5E685B1424B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift in Sources */,
+				5E685B1224B6E2BE00F74A68 /* GlobalVariables.swift in Sources */,
 				5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */,
 				5E09C78824B4708100FE6808 /* TestConfigurationViewController.swift in Sources */,
 				5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */,
@@ -386,6 +401,7 @@
 				5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */,
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
 				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,
+				5E82A02B24B6D9CE00955677 /* RunViewController.swift in Sources */,
 				5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */,
 				5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,

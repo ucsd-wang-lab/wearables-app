@@ -75,10 +75,12 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func nextButtonClicked(_ sender: Any) {
 //        performSegue(withIdentifier: "toTesting", sender: self)
-        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
-        controller.deviceName = self.nameTextField.text
-        self.navigationController?.pushViewController(controller, animated: true)
+        if self.nameTextField.text != ""{
+            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
+            connectedDeiviceName = self.nameTextField.text
+            self.navigationController?.pushViewController(controller, animated: true)
+        }        
     }
     
     

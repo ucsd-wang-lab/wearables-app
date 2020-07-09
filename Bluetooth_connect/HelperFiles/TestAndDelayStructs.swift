@@ -6,8 +6,6 @@
 //  Copyright © 2020 neel shah. All rights reserved.
 //
 
-import Foundation
-
 protocol Config {
     var name:String? {get set}
     var hour: Int {get set}
@@ -47,8 +45,3 @@ enum LeadConfig{
     case TWO_LEAD
     case THREE_LEAD
 }
-
-var configsList:[Config] = []
-var totalHr: Int = 0
-var totalMin: Int = 0
-var totalSec: Int = 0

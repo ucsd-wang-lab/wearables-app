@@ -26,12 +26,15 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        deviceNameLabel.text = connectedDeiviceName
+        
         loopCountTextField.delegate = self
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0, y: loopCountTextField.frame.height - 1, width: loopCountTextField.frame.width, height: 1.0)
         bottomLine.backgroundColor = UIColor(red: 0x41/255, green: 0xb2/255, blue: 0x5b/255, alpha: 1).cgColor
         loopCountTextField.borderStyle = .none
         loopCountTextField.layer.addSublayer(bottomLine)
+        loopCountTextField.addDoneButton(onDone: (target: self, action: #selector(self.doneButtonPressed)))
 
         addTestButton.layer.cornerRadius = addTestButton.layer.bounds.height / 3
         addDelayButton.layer.cornerRadius = addDelayButton.layer.bounds.height / 3
@@ -42,7 +45,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         listOfTestTableView.dropDelegate = self
         listOfTestTableView.dragInteractionEnabled = true
         
-        let tabBarItem = UITabBarItem(title: "Device", image: UIImage(named: "1")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "1sel")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
+        let tabBarItem = UITabBarItem(title: "Queue", image: UIImage(named: "1")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "1sel")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
         self.tabBarItem = tabBarItem
 
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -81,6 +84,11 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
+    }
+    
+    @objc func doneButtonPressed(){
+        loopCount = Int(loopCountTextField.text ?? "0")
+        self.view.endEditing(true)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -199,41 +207,11 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec)
     }
     
-    private func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
-        var delayStr = ""
-        
-        if hour < 10{
-            delayStr = delayStr + "0" + String(hour) + ":"
-        }
-        else{
-            delayStr = delayStr + String(hour) + ":"
-        }
-        
-        if min < 10{
-            delayStr = delayStr + "0" + String(min) + ":"
-        }
-        else{
-            delayStr = delayStr + String(min) + ":"
-        }
-        
-        if sec < 10{
-            delayStr = delayStr + "0" + String(sec) + ":"
-        }
-        else{
-            delayStr = delayStr + String(sec) + ":"
-        }
-        return delayStr
-    }
-    
     @IBAction func addTestButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toTestConfiguration", sender: self)
     }
     
     @IBAction func addDelayButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toDelayConfiguration", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
     }
 }
