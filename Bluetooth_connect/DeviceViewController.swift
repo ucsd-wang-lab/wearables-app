@@ -109,6 +109,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let config = configsList[indexPath.row]
+        
         if config is DelayConfig {
             let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
             if #available(iOS 13.0, *) {

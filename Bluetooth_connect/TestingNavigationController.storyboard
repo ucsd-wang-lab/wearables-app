@@ -718,6 +718,8 @@
                     </view>
                     <navigationItem key="navigationItem" title="Test Configuration" id="7Xl-gE-boP"/>
                     <connections>
+                        <outlet property="leadConfigSegmentedControl" destination="17G-qu-20t" id="cig-s2-36W"/>
+                        <outlet property="measurementTypeSegmentedControl" destination="VMh-7n-1IW" id="p04-jP-UVl"/>
                         <outlet property="nextButton" destination="RjZ-PR-GUw" id="XrJ-um-tFR"/>
                         <outlet property="testConfigTableView" destination="LDx-fj-d64" id="l2e-YA-9aq"/>
                         <segue destination="onY-Lx-zaN" kind="show" identifier="toTestName" id="oVH-SW-3F2"/>
@@ -730,27 +732,19 @@
         <!--New Test-->
         <scene sceneID="FhX-lJ-RSs">
             <objects>
-                <viewController id="onY-Lx-zaN" sceneMemberID="viewController">
+                <viewController id="onY-Lx-zaN" customClass="TestNameConfigViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uIk-qG-z7y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="WRU-Wl-y2F">
-                                <rect key="frame" x="20" y="40" width="374" height="101.5"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a name for your test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAG-R5-s3r">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="27.5"/>
-                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
-                                        <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-4u-Y5j">
-                                        <rect key="frame" x="0.0" y="67.5" width="374" height="34"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                </subviews>
-                            </stackView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9Me-4u-Y5j">
+                                <rect key="frame" x="20" y="102.5" width="374" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="f02-8l-Vzz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ogy-Gh-fUr">
                                 <rect key="frame" x="299" y="743" width="95" height="45"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -765,20 +759,34 @@
                                 <connections>
                                     <action selector="addDelayButtonClicked:" destination="wVp-iE-eTs" eventType="touchUpInside" id="MUx-55-sLv"/>
                                     <action selector="addDelayButtonClicked:" destination="FVm-4c-zU0" eventType="touchUpInside" id="vKw-a7-1nj"/>
+                                    <action selector="addTestButtonPressed:" destination="onY-Lx-zaN" eventType="touchUpInside" id="qyR-4F-Kpy"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a name for your test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LAG-R5-s3r">
+                                <rect key="frame" x="20" y="40" width="374" height="27.5"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="WRU-Wl-y2F" firstAttribute="leading" secondItem="2Z3-5B-4pG" secondAttribute="leading" constant="20" id="2pg-Un-qig"/>
-                            <constraint firstItem="ogy-Gh-fUr" firstAttribute="trailing" secondItem="WRU-Wl-y2F" secondAttribute="trailing" id="DZc-sb-LAS"/>
-                            <constraint firstItem="2Z3-5B-4pG" firstAttribute="trailing" secondItem="WRU-Wl-y2F" secondAttribute="trailing" constant="20" id="UvU-2g-rDC"/>
-                            <constraint firstItem="WRU-Wl-y2F" firstAttribute="top" secondItem="2Z3-5B-4pG" secondAttribute="top" constant="40" id="Wo8-zS-Z5q"/>
+                            <constraint firstItem="LAG-R5-s3r" firstAttribute="leading" secondItem="uIk-qG-z7y" secondAttribute="leadingMargin" id="2Bb-TA-csg"/>
+                            <constraint firstItem="9Me-4u-Y5j" firstAttribute="top" secondItem="LAG-R5-s3r" secondAttribute="bottom" constant="35" id="OKM-ed-rbI"/>
+                            <constraint firstItem="LAG-R5-s3r" firstAttribute="trailing" secondItem="uIk-qG-z7y" secondAttribute="trailingMargin" id="PcF-fz-mtV"/>
+                            <constraint firstItem="9Me-4u-Y5j" firstAttribute="leading" secondItem="uIk-qG-z7y" secondAttribute="leadingMargin" id="RTf-32-yX3"/>
+                            <constraint firstItem="ogy-Gh-fUr" firstAttribute="trailing" secondItem="9Me-4u-Y5j" secondAttribute="trailing" id="RxR-gV-usk"/>
+                            <constraint firstItem="LAG-R5-s3r" firstAttribute="top" secondItem="uIk-qG-z7y" secondAttribute="topMargin" constant="40" id="Ytz-B9-IaR"/>
                             <constraint firstItem="ogy-Gh-fUr" firstAttribute="bottom" secondItem="uIk-qG-z7y" secondAttribute="bottomMargin" constant="-20" id="vKk-X5-SXx"/>
+                            <constraint firstItem="9Me-4u-Y5j" firstAttribute="trailing" secondItem="uIk-qG-z7y" secondAttribute="trailingMargin" id="yJA-Dj-heB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2Z3-5B-4pG"/>
                     </view>
                     <navigationItem key="navigationItem" title="New Test" id="JnB-lb-Wfq"/>
+                    <connections>
+                        <outlet property="addTestButton" destination="ogy-Gh-fUr" id="HIY-Aw-cH4"/>
+                        <outlet property="testNameTextField" destination="9Me-4u-Y5j" id="ScZ-7F-fcO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ueV-Fg-CTS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

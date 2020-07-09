@@ -26,22 +26,12 @@ struct TestConfig: Config {
     var min: Int
     var sec: Int
     
-    var measurementType: MeasurementType
-    var leadConfig: LeadConfig
+    var measurementTypeIndex: Int
+    var leadConfigIndex: Int
     var biasPotential: Int
     var initialDelay: Int
     var samplePeriod: Int
     var sampleCount: Int
     var gain: Int
     var electrodeMast: Int
-}
-
-enum MeasurementType {
-    case AMPERO
-    case POTENTIO
-}
-
-enum LeadConfig{
-    case TWO_LEAD
-    case THREE_LEAD
 }

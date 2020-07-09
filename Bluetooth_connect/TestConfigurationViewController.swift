@@ -12,6 +12,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     @IBOutlet weak var testConfigTableView: UITableView!
     @IBOutlet weak var nextButton: UIButton!
+    @IBOutlet weak var measurementTypeSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var leadConfigSegmentedControl: UISegmentedControl!
     
     var unitsMapping: [Int: [String: String]] = [0: ["Bias Potential": " mV"],
                                                  1: ["Initial Delay": " ms"],
@@ -63,6 +65,12 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     @IBAction func nextButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toTestName", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as! TestNameConfigViewController
+        destination.leadConfig = leadConfigSegmentedControl.selectedSegmentIndex
+        destination.measurementType = measurementTypeSegmentedControl.selectedSegmentIndex
     }
 
 }

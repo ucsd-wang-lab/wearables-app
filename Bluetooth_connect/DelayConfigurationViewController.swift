@@ -29,9 +29,6 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
         delayPickerView.dataSource = self
         
         delayNameTextfield.delegate = self
-//        let nameTextFieldFrame = CGRect(x: delayNameTextfield.frame.minX, y: nameQuestionLabel.frame.maxY + 40, width: self.view.frame.width * 0.8, height: delayNameTextfield.frame.height)
-//        delayNameTextfield.frame = nameTextFieldFrame
-        
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0, y: delayNameTextfield.frame.height - 1, width: self.view.frame.width * 0.9, height: 1.0)
         bottomLine.backgroundColor = UIColor(red: 0x41/255, green: 0xb2/255, blue: 0x5b/255, alpha: 1).cgColor
