@@ -102,7 +102,9 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     }
     
     @IBAction func addDelayButtonClicked(_ sender: Any) {
-        
+        let delayConfig = DelayConfig(name: delayNameTextfield.text, hour: hour, min: min, sec: sec)
+        configsList.append(delayConfig)
+        self.navigationController?.popViewController(animated: true)
     }
     
     /*

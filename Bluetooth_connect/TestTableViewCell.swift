@@ -10,12 +10,16 @@ import UIKit
 
 class TestTableViewCell: UITableViewCell, UITableViewDelegate {
 
-    @IBOutlet weak var cellTitleLabel: UILabel!
-    @IBOutlet weak var runtimeLabel: UILabel!
+    @IBOutlet weak var cellTitle: UILabel!
+    @IBOutlet weak var cellRuntime: UILabel!
+    
+    @IBOutlet weak var fillerView: UIView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        fillerView.backgroundColor = .clear
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

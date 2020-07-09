@@ -179,7 +179,7 @@
                         <outlet property="infoLabel" destination="Tdz-Gs-4iV" id="NyM-XT-vPa"/>
                         <outlet property="nameTextField" destination="SN4-xm-T7f" id="Hbh-5X-OGX"/>
                         <outlet property="nextButton" destination="P7k-LE-NUS" id="BYt-z3-JeV"/>
-                        <segue destination="5rh-Lv-CYH" kind="show" identifier="toTesting" id="cFv-CS-Y1o"/>
+                        <segue destination="5rh-Lv-CYH" kind="show" identifier="toTesting" id="gNI-Xc-NNU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H5c-DJ-li9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -189,10 +189,10 @@
         <!--TestingNavigationController-->
         <scene sceneID="0z4-fT-2cM">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c9k-2r-QLi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewControllerPlaceholder storyboardName="TestingNavigationController" id="5rh-Lv-CYH" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="lXc-gL-1hK"/>
                 </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="c9k-2r-QLi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3749" y="-190"/>
         </scene>
