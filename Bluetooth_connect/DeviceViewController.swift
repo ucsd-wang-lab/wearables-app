@@ -98,7 +98,27 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        _ = tableView.cellForRow(at: indexPath)
+        let config = configsList[indexPath.row]
+        if config is DelayConfig {
+            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+            if #available(iOS 13.0, *) {
+                let controller = storyboard.instantiateViewController(identifier: "delayController") as! DelayConfigurationViewController
+                controller.delayName = config.name
+                controller.delayHour = config.hour
+                controller.delayMin = config.min
+                controller.delaySec = config.sec
+                controller.updateIndex = indexPath.row
+                controller.isUpdate = true
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+            }
+        
+            
+        }
+        else{
+            print("Test config")
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -150,7 +170,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         cell.cellTitle.text = config.name
         cell.cellRuntime.text = "Run Time: " + delayStr
         
-        cell.selectionStyle = UITableViewCell.SelectionStyle.none
+        cell.selectionStyle = UITableViewCell.SelectionStyle.default
         
         updateTotalDuration(hour: hour, min: min, sec: sec)
         return cell
@@ -201,5 +221,9 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     
     @IBAction func addDelayButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
     }
 }

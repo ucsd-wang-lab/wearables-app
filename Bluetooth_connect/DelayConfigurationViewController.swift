@@ -15,9 +15,12 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     @IBOutlet weak var delayPickerView: UIPickerView!
     @IBOutlet weak var nameQuestionLabel: UILabel!
     
-    var hour:Int!
-    var min:Int!
-    var sec:Int!
+    var delayName:String?
+    var delayHour:Int?
+    var delayMin:Int?
+    var delaySec:Int?
+    var isUpdate:Bool?
+    var updateIndex:Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +39,30 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
         delayNameTextfield.layer.addSublayer(bottomLine)
         
         addDelayButton.layer.cornerRadius = addDelayButton.layer.bounds.height / 3
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        hour = 0
-        min = 0
-        sec = 0
+        if let name = delayName{
+            delayNameTextfield.text = name
+        }
+        
+        if let hr = delayHour{
+            delayPickerView.selectRow(hr, inComponent: 0, animated: true)
+        }
+        
+        if let min = delayMin{
+            delayPickerView.selectRow(min, inComponent: 1, animated: true)
+        }
+        
+        if let sec = delaySec{
+            delayPickerView.selectRow(sec, inComponent: 2, animated: true)
+        }
+        
+        if let _ = isUpdate{
+            addDelayButton.setTitle("Update", for: .normal)
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -89,32 +112,22 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
         return nil
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 0{
-            hour = row
-        }
-        else if component == 1{
-            min = row
-        }
-        else if component == 2{
-            sec = row
-        }
-    }
     
     @IBAction func addDelayButtonClicked(_ sender: Any) {
-        let delayConfig = DelayConfig(name: delayNameTextfield.text, hour: hour, min: min, sec: sec)
-        configsList.append(delayConfig)
-        self.navigationController?.popViewController(animated: true)
+        if let _ = isUpdate, let index = updateIndex{
+            // do nothing....
+            configsList[index].name = delayNameTextfield.text
+            configsList[index].hour = delayPickerView.selectedRow(inComponent: 0)
+            configsList[index].min = delayPickerView.selectedRow(inComponent: 1)
+            configsList[index].sec = delayPickerView.selectedRow(inComponent: 2)
+            self.navigationController?.popViewController(animated: true)
+        }
+        else{
+            let delayConfig = DelayConfig(name: delayNameTextfield.text, hour: delayPickerView.selectedRow(inComponent: 0), min: delayPickerView.selectedRow(inComponent: 1), sec: delayPickerView.selectedRow(inComponent: 2))
+            configsList.append(delayConfig)
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
