@@ -24,9 +24,13 @@ class ChartsViewController: UIViewController {
     var doQuit: Bool!
     var sampleCount = 0
     var currentTime: String!
+    var samplePeriod: Double?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let value = CHARACTERISTIC_VALUE["Sample Period"]!
+        samplePeriod = Double(value) ?? -1
         
         customizeChart()
         customizeLoadingIcon()
@@ -70,10 +74,9 @@ class ChartsViewController: UIViewController {
 //        line.fill = Fill.fillWithColor(.orange)
 //        line.drawFilledEnabled = true
         
-       
         let data = LineChartData()
         data.addDataSet(line)
-       
+        
         graphView.data = data
         graphView.data?.setDrawValues(false)
         
@@ -87,7 +90,6 @@ class ChartsViewController: UIViewController {
         graphView.xAxis.drawGridLinesEnabled = false
         graphView.xAxis.labelPosition = .bottom
         graphView.xAxis.labelTextColor = .orange
-//        graphView.xAxis.valueFormatter = XAxisLabel()
         graphView.legend.enabled = true
     }
     
@@ -95,10 +97,18 @@ class ChartsViewController: UIViewController {
         doQuit = false
         let num_of_lines = graphView.data?.dataSetCount ?? 1
         chartData.append(value)
-        let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value)
         
-        graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
-        graphView.notifyDataSetChanged()
+        if samplePeriod != -1{
+            let numOfPoints = graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0
+            let newValue = ChartDataEntry(x: Double(numOfPoints) * samplePeriod! / 1000, y: value)
+            graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
+            graphView.notifyDataSetChanged()
+        }
+        else{
+            let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value)
+            graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
+            graphView.notifyDataSetChanged()
+        }
     }
     
     // This function creates a new line to be added to the line chart data
