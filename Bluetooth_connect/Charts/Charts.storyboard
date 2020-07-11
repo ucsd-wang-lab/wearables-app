@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tAA-Ze-NAQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tAA-Ze-NAQ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -35,7 +35,7 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZmW-QJ-oaW">
-                                <rect key="frame" x="299" y="726" width="62" height="36"/>
+                                <rect key="frame" x="298.5" y="726" width="90.5" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Repeat"/>
                                 <connections>
@@ -43,7 +43,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPi-DK-Gbh">
-                                <rect key="frame" x="79" y="726" width="43" height="36"/>
+                                <rect key="frame" x="25" y="726" width="96.5" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
@@ -62,10 +62,23 @@
                                     <action selector="startStopClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="59b-Py-Rft"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaO-8B-PWQ">
+                                <rect key="frame" x="178.5" y="726" width="57" height="36"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="57" id="cu8-Hd-Uzo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Delete"/>
+                                <connections>
+                                    <action selector="deleteButtonClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="pkF-53-y4a"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="HPi-DK-Gbh" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="79" id="4Uv-nn-K7D"/>
+                            <constraint firstItem="UaO-8B-PWQ" firstAttribute="baseline" secondItem="HPi-DK-Gbh" secondAttribute="baseline" id="2pc-h1-h01"/>
+                            <constraint firstItem="HPi-DK-Gbh" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="25" id="4Uv-nn-K7D"/>
+                            <constraint firstItem="UaO-8B-PWQ" firstAttribute="centerX" secondItem="cqw-fK-zNZ" secondAttribute="centerX" id="5ca-AO-Czj"/>
                             <constraint firstItem="vJG-2a-ObL" firstAttribute="trailing" secondItem="oPY-kF-cj8" secondAttribute="trailingMargin" id="6YE-x0-XZ1"/>
                             <constraint firstItem="HPi-DK-Gbh" firstAttribute="baseline" secondItem="ZmW-QJ-oaW" secondAttribute="baseline" id="DCY-Mq-laq"/>
                             <constraint firstItem="4qf-qd-7oj" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="104" id="FhO-o8-WK9"/>
@@ -78,7 +91,9 @@
                             <constraint firstItem="vJG-2a-ObL" firstAttribute="top" secondItem="oPY-kF-cj8" secondAttribute="topMargin" id="kM9-vo-gdu"/>
                             <constraint firstItem="cqw-fK-zNZ" firstAttribute="centerY" secondItem="oPY-kF-cj8" secondAttribute="centerY" id="oW7-Hl-YnO"/>
                             <constraint firstItem="5r8-40-6Td" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="5" id="tEQ-Oo-RKS"/>
-                            <constraint firstItem="7I0-K8-D8T" firstAttribute="trailing" secondItem="ZmW-QJ-oaW" secondAttribute="trailing" constant="53" id="zFa-QD-gj6"/>
+                            <constraint firstItem="UaO-8B-PWQ" firstAttribute="leading" secondItem="HPi-DK-Gbh" secondAttribute="trailing" constant="57" id="umh-Ty-ktE"/>
+                            <constraint firstItem="ZmW-QJ-oaW" firstAttribute="leading" secondItem="UaO-8B-PWQ" secondAttribute="trailing" constant="63" id="yIs-dk-XmB"/>
+                            <constraint firstItem="7I0-K8-D8T" firstAttribute="trailing" secondItem="ZmW-QJ-oaW" secondAttribute="trailing" constant="25" id="zFa-QD-gj6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7I0-K8-D8T"/>
                     </view>
@@ -90,7 +105,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hdq-rs-lK8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-56.521739130434788" y="170.08928571428569"/>
+            <point key="canvasLocation" x="-56.521739130434788" y="169.41964285714286"/>
         </scene>
     </scenes>
 </document>

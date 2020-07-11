@@ -214,6 +214,11 @@ class ChartsViewController: UIViewController {
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
+    
+    @IBAction func deleteButtonClicked(_ sender: Any) {
+        customizeChart()
+    }
+    
 
     @IBAction func startStopClicked(_ sender: UIButton) {
         if sender.tag == 0{

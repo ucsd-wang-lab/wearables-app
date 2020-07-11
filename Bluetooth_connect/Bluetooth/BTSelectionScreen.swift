@@ -16,6 +16,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
     
     var bleDeviceList: [String: CBPeripheral] = [:]
     let refreshControl = UIRefreshControl()
+    var didSelectDevice:Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +45,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         BluetoothInterface.instance.initVar()
         BluetoothInterface.instance.startScan()
         
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let now = df.string(from: Date())
-        print("Now = \(now)")
+        didSelectDevice = false
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -71,6 +69,7 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectDevice = true
         BluetoothInterface.instance.connect(peripheral: bleDeviceList[indexPath.row].value)
     }
     
@@ -100,15 +99,17 @@ extension BTSelectionScreen: BLEDiscoveredObserver, BLEStatusObserver{
     }
     
     func deviceConnected(with device: String) {
-        let storyboard = UIStoryboard(name: "MeasurementSelection", bundle: nil)
-        let controller = storyboard.instantiateInitialViewController() as! MeasurementSelection
-        controller.modalPresentationStyle = .fullScreen
-        controller.deviceName = device
-        self.present(controller, animated: true) {
-            self.bleDeviceList.removeAll()
-            BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id)
-            BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-            BluetoothInterface.instance.stopScan()
+        if didSelectDevice{
+            let storyboard = UIStoryboard(name: "MeasurementSelection", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! MeasurementSelection
+            controller.modalPresentationStyle = .fullScreen
+            controller.deviceName = device
+            self.present(controller, animated: true) {
+                self.bleDeviceList.removeAll()
+                BluetoothInterface.instance.detachBLEDiscoveredObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.stopScan()
+            }
         }
     }
     

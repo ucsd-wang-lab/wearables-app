@@ -97,6 +97,18 @@ class MeasurementSelection: UIViewController {
     @IBAction func disconnectButtonClicked(_ sender: Any) {
         BluetoothInterface.instance.disconnect()
         switchScreen = true
+        
+        if !BluetoothInterface.instance.isConnected {
+            let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
+               let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen
+               controller.modalPresentationStyle = .fullScreen
+               self.present(controller, animated: true) {
+                   // do nothing....
+                   BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                   BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                   BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+               }
+        }
     }
 }
 

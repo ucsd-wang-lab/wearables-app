@@ -40,6 +40,8 @@ class DashboardViewController: UIViewController{
                                               "Potentiometry": "Start/Stop Potentiometry"]
     
     
+    var valueTextField:[Int: UITextField] = [:]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -93,9 +95,17 @@ class DashboardViewController: UIViewController{
         textField.selectAll(nil)
     }
     
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        print("Textfield end editing....\(textField.text)")
-//    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("Textfield end editing....\(textField.text)")
+        for key in valueTextField.keys{
+            let tf = valueTextField[key]
+            if textField == tf {
+                let button = UIBarButtonItem()
+                button.tag = key
+                saveClicked(button)
+            }
+        }
+    }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -128,11 +138,14 @@ class DashboardViewController: UIViewController{
         if indexPath.section == 0{
             cell.value_label.isUserInteractionEnabled = false
         }
+        else{
+            valueTextField[indexPath.row] = cell.value_label
+        }
         
         cell.selectionStyle = .none
-        addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
+//        addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
         cell.value_label.selectAll(nil)
-
+        
         return cell
     }
     
