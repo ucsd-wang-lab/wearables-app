@@ -43,6 +43,11 @@ class BTSelectionScreen: UIViewController, UITableViewDataSource, UITableViewDel
         bluetoothTableView.reloadData()
         BluetoothInterface.instance.initVar()
         BluetoothInterface.instance.startScan()
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let now = df.string(from: Date())
+        print("Now = \(now)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -38,7 +38,9 @@ class ChartsViewController: UIViewController {
             chartsTitle.text = title
         }
         
-        currentTime = get_current_time()
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        currentTime = df.string(from: Date())
     }
     
     func customizeLoadingIcon(){
@@ -62,7 +64,7 @@ class ChartsViewController: UIViewController {
         line.colors = [.orange]
         line.circleColors = [.orange]
         line.circleHoleColor = .orange
-        line.circleRadius = 2.5
+        line.circleRadius = 1.5
         
         // User the following lines of code to enable background color
 //        line.fill = Fill.fillWithColor(.orange)
@@ -109,7 +111,7 @@ class ChartsViewController: UIViewController {
         line.colors = [color]
         line.circleColors = [color]
         line.circleHoleColor = color
-        line.circleRadius = 2.5
+        line.circleRadius = 1.5
        
         graphView.data?.dataSets.append(line)
         graphView.data?.setDrawValues(false)
@@ -134,8 +136,26 @@ class ChartsViewController: UIViewController {
         
         self.spinner.stopAnimating()
         self.chartData.removeAll()
-        let csvString = self.createCSV(currentTime: currentTime)
-        self.customizeChart()
+        let csvStrings = self.createCSV(currentTime: currentTime)
+//        self.customizeChart()
+        
+        var count = 1
+        for csvString in csvStrings{
+            let fileName = "\(self.chartsTitle.text!)_data_mesaurement\(count)_\(currentTime ?? "Couldn't get current time")"
+            let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("csv")
+            
+            do {
+                try csvString.write(to: fileURL, atomically: true, encoding: .ascii)
+                print("File saved: \(fileURL.absoluteURL)")
+            } catch  {
+                let alert = UIAlertController(title: "Error!!", message: "Cannot save File! \(error.localizedDescription))", preferredStyle: .alert)
+
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
+            count += 1
+        }
         
         guard MFMailComposeViewController.canSendMail() else{
             let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
@@ -150,22 +170,25 @@ class ChartsViewController: UIViewController {
 //        composer.setToRecipients(["rap004@ucsd.edu"])
         composer.setSubject("Data Collected: \(currentTime ?? "Couldn't get current time")")
         composer.setMessageBody("Attached is the \(self.chartsTitle.text!) data collected on: \(currentTime ?? "Couldn't get current time")", isHTML: true)
-        composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_\(currentTime ?? "Couldn't get current time").csv")
-
+        count = 1
+        for csvString in csvStrings{
+            composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_mesaurement\(count)_\(currentTime ?? "Couldn't get current time").csv")
+        }
         self.present(composer, animated: true)
     }
     
-    private func createCSV(currentTime: String) -> String{
-        var csvString = "\("Timestamp"),\(currentTime)\n\n"
-        csvString.append("Potential,\(CHARACTERISTIC_VALUE["Potential"]!),mV\n")
-        csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay"]!),ms\n")
-        csvString.append("Sample Period,\(CHARACTERISTIC_VALUE["Sample Period"]!),ms\n")
-        csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count"]!)\n")
-        csvString.append("Gain,\(CHARACTERISTIC_VALUE["Gain"]!),x\n")
-        csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
-        
+    private func createCSV(currentTime: String) -> [String]{
         let num_of_lines = graphView.data?.dataSetCount ?? 0
+        var csvStrings:[String] = []
         for i in 0..<num_of_lines{
+            var csvString = "\("Timestamp"),\(currentTime)\n\n"
+            csvString.append("Potential,\(CHARACTERISTIC_VALUE["Potential"]!),mV\n")
+            csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay"]!),ms\n")
+            csvString.append("Sample Period,\(CHARACTERISTIC_VALUE["Sample Period"]!),ms\n")
+            csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count"]!)\n")
+            csvString.append("Gain,\(CHARACTERISTIC_VALUE["Gain"]!),x\n")
+            csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
+            
             csvString.append("Measurement,\(i + 1)\n")
             csvString.append("x,y\n")
             
@@ -176,11 +199,11 @@ class ChartsViewController: UIViewController {
                 let y = data?.entryForIndex(j)!.y
                 csvString.append("\(String(describing: x!)),\(String(describing: y!))\n")
             }
-            csvString.append("\n")
+            csvStrings.append(csvString)
         }
         
-        print("csvString = \n\(csvString)")
-        return csvString
+        print("csvString = \n\(csvStrings)")
+        return csvStrings
     }
     
     @IBAction func quitButtonClicked(_ sender: Any) {
