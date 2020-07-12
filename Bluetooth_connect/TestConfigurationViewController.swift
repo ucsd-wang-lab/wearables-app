@@ -42,7 +42,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         super.viewDidAppear(animated)
         
         if tempTestConfig == nil{
-//            tempTestConfig = TestConfig(name: nil, hour: 0, min: 0, sec: 0, testSettings: [:], measurementTypeIndex: measurementTypeSegmentedControl.selectedSegmentIndex, leadConfigIndex: leadConfigSegmentedControl.selectedSegmentIndex)
             tempTestConfig = TestConfig(name: nil, hour: 0, min: 0, sec: 0, milSec: 0, testSettings: [:], measurementTypeIndex: measurementTypeSegmentedControl.selectedSegmentIndex, leadConfigIndex: leadConfigSegmentedControl.selectedSegmentIndex)
         }
     }

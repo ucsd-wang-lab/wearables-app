@@ -15,7 +15,7 @@
 		5E225298242AB6EE00A676CB /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E225297242AB6EE00A676CB /* DashboardViewController.swift */; };
 		5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */; };
 		5E22529F242AD1ED00A676CB /* Charts.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E22529E242AD1ED00A676CB /* Charts.storyboard */; };
-		5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2252A0242AD22B00A676CB /* ChartsViewController.swift */; };
+		5E2252A1242AD22B00A676CB /* ChartsViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2252A0242AD22B00A676CB /* ChartsViewController2.swift */; };
 		5E2BF12E24439BE200159DB6 /* Pods_Bluetooth_connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1592064CA2B2426FDFF3E29D /* Pods_Bluetooth_connect.framework */; };
 		5E2D5F8C24B4609F009A68F1 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D5F8B24B4609F009A68F1 /* TestTableViewCell.swift */; };
 		5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */; };
@@ -74,7 +74,7 @@
 		5E225297242AB6EE00A676CB /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		5E22529B242ABA3C00A676CB /* DashboardEditableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEditableCell.swift; sourceTree = "<group>"; };
 		5E22529E242AD1ED00A676CB /* Charts.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Charts.storyboard; sourceTree = "<group>"; };
-		5E2252A0242AD22B00A676CB /* ChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
+		5E2252A0242AD22B00A676CB /* ChartsViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController2.swift; sourceTree = "<group>"; };
 		5E2D5F8B24B4609F009A68F1 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 		5E30DF79242A9D81007D8277 /* BTSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BTSelectionScreen.swift; sourceTree = "<group>"; };
 		5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothInterface.swift; sourceTree = "<group>"; };
@@ -192,7 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				5E22529E242AD1ED00A676CB /* Charts.storyboard */,
-				5E2252A0242AD22B00A676CB /* ChartsViewController.swift */,
+				5E2252A0242AD22B00A676CB /* ChartsViewController2.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -397,7 +397,7 @@
 				5EF2980D24B31858006394CA /* DeviceViewController.swift in Sources */,
 				5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */,
 				5E22529C242ABA3C00A676CB /* DashboardEditableCell.swift in Sources */,
-				5E2252A1242AD22B00A676CB /* ChartsViewController.swift in Sources */,
+				5E2252A1242AD22B00A676CB /* ChartsViewController2.swift in Sources */,
 				5E30DF7A242A9D81007D8277 /* BTSelectionScreen.swift in Sources */,
 				5E30DF7C242AA290007D8277 /* BluetoothInterface.swift in Sources */,
 				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,

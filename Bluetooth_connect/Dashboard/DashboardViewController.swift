@@ -396,7 +396,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString)
         if name == "Start/Stop Queue" || name == "Start/Stop Potentiometry"{
             let storyboard = UIStoryboard(name: "Charts", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! ChartsViewController
+            let controller = storyboard.instantiateInitialViewController() as! ChartsViewController2
             controller.modalPresentationStyle = .fullScreen
             controller.deviceName = self.deviceName
             controller.chartTitle = measurementType

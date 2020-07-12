@@ -9,7 +9,7 @@
 import Charts
 import MessageUI
 
-class ChartsViewController: UIViewController {
+class ChartsViewController2: UIViewController {
     var id: Int = 3
 
     @IBOutlet weak var graphView: LineChartView!
@@ -240,7 +240,7 @@ class ChartsViewController: UIViewController {
     }
 }
 
-extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
+extension ChartsViewController2: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         if let err = error{
             print("Error: ", err)

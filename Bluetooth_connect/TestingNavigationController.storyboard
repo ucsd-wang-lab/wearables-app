@@ -354,11 +354,44 @@
                         <outlet property="runControlButton" destination="LsF-lS-xuJ" id="SBx-zB-1eD"/>
                         <outlet property="saveDataButton" destination="h05-Nd-1LH" id="waA-ji-TnO"/>
                         <outlet property="timeRemainingLabel" destination="O9H-XH-1Sv" id="UIo-4T-bZd"/>
+                        <segue destination="bJd-4b-vMh" kind="show" id="PcS-4G-KBf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kmg-jl-Uh2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="476.81159420289856" y="875.89285714285711"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="fbL-6R-iBG">
+            <objects>
+                <viewController id="bJd-4b-vMh" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UDV-DB-pcL">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Composite View" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LiI-ZM-aJK">
+                                <rect key="frame" x="20" y="58" width="374" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <color key="textColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Custom Configuration" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7c8-Pw-bFI">
+                                <rect key="frame" x="20" y="110" width="374" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="0KT-o7-u3A"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Md1-3Z-Q8d"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kbV-gp-t5t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1386.9565217391305" y="875.89285714285711"/>
         </scene>
         <!--Device-->
         <scene sceneID="bHj-4j-Cqq">
