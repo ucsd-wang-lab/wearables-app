@@ -15,6 +15,7 @@ class ChartsViewController: UIViewController {
     @IBOutlet weak var graphView: LineChartView!
     @IBOutlet weak var stopStartButton: UIButton!
     @IBOutlet weak var chartsTitle: UILabel!
+    @IBOutlet weak var yAxisTitleLabel: UILabel!
     
     var chartData = [Double]()
     var spinner: UIActivityIndicatorView!
@@ -45,6 +46,8 @@ class ChartsViewController: UIViewController {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         currentTime = df.string(from: Date())
+        
+        yAxisTitleLabel.transform = CGAffineTransform(rotationAngle: 3 * CGFloat.pi / 2)
     }
     
     func customizeLoadingIcon(){
@@ -96,16 +99,16 @@ class ChartsViewController: UIViewController {
     func updatChart(value: Double){
         doQuit = false
         let num_of_lines = graphView.data?.dataSetCount ?? 1
-        chartData.append(value)
+        chartData.append(value / 1e6)   // from for electronic is in pA, or divide by 1E6
         
         if samplePeriod != -1{
             let numOfPoints = graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0
-            let newValue = ChartDataEntry(x: Double(numOfPoints) * samplePeriod! / 1000, y: value)
+            let newValue = ChartDataEntry(x: Double(numOfPoints) * samplePeriod! / 1000, y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
             graphView.notifyDataSetChanged()
         }
         else{
-            let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value)
+            let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
             graphView.notifyDataSetChanged()
         }
@@ -200,7 +203,7 @@ class ChartsViewController: UIViewController {
             csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask"]!)\n\n")
             
             csvString.append("Measurement,\(i + 1)\n")
-            csvString.append("x,y\n")
+            csvString.append("Time (sec),Current (uA)\n")
             
             let data = graphView.data?.dataSets[i]
             let num_of_points = data?.entryCount ?? 0
