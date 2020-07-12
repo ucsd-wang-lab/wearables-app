@@ -18,6 +18,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBOutlet weak var runControlButton: UIButton!
     @IBOutlet weak var listOfTestTableView: UITableView!
     
+    var testOrderList: [TestConfig] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -54,11 +56,13 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         }
         
         timeRemainingLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec)
+        testOrderList = []
+        constructTestOrder()
         listOfTestTableView.reloadData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return configsList.count
+        return testOrderList.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -74,13 +78,13 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         view.backgroundColor = UIColor(red: 0xef/255, green: 0xef/255, blue: 0xf4/255, alpha: 1)
         
         let titleLabel = UILabel(frame: CGRect(x: deviceNameLabel.frame.minX, y: 0, width: self.view.frame.width, height: 40))
-        titleLabel.text = "Test - " + (configsList[section].name ?? "")
+        titleLabel.text = "Test - " + (testOrderList[section].name ?? "")
         view.addSubview(titleLabel)
         return view
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return configsList[section].name
+        return testOrderList[section].name
     }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,6 +97,14 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         }
         
         return cell
+    }
+    
+    private func constructTestOrder(){
+        for test in configsList{
+            if test is TestConfig{
+                testOrderList.append(test as! TestConfig)
+            }
+        }
     }
 
 }

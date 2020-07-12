@@ -13,6 +13,7 @@ var loopCount:Int?
 var totalHr: Int = 0
 var totalMin: Int = 0
 var totalSec: Int = 0
+var tempTestConfig:TestConfig?
 
 func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
     var delayStr = ""

@@ -22,6 +22,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     @IBOutlet weak var listOfTestTableView: UITableView!
     
     var sensorName:String?
+    var messageLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +51,14 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
 
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(red: 0x31/255, green: 0x30/255, blue: 0x30/255, alpha: 1)], for: .selected)
+        
+        messageLabel = UILabel(frame: listOfTestTableView.frame)
+        messageLabel.text = "Add a test to get started!"
+        messageLabel.font = UIFont(name: "Avenir-Heavy", size: 24)
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.alpha = 0
+        self.view.addSubview(messageLabel)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -96,6 +105,13 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if configsList.count > 0{
+            messageLabel.alpha = 0
+        }
+        else{
+            messageLabel.alpha = 1
+        }
+        
         return configsList.count
     }
     
@@ -181,6 +197,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "testTableViewCell") as! TestTableViewCell
         
         let config = configsList[indexPath.row]
+        print("\n\nconfig = \(config)\n\n")
         let hour = config.hour
         let min = config.min
         let sec = config.sec

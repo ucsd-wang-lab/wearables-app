@@ -588,7 +588,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p2Q-J6-Huf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1282.608695652174" y="83.705357142857139"/>
+            <point key="canvasLocation" x="1387" y="84"/>
         </scene>
         <!--Test Configuration-->
         <scene sceneID="P87-tG-7uT">
@@ -786,11 +786,37 @@
                     <connections>
                         <outlet property="addTestButton" destination="ogy-Gh-fUr" id="HIY-Aw-cH4"/>
                         <outlet property="testNameTextField" destination="9Me-4u-Y5j" id="ScZ-7F-fcO"/>
+                        <segue destination="QF9-qz-URi" kind="show" id="QeI-VH-SwH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ueV-Fg-CTS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3257.971014492754" y="515.625"/>
+            <point key="canvasLocation" x="3222" y="516"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="pE6-rh-aS5">
+            <objects>
+                <viewController id="QF9-qz-URi" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DQs-pn-YNh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Lead Selection" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bG2-mo-dAG">
+                                <rect key="frame" x="20" y="97" width="374" height="27.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="20"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="ek7-w8-6zo"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="znc-sw-wJl"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pmu-gQ-ggq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4112" y="516"/>
         </scene>
         <!--Microneedle-->
         <scene sceneID="Jef-vr-hsf">

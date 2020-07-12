@@ -30,6 +30,7 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
         nameTextField.layer.addSublayer(bottomLine)
         
         nextButton.layer.cornerRadius = 10
+        nextButton.alpha = 0.7
         
         let backBarButtton = UIBarButtonItem(title: "Disconnect", style: .plain, target: self, action: nil)
         navigationItem.backBarButtonItem = backBarButtton
@@ -42,10 +43,10 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // touched anywhere on screen ended
         if nameTextField.text != ""{
-                   nextButton.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1)
+            nextButton.alpha = 1.0
        }
        else{
-           nextButton.backgroundColor = UIColor(red: 0xfa/255, green: 0x78/255, blue: 0x5f/255, alpha: 1)
+            nextButton.alpha = 0.7
        }
         self.view.endEditing(true)
     }
@@ -63,10 +64,10 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     // when hitting enter on the textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text != ""{
-            nextButton.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1)
+            nextButton.alpha = 1.0
         }
         else{
-            nextButton.backgroundColor = UIColor(red: 0xfa/255, green: 0x78/255, blue: 0x5f/255, alpha: 1)
+            nextButton.alpha = 0.7
         }
         self.view.endEditing(true)
         return true
@@ -74,13 +75,13 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func nextButtonClicked(_ sender: Any) {
-//        performSegue(withIdentifier: "toTesting", sender: self)
-        if self.nameTextField.text != ""{
-            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
-            connectedDeiviceName = self.nameTextField.text
-            self.navigationController?.pushViewController(controller, animated: true)
-        }        
+        performSegue(withIdentifier: "toTesting", sender: self)
+//        if self.nameTextField.text != ""{
+//            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+//            let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
+//            connectedDeiviceName = self.nameTextField.text
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }        
     }
     
     

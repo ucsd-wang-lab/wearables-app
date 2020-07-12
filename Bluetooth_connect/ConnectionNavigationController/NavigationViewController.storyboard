@@ -151,7 +151,7 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P7k-LE-NUS">
                                 <rect key="frame" x="279" y="758" width="85" height="54"/>
-                                <color key="backgroundColor" red="0.98039215686274506" green="0.47058823529411764" blue="0.37254901960784315" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.99215686274509807" green="0.36078431372549019" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="Deg-U5-jaO"/>
                                     <constraint firstAttribute="width" constant="85" id="xRO-Lp-TMI"/>
@@ -189,10 +189,10 @@
         <!--TestingNavigationController-->
         <scene sceneID="0z4-fT-2cM">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="c9k-2r-QLi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <viewControllerPlaceholder storyboardName="TestingNavigationController" id="5rh-Lv-CYH" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="lXc-gL-1hK"/>
                 </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c9k-2r-QLi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3749" y="-190"/>
         </scene>
@@ -203,7 +203,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" backIndicatorImage="arrowshape.turn.up.left.2.fill" catalog="system" id="Npy-4Y-IJw">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.99215686274509807" green="0.36078431372549019" blue="0.23529411764705882" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.99215686274509807" green="0.36078431372549019" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>

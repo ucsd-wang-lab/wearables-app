@@ -13,9 +13,6 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var testNameTextField: UITextField!
     @IBOutlet weak var addTestButton: UIButton!
     
-    var measurementType: Int?
-    var leadConfig: Int?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,6 +29,7 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        testNameTextField.text = tempTestConfig?.name
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -45,11 +43,21 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.selectAll(nil)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+//        print("\n\nTextfield end editing....\(textField.text ?? "nil")\n\n")
+        tempTestConfig?.name = textField.text
+        
+    }
+    
     @IBAction func addTestButtonPressed(_ sender: Any) {
         if let viewController = self.navigationController?.viewControllers[3]{
-            var testConfig = TestConfig(hour: 0, min: 0, sec: 0, measurementTypeIndex: measurementType ?? 0, leadConfigIndex: leadConfig ?? 0, biasPotential: 0, initialDelay: 0, samplePeriod: 0, sampleCount: 0, gain: 0, electrodeMast: 0)
-            testConfig.name = testNameTextField.text
-            configsList.append(testConfig)
+            tempTestConfig?.name = testNameTextField.text
+            configsList.append(tempTestConfig!)
+            tempTestConfig = nil
             
             self.navigationController?.popToViewController(viewController, animated: true)
         }

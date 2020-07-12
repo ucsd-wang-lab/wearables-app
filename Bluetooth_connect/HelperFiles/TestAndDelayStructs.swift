@@ -25,13 +25,10 @@ struct TestConfig: Config {
     var hour: Int
     var min: Int
     var sec: Int
+    var milSec: Int
+    
+    var testSettings:[String:Int]
     
     var measurementTypeIndex: Int
     var leadConfigIndex: Int
-    var biasPotential: Int
-    var initialDelay: Int
-    var samplePeriod: Int
-    var sampleCount: Int
-    var gain: Int
-    var electrodeMast: Int
 }
