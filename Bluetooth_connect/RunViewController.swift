@@ -86,6 +86,25 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return testOrderList[section].name
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var chartTitle = ""
+        if indexPath.row == 0{
+            chartTitle = "Live View"
+        }
+        else{
+            chartTitle = "Composite View"
+        }
+        
+        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+        if #available(iOS 13.0, *) {
+            let controller = storyboard.instantiateViewController(identifier: "chartsView") as! ChartsViewController
+            controller.chartsTitle = chartTitle
+            self.navigationController?.pushViewController(controller, animated: true)
+        } else {
+            performSegue(withIdentifier: "toChartsView", sender: self)
+        }
+    }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "testViewCell", for: indexPath) as! TestDisplayModeTableViewCell

@@ -32,6 +32,7 @@
 		5E82A02B24B6D9CE00955677 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E82A02A24B6D9CE00955677 /* RunViewController.swift */; };
 		5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA2A74B24B65A910066392D /* TabBarViewController.swift */; };
 		5EB235B924B6F8F2002BD42E /* TestNameConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */; };
+		5EB65FBD24BB077D002814ED /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB65FBC24BB077D002814ED /* ChartsViewController.swift */; };
 		5EB68968243468120017A1FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5EB68967243468120017A1FC /* GoogleService-Info.plist */; };
 		5EB6F5082468CCF2006626A0 /* MeasurementSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */; };
 		5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */; };
@@ -90,6 +91,7 @@
 		5E82A02A24B6D9CE00955677 /* RunViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		5EA2A74B24B65A910066392D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNameConfigViewController.swift; sourceTree = "<group>"; };
+		5EB65FBC24BB077D002814ED /* ChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
 		5EB68967243468120017A1FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5EB6F5072468CCF2006626A0 /* MeasurementSelection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MeasurementSelection.storyboard; sourceTree = "<group>"; };
 		5EB6F50A2468CFE4006626A0 /* MeasurementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementCell.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */,
 				5E82A02A24B6D9CE00955677 /* RunViewController.swift */,
 				5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */,
+				5EB65FBC24BB077D002814ED /* ChartsViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
@@ -403,6 +406,7 @@
 				5E6736992437F88800FA03E9 /* TypeExtension.swift in Sources */,
 				5E82A02B24B6D9CE00955677 /* RunViewController.swift in Sources */,
 				5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */,
+				5EB65FBD24BB077D002814ED /* ChartsViewController.swift in Sources */,
 				5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
 				5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */,
