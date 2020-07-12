@@ -8,12 +8,12 @@
 
 import Charts
 import MessageUI
+import MobileCoreServices
 
 class ChartsViewController: UIViewController {
     var id: Int = 3
 
     @IBOutlet weak var graphView: LineChartView!
-    @IBOutlet weak var stopStartButton: UIButton!
     @IBOutlet weak var chartsTitle: UILabel!
     @IBOutlet weak var yAxisTitleLabel: UILabel!
     
@@ -131,9 +131,6 @@ class ChartsViewController: UIViewController {
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {
-        stopStartButton.tag = 0
-        stopStartButton.setTitle("Stop", for: .normal)
-
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d[0] = data
@@ -256,6 +253,15 @@ class ChartsViewController: UIViewController {
         }
     }
     
+    @IBAction func importButtonClicked(_ sender: Any) {
+        print("Import Button clicked.....")
+        let documentPicker = UIDocumentPickerViewController(documentTypes: [kUTTypePlainText as String], in: .import)
+        documentPicker.delegate = self
+        documentPicker.allowsMultipleSelection = false
+        present(documentPicker, animated: true, completion: nil)
+    }
+    
+    
     private func readCharacteristicValue(characteristicName: String){
            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
            BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
@@ -299,7 +305,11 @@ class ChartsViewController: UIViewController {
     }
 }
 
-extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
+extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate, UIDocumentPickerDelegate{
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        // do nothing.....
+    }
+    
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         if let err = error{
             print("Error: ", err)
@@ -406,12 +416,4 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
             }
         }
     }
-}
-
-class XAxisLabel: IAxisValueFormatter{
-    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        return "X"
-    }
-    
-    
 }

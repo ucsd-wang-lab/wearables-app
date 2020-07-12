@@ -96,13 +96,15 @@ class DashboardViewController: UIViewController{
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("Textfield end editing....\(textField.text)")
+//        print("Textfield end editing....\(textField.text)")
         for key in valueTextField.keys{
             let tf = valueTextField[key]
             if textField == tf {
-                let button = UIBarButtonItem()
-                button.tag = key
-                saveClicked(button)
+                let name = section_mapping[1]![key]
+                print("name = ", name)
+                let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
+                let value = textField.text
+                updateValue(name: name, encodingType: encodingType, value: value)
             }
         }
     }
@@ -259,6 +261,71 @@ class DashboardViewController: UIViewController{
             showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
         }
         self.view.endEditing(true)
+    }
+    
+    private func updateValue(name: String, encodingType: Any?, value: String?){
+        if let value = value{
+            if value == ""{
+                showErrorMessage(message: "Value Field Cannot be empty")
+            }
+            else if Int(value) == nil{
+                showErrorMessage(message: "Value Field Must be a number")
+            }
+            else{
+                if name == "Electrode Mask"{
+                    let data = UInt8(value, radix: 2) ?? nil
+                    if data == nil {
+                        let message = "Value Field must be valid 8-bit binary input"
+                        showErrorMessage(message: message)
+                    }
+                    else{
+                        var d = Data(count: 1)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    }
+                }
+                else if encodingType is UInt8{
+                    let data = UInt8(value) ?? nil
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 1)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                        
+                    }
+                }
+                else if encodingType is UInt16{
+                    let data = UInt16(value) ?? nil
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 2)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    }
+                }
+                else if encodingType is Int16{
+                    let data = Int16(value) ?? nil
+                    if isValidValue(value: data, characteristicName: name){
+                        var d = Data(count: 2)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    }
+                }
+                else{
+                    showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
+                }
+            }
+            
+        }
+        else{
+            showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
+        }
     }
     
     private func isValidValue(value: Any?, characteristicName: String) -> Bool {

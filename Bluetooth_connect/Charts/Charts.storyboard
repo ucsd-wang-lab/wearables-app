@@ -50,16 +50,16 @@
                                     <action selector="saveButtonClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="iRs-9Y-KVZ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJG-2a-ObL">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vJG-2a-ObL">
                                 <rect key="frame" x="329" y="44" width="65" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="27i-D8-OpU"/>
                                     <constraint firstAttribute="width" constant="65" id="5Az-dy-cig"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Stop"/>
+                                <state key="normal" title="Import"/>
                                 <connections>
-                                    <action selector="startStopClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="59b-Py-Rft"/>
+                                    <action selector="importButtonClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="jxF-oo-BHc"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaO-8B-PWQ">
@@ -116,7 +116,6 @@
                     <connections>
                         <outlet property="chartsTitle" destination="4qf-qd-7oj" id="lfd-h8-ZuA"/>
                         <outlet property="graphView" destination="cqw-fK-zNZ" id="kr4-kr-QQ0"/>
-                        <outlet property="stopStartButton" destination="vJG-2a-ObL" id="5Be-Oy-uzP"/>
                         <outlet property="yAxisTitleLabel" destination="ay6-FP-IuJ" id="BKu-Bj-egP"/>
                     </connections>
                 </viewController>
