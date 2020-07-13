@@ -10,6 +10,7 @@
 var configsList:[Config] = []
 var connectedDeiviceName:String?
 var loopCount:Int?
+var currentLoopCount = -1
 var totalHr: Int = 0
 var totalMin: Int = 0
 var totalSec: Int = 0

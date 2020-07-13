@@ -13,6 +13,8 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var testNameTextField: UITextField!
     @IBOutlet weak var addTestButton: UIButton!
     
+    var isUpdate:Bool?
+    var updateIndex:Int?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,8 +58,14 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     @IBAction func addTestButtonPressed(_ sender: Any) {
         if let viewController = self.navigationController?.viewControllers[3]{
             tempTestConfig?.name = testNameTextField.text
-            configsList.append(tempTestConfig!)
-            tempTestConfig = nil
+            if let _ = isUpdate, let index = updateIndex{
+                configsList[index] = tempTestConfig!
+            }
+            else{
+                configsList.append(tempTestConfig!)
+                tempTestConfig = nil
+            }
+            
             
             self.navigationController?.popToViewController(viewController, animated: true)
         }

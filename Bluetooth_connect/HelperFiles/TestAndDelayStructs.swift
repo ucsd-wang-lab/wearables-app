@@ -31,4 +31,30 @@ struct TestConfig: Config {
     
     var measurementTypeIndex: Int
     var leadConfigIndex: Int
+    
+    init() {
+        hour = 0
+        min = 0
+        sec = 0
+        milSec = 0
+        
+        testSettings = [:]
+        measurementTypeIndex = -1
+        leadConfigIndex = -1
+    }
+}
+
+
+struct TestData{
+    
+    var name: String?
+    var data:[Int: [Double]]
+    
+    init() {
+        data = [:]
+    }
+    
+    mutating func insertData(loopCount: Int, data: Double){
+        self.data[loopCount]?.append(data)
+    }
 }

@@ -141,6 +141,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 //        print("didUpdateValueFor: ", characteristic)
         if let data = characteristic.value {
             let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString)!
+            print("\n\nValue updated: \(name)")
             notifyBLEValueUpdate(bleName: name, data: data)
         }
     }

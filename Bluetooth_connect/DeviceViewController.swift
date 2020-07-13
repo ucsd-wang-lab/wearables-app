@@ -64,6 +64,10 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        if let lCount = loopCount{
+            loopCountTextField.text = String(lCount)
+        }
+        
         if let name = sensorName{
             deviceNameLabel.text = name
         }
@@ -140,11 +144,18 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
             } else {
                 performSegue(withIdentifier: "toDelayConfiguration", sender: self)
             }
-        
-            
         }
         else{
-            print("Test config")
+            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+            if #available(iOS 13.0, *) {
+                let controller = storyboard.instantiateViewController(identifier: "testController") as! TestConfigurationViewController
+                controller.isUpdate = true
+                controller.updateIndex = indexPath.row
+                tempTestConfig = configsList[indexPath.row] as? TestConfig
+                self.navigationController?.pushViewController(controller, animated: true)
+            } else {
+                performSegue(withIdentifier: "toTestConfiguration", sender: self)
+            }
         }
     }
     
@@ -197,7 +208,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         let cell = tableView.dequeueReusableCell(withIdentifier: "testTableViewCell") as! TestTableViewCell
         
         let config = configsList[indexPath.row]
-        print("\n\nconfig = \(config)\n\n")
+//        print("\n\nconfig = \(config)\n\n")
         let hour = config.hour
         let min = config.min
         let sec = config.sec

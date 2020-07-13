@@ -24,6 +24,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                                                  4: ["Gain": " k\u{2126}"]
                                                 ]
     
+    var isUpdate:Bool?
+    var updateIndex:Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +44,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         super.viewDidAppear(animated)
         
         if tempTestConfig == nil{
-            tempTestConfig = TestConfig(name: nil, hour: 0, min: 0, sec: 0, milSec: 0, testSettings: [:], measurementTypeIndex: measurementTypeSegmentedControl.selectedSegmentIndex, leadConfigIndex: leadConfigSegmentedControl.selectedSegmentIndex)
+            tempTestConfig = TestConfig()
         }
     }
     
@@ -68,7 +70,18 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     // when hitting enter on the textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        for key in valueTextField.keys{
+            let tf = valueTextField[key]
+            if textField == tf {
+                let nextKey = key + 1
+                if let nextTF = valueTextField[nextKey]{
+                    nextTF.becomeFirstResponder()
+                }
+                else{
+                    textField.resignFirstResponder()
+                }
+            }
+        }
         return true
     }
     
@@ -184,10 +197,25 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     }
     
     @IBAction func nextButtonClicked(_ sender: Any) {
-        performSegue(withIdentifier: "toTestName", sender: self)
+        var canSegue = true
+        for key in unitsMapping.keys{
+            let characteristics = unitsMapping[key]![0].key
+            if tempTestConfig?.testSettings[characteristics] == nil{
+                canSegue = false
+            }
+        }
+        if canSegue{
+            performSegue(withIdentifier: "toLeadConfig", sender: self)
+        }
+        else{
+            showErrorMessage(message: "Must set all characteristics!", textField: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! LeadSelectionViewController
+        controller.isUpdate = isUpdate
+        controller.updateIndex = updateIndex
         tempTestConfig?.measurementTypeIndex = measurementTypeSegmentedControl.selectedSegmentIndex
         tempTestConfig?.leadConfigIndex = leadConfigSegmentedControl.selectedSegmentIndex
     }

@@ -272,6 +272,7 @@ class CharacteristicsUUID{
 //    }
     
     func getCharacteristicDataType(characteristicName: String) -> Any?{
+        
         return characteristicDataType[characteristicName]
     }
     

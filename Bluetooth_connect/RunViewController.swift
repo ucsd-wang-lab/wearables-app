@@ -31,7 +31,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         bottomLine.backgroundColor = UIColor(red: 0x41/255, green: 0xb2/255, blue: 0x5b/255, alpha: 1).cgColor
         loopCountTextField.borderStyle = .none
         loopCountTextField.layer.addSublayer(bottomLine)
-        loopCountTextField.isUserInteractionEnabled = false
+        loopCountTextField.addDoneButton(onDone: (target: self, action: #selector(self.doneButtonPressed)))
+        loopCountTextField.isUserInteractionEnabled = true
 
         // Do any additional setup after loading the view.
         let tabBarItem = UITabBarItem(title: "Run", image: UIImage(named: "2")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "2sel")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
@@ -46,6 +47,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         listOfTestTableView.tableFooterView = UIView()  // Show no empty cell at the bottom
         listOfTestTableView.delegate = self
         listOfTestTableView.dataSource = self
+        
+        BluetoothInterface.instance.attachBLEValueObserver(id: self.id, observer: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,6 +62,11 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         testOrderList = []
         constructTestOrder()
         listOfTestTableView.reloadData()
+    }
+    
+    @objc func doneButtonPressed(){
+        loopCount = Int(loopCountTextField.text ?? "0")
+        self.view.endEditing(true)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -125,5 +133,92 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             }
         }
     }
+    @IBAction func startStopQueueButtonClicked(_ sender: Any) {
+        let button = sender as! UIButton
+        if button.tag == 0{
+            // Test is not running
+            if listOfTestTableView.numberOfSections == 0{
+                showErrorMessage(message: "There must be a test present to start queue!")
+            }
+            else if loopCount == nil{
+                showErrorMessage(message: "Loop count must be provided!")
+            }
+            else if loopCount! < 0{
+                showErrorMessage(message: "Loop count must be non-negative!")
+            }
+            else{
+                if currentLoopCount == -1{
+                    currentLoopCount = loopCount!
+                }
+                sendTestConfiguration(testCofig: testOrderList[0] )
+                button.layer.backgroundColor = UIColor(red: 1, green: 0x3b/255, blue: 0x30/255, alpha: 1).cgColor
+                button.setTitle("Stop Queue", for: .normal)
+                button.tag = 1
+            }
+        }
+        else{
+            // Test is running
+            button.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
+            button.setTitle("Start Queue", for: .normal)
+            button.tag = 0
+        }
+    }
+    
+    @IBAction func saveDataButtonPressed(_ sender: Any) {
+        
+    }
+    
+    private func showErrorMessage(message: String){
+        let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
 
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    func sendTestConfiguration(testCofig: TestConfig){
+        for characteristics in testCofig.testSettings.keys{
+            let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristics)
+            print("Encoding Type: \(encodingType)\n\n")
+            let value = testCofig.testSettings[characteristics]!
+            var data = Data(count: 4)
+            data = withUnsafeBytes(of: value) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristics)!
+            BluetoothInterface.instance.writeData(data: data, characteristicUUIDString: charUUID)
+        }
+        
+        // Sending Start Signal
+//        let data: UInt8 = 1
+//        var d: Data = Data(count: 1)
+//        d = withUnsafeBytes(of: data) { Data($0) }
+//        let measurementTypeIndex = testCofig.measurementTypeIndex
+//
+//        if measurementTypeIndex == 0{
+//            // Ampero
+//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+//        }
+//        else if measurementTypeIndex == 1{
+//            // Potentio
+//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Potentiometry")!
+//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+//        }
+//        else{
+//            showErrorMessage(message: "Enable to start measurement\nContact Developer")
+//        }
+    }
+}
+
+extension RunViewController: BLEValueUpdateObserver{
+    var id: Int {
+        10
+    }
+    
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
+            let data = value.int32
+            print("data = ", data)
+        }
+    }
+    
+    
 }
