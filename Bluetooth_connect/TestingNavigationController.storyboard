@@ -790,6 +790,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Test Configuration" id="7Xl-gE-boP"/>
                     <connections>
+                        <outlet property="durationLabel" destination="y41-0O-Xe6" id="cvl-cc-D3o"/>
                         <outlet property="leadConfigSegmentedControl" destination="17G-qu-20t" id="cig-s2-36W"/>
                         <outlet property="measurementTypeSegmentedControl" destination="VMh-7n-1IW" id="p04-jP-UVl"/>
                         <outlet property="nextButton" destination="RjZ-PR-GUw" id="XrJ-um-tFR"/>

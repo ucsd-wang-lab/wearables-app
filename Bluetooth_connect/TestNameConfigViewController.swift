@@ -24,6 +24,7 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         bottomLine.backgroundColor = UIColor(red: 0x41/255, green: 0xb2/255, blue: 0x5b/255, alpha: 1).cgColor
         testNameTextField.borderStyle = .none
         testNameTextField.layer.addSublayer(bottomLine)
+        testNameTextField.returnKeyType = .done
         
         addTestButton.layer.cornerRadius = addTestButton.layer.bounds.height / 3
     }

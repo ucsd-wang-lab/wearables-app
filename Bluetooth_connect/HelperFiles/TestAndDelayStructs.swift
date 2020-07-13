@@ -26,6 +26,7 @@ struct TestConfig: Config {
     var min: Int
     var sec: Int
     var milSec: Int
+    var initialDelay: Int
     
     var testSettings:[String:Int]
     
@@ -37,6 +38,7 @@ struct TestConfig: Config {
         min = 0
         sec = 0
         milSec = 0
+        initialDelay = 0
         
         testSettings = [:]
         measurementTypeIndex = -1

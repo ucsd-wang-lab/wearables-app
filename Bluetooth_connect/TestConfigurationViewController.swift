@@ -10,6 +10,7 @@ import UIKit
 
 class TestConfigurationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
+    @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var testConfigTableView: UITableView!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var measurementTypeSegmentedControl: UISegmentedControl!
@@ -126,6 +127,10 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         return view
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.view.endEditing(true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "testConfigCell") as! TestConfigTableViewCell
         cell.keyLabel.text = "\(unitsMapping[indexPath.section]![0].key)"
@@ -140,6 +145,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         cell.valueLabel.delegate = self
         valueTextField[indexPath.section] = cell.valueLabel
         cell.unitsLabel.text = " \(unitsMapping[indexPath.section]![0].value)"
+        cell.selectionStyle = .none
+        
 //        print("Section = \(indexPath.section)\t \(unitsMapping[indexPath.section]![0].key)")
         return cell
     }
@@ -177,11 +184,27 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     private func calculateDuration(characteristicName: String, value: String){
         if let initialDelay = tempTestConfig?.testSettings["Initial Delay"]{
-            tempTestConfig?.milSec += initialDelay
+            tempTestConfig?.initialDelay = initialDelay
         }
-        if let samplePeriod = tempTestConfig?.testSettings["Sample Period"], let sampleCount = tempTestConfig?.testSettings["Sample Count"]{
+        if let samplePeriod = tempTestConfig?.testSettings["Sample Period"], let sampleCount = tempTestConfig?.testSettings["Sample Count"], let initialDelay = tempTestConfig?.initialDelay{
             let delay = samplePeriod * sampleCount
-            tempTestConfig?.milSec += delay
+            tempTestConfig?.sec = 0
+            tempTestConfig?.min = 0
+            tempTestConfig?.hour = 0
+            
+            tempTestConfig?.milSec = delay + initialDelay
+            tempTestConfig?.sec += (delay + initialDelay) / 1000
+            tempTestConfig?.milSec = (delay + initialDelay) % 1000
+            
+            var temp = tempTestConfig!.sec
+            tempTestConfig?.min += temp / 60
+            tempTestConfig?.sec = temp % 60
+            
+            temp = tempTestConfig!.min
+            tempTestConfig?.hour += temp / 60
+            tempTestConfig?.min = temp % 60
+            
+            durationLabel.text = "Duration: " + constructDelayString(hour: tempTestConfig!.hour, min: tempTestConfig!.min, sec: tempTestConfig!.sec)
         }
     }
     

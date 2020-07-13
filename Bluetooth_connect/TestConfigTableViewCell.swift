@@ -48,6 +48,7 @@ class TestConfigTableViewCell: UITableViewCell {
 
         let value_label_frame = CGRect(x: keyLabel.frame.maxX, y: 0, width: width * 0.3, height: height)
         valueLabel.frame = value_label_frame
+        valueLabel.returnKeyType = .next
         
         let suffix_label_frame = CGRect(x: valueLabel.frame.maxX, y: 0, width: width * 0.2, height: height)
         unitsLabel.frame = suffix_label_frame
