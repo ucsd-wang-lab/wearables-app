@@ -217,7 +217,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         cell.cellTitle.text = config.name
         cell.cellRuntime.text = "Run Time: " + delayStr
         
-        cell.selectionStyle = UITableViewCell.SelectionStyle.default
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         updateTotalDuration(hour: hour, min: min, sec: sec)
         return cell

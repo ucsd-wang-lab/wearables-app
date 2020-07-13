@@ -894,7 +894,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rfc-6y-vgK">
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rfc-6y-vgK">
                                 <rect key="frame" x="92" y="306" width="60" height="60"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -906,7 +906,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWr-ek-LiR">
+                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mWr-ek-LiR">
                                 <rect key="frame" x="262" y="476" width="60" height="60"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -918,7 +918,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvt-3g-NWi">
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mvt-3g-NWi">
                                 <rect key="frame" x="92" y="476" width="60" height="60"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -948,7 +948,7 @@
                                     <action selector="nextButtonClicked:" destination="QF9-qz-URi" eventType="touchUpInside" id="hXz-zj-uZO"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcC-tC-cIg">
+                            <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KcC-tC-cIg">
                                 <rect key="frame" x="262" y="306" width="60" height="60"/>
                                 <color key="backgroundColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -963,14 +963,14 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Q0s-eb-mcU">
                                 <rect key="frame" x="115" y="67" width="184" height="32"/>
                                 <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Q0s-eb-mcU" secondAttribute="height" multiplier="185:31" id="SOc-gQ-14T"/>
-                                </constraints>
                                 <segments>
-                                    <segment title="Working"/>
-                                    <segment title="Reference"/>
+                                    <segment title="WE"/>
+                                    <segment title="CE"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" red="0.97647058823529409" green="0.82745098039215681" blue="0.47843137254901957" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="segmentedControlIndexChanged:" destination="QF9-qz-URi" eventType="valueChanged" id="r9L-6z-kji"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -1000,13 +1000,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="znc-sw-wJl"/>
                     <connections>
-                        <outlet property="ceButton" destination="mvt-3g-NWi" id="dGx-KQ-H6q"/>
+                        <outlet property="E1Button" destination="Rfc-6y-vgK" id="42i-A9-dRN"/>
+                        <outlet property="E2Button" destination="mvt-3g-NWi" id="dGx-KQ-H6q"/>
+                        <outlet property="E3Button" destination="mWr-ek-LiR" id="MuB-IS-26T"/>
+                        <outlet property="E4Button" destination="KcC-tC-cIg" id="ehD-We-PXs"/>
                         <outlet property="leadSelectionSegmentedControl" destination="Q0s-eb-mcU" id="Q2n-p9-EOU"/>
                         <outlet property="nextButton" destination="WjT-Cr-pBx" id="no6-AM-ghy"/>
                         <outlet property="reButton" destination="Qf2-e3-nWf" id="yzC-ML-oMU"/>
-                        <outlet property="we1Button" destination="Rfc-6y-vgK" id="42i-A9-dRN"/>
-                        <outlet property="we2Button" destination="KcC-tC-cIg" id="ehD-We-PXs"/>
-                        <outlet property="we3Button" destination="mWr-ek-LiR" id="MuB-IS-26T"/>
                         <segue destination="onY-Lx-zaN" kind="show" identifier="toNameConfig" id="y44-iT-awK"/>
                     </connections>
                 </viewController>

@@ -42,6 +42,7 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         
     // when hitting enter on the textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        addTestButtonPressed(textField)
         self.view.endEditing(true)
         return true
     }
@@ -56,19 +57,33 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    private func showErrorMessage(message: String, textField: UITextField?){
+        let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true) {
+            if let tf = textField{
+                tf.becomeFirstResponder()
+            }
+        }
+    }
+    
     @IBAction func addTestButtonPressed(_ sender: Any) {
-        if let viewController = self.navigationController?.viewControllers[3]{
-            tempTestConfig?.name = testNameTextField.text
-            if let _ = isUpdate, let index = updateIndex{
-                configsList[index] = tempTestConfig!
+        if self.testNameTextField.text != ""{
+            if let viewController = self.navigationController?.viewControllers[3]{
+                tempTestConfig?.name = testNameTextField.text
+                if let _ = isUpdate, let index = updateIndex{
+                    configsList[index] = tempTestConfig!
+                }
+                else{
+                    configsList.append(tempTestConfig!)
+                    tempTestConfig = nil
+                }
+                self.navigationController?.popToViewController(viewController, animated: true)
             }
-            else{
-                configsList.append(tempTestConfig!)
-                tempTestConfig = nil
-            }
-            
-            
-            self.navigationController?.popToViewController(viewController, animated: true)
+        }
+        else{
+            showErrorMessage(message: "Test name must not be empty!", textField: testNameTextField)
         }
     }
 }
