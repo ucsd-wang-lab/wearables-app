@@ -178,33 +178,89 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     func sendTestConfiguration(testCofig: TestConfig){
         for characteristics in testCofig.testSettings.keys{
             let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristics)
-            print("Encoding Type: \(encodingType)\n\n")
             let value = testCofig.testSettings[characteristics]!
-            var data = Data(count: 4)
-            data = withUnsafeBytes(of: value) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristics)!
-            BluetoothInterface.instance.writeData(data: data, characteristicUUIDString: charUUID)
+            updateValue(name: characteristics, encodingType: encodingType, value: String(value))
         }
         
         // Sending Start Signal
-//        let data: UInt8 = 1
-//        var d: Data = Data(count: 1)
-//        d = withUnsafeBytes(of: data) { Data($0) }
-//        let measurementTypeIndex = testCofig.measurementTypeIndex
-//
-//        if measurementTypeIndex == 0{
-//            // Ampero
-//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-//        }
-//        else if measurementTypeIndex == 1{
-//            // Potentio
-//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Potentiometry")!
-//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-//        }
-//        else{
-//            showErrorMessage(message: "Enable to start measurement\nContact Developer")
-//        }
+        let data: UInt8 = 1
+        var d: Data = Data(count: 1)
+        d = withUnsafeBytes(of: data) { Data($0) }
+        let measurementTypeIndex = testCofig.measurementTypeIndex
+
+        if measurementTypeIndex == 0{
+            // Ampero
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else if measurementTypeIndex == 1{
+            // Potentio
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Potentiometry")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
+        else{
+            showErrorMessage(message: "Enable to start measurement\nContact Developer")
+        }
+    }
+    
+    private func updateValue(name: String, encodingType: Any?, value: String?){
+        if let value = value{
+            if value == ""{
+                showErrorMessage(message: "Value Field Cannot be empty")
+            }
+            else if Int(value) == nil{
+                showErrorMessage(message: "Value Field Must be a number")
+            }
+            else{
+                if name == "Electrode Mask"{
+                    let data = UInt8(value, radix: 2) ?? nil
+                    if data == nil {
+                        let message = "Value Field must be valid 8-bit binary input"
+                        showErrorMessage(message: message)
+                    }
+                    else{
+                        var d = Data(count: 1)
+                        d = withUnsafeBytes(of: data!) { Data($0) }
+                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    }
+                }
+                else if encodingType is UInt8{
+                    let data = UInt8(value) ?? nil
+                    var d = Data(count: 1)
+                    d = withUnsafeBytes(of: data!) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                }
+                else if encodingType is UInt16{
+                    let data = UInt16(value) ?? nil
+                    var d = Data(count: 2)
+                    d = withUnsafeBytes(of: data!) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    
+                }
+                else if encodingType is Int16{
+                    let data = Int16(value) ?? nil
+                    var d = Data(count: 2)
+                    d = withUnsafeBytes(of: data!) { Data($0) }
+                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
+                    
+                }
+                else{
+                    showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
+                }
+            }
+            
+        }
+        else{
+            showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
+        }
     }
 }
 

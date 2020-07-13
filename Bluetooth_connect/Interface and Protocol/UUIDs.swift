@@ -95,7 +95,7 @@ class CharacteristicsUUID{
         setupCharacteristicNametoUUID()
         setupUUIDtoCharacteristicName()
         setCharacteristicPropery()
-//        setCharacteristicDataType()
+        setCharacteristicDataType()
 //        setCharacteristicValue()
     }
     
