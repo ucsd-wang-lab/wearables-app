@@ -41,3 +41,15 @@ class ChartsViewController: UIViewController {
     */
 
 }
+
+extension ChartsViewController: BLEValueUpdateObserver{
+    var id: Int {
+        9
+    }
+    
+    func update(with characteristicUUIDString: String, with value: Data) {
+        // do nothing....
+    }
+    
+    
+}

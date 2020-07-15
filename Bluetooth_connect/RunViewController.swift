@@ -266,7 +266,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
 
 extension RunViewController: BLEValueUpdateObserver{
     var id: Int {
-        10
+        8
     }
     
     func update(with characteristicUUIDString: String, with value: Data) {

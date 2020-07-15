@@ -69,21 +69,33 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func addTestButtonPressed(_ sender: Any) {
-        if self.testNameTextField.text != ""{
-            if let viewController = self.navigationController?.viewControllers[3]{
-                tempTestConfig?.name = testNameTextField.text
-                if let _ = isUpdate, let index = updateIndex{
-                    configsList[index] = tempTestConfig!
-                }
-                else{
-                    configsList.append(tempTestConfig!)
-                    tempTestConfig = nil
-                }
-                self.navigationController?.popToViewController(viewController, animated: true)
+        if let viewController = self.navigationController?.viewControllers[3]{
+            tempTestConfig?.name = testNameTextField.text
+            if let _ = isUpdate, let index = updateIndex{
+                configsList[index] = tempTestConfig!
             }
+            else{
+                configsList.append(tempTestConfig!)
+                tempTestConfig = nil
+            }
+            self.navigationController?.popToViewController(viewController, animated: true)
         }
-        else{
-            showErrorMessage(message: "Test name must not be empty!", textField: testNameTextField)
-        }
+        
+//        if self.testNameTextField.text != ""{
+//            if let viewController = self.navigationController?.viewControllers[3]{
+//                tempTestConfig?.name = testNameTextField.text
+//                if let _ = isUpdate, let index = updateIndex{
+//                    configsList[index] = tempTestConfig!
+//                }
+//                else{
+//                    configsList.append(tempTestConfig!)
+//                    tempTestConfig = nil
+//                }
+//                self.navigationController?.popToViewController(viewController, animated: true)
+//            }
+//        }
+//        else{
+//            showErrorMessage(message: "Test name must not be empty!", textField: testNameTextField)
+//        }
     }
 }
