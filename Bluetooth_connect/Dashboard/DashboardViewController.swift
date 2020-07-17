@@ -95,7 +95,6 @@ class DashboardViewController: UIViewController{
     
     // when touched anywhere on the screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touched somewhere on the screen...")
         self.view.endEditing(true)
     }
     

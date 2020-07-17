@@ -123,12 +123,8 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 
             for characteristic in characteristics{
 //                print("Characteristics = ", characteristic.uuid.uuidString)
-                if let _ = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
-//                    print("characteristics = ", name)
-//
-//                    if name == "Electrode Selection"{
-//                        print("Found Electrode Mast Selection")
-//                    }
+                if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
+                    print("characteristics = \(name)")
                     
                     characteristicDictionary.updateValue(characteristic, forKey: characteristic.uuid.uuidString)
                     notifyBLECharacteristicObserver(characteristicUUIDString: characteristic.uuid.uuidString)
@@ -194,7 +190,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         self.centralManager.cancelPeripheralConnection(self.connectedPeripheral)
 //        self.connectedPeripheral = nil
         self.serviceDictionary.removeAll()
-        self.characteristicDictionary.removeAll()
+//        self.characteristicDictionary.removeAll()
     }
     
     var connectedPeripheral: CBPeripheral!

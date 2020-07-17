@@ -16,6 +16,11 @@ class ChartsViewController: UIViewController {
     @IBOutlet weak var graphView: LineChartView!
     @IBOutlet weak var chartsTitle: UILabel!
     @IBOutlet weak var yAxisTitleLabel: UILabel!
+    @IBOutlet weak var startStopLabel: UIButton!
+    @IBOutlet weak var yValueLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var floatingLabel: UILabel!
+    
     
     var chartData = [Double]()
     var spinner: UIActivityIndicatorView!
@@ -48,6 +53,8 @@ class ChartsViewController: UIViewController {
         currentTime = df.string(from: Date())
         
         yAxisTitleLabel.transform = CGAffineTransform(rotationAngle: 3 * CGFloat.pi / 2)
+        
+        graphView.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,7 +89,11 @@ class ChartsViewController: UIViewController {
         line.colors = [.orange]
         line.circleColors = [.orange]
         line.circleHoleColor = .orange
-        line.circleRadius = 1.5
+        line.circleRadius = 1.0
+        line.setDrawHighlightIndicators(true)
+        line.highlightEnabled = true
+        line.highlightLineWidth = 1.5
+        line.highlightColor = .darkGray
         
         // User the following lines of code to enable background color
 //        line.fill = Fill.fillWithColor(.orange)
@@ -104,6 +115,7 @@ class ChartsViewController: UIViewController {
         graphView.xAxis.drawGridLinesEnabled = false
         graphView.xAxis.labelPosition = .bottom
         graphView.xAxis.labelTextColor = .orange
+        
         graphView.legend.enabled = true
     }
     
@@ -116,11 +128,15 @@ class ChartsViewController: UIViewController {
             let numOfPoints = graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0
             let newValue = ChartDataEntry(x: Double(numOfPoints) * samplePeriod! / 1000, y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
+            timeLabel.text = "Time (sec): \(Double(numOfPoints) * samplePeriod! / 1000)"
+            yValueLabel.text = yAxisTitleLabel.text! + ": \(value / 1e6)"
             graphView.notifyDataSetChanged()
         }
         else{
             let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
+            timeLabel.text = "Time (sec): \(Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0))"
+            yValueLabel.text = yAxisTitleLabel.text! + ": \(value / 1e6)"
             graphView.notifyDataSetChanged()
         }
     }
@@ -135,7 +151,11 @@ class ChartsViewController: UIViewController {
         line.colors = [color]
         line.circleColors = [color]
         line.circleHoleColor = color
-        line.circleRadius = 1.5
+        line.circleRadius = 1.0
+        line.setDrawHighlightIndicators(true)
+        line.highlightEnabled = true
+        line.highlightLineWidth = 1.5
+        line.highlightColor = .darkGray
        
         graphView.data?.dataSets.append(line)
         graphView.data?.setDrawValues(false)
@@ -196,6 +216,7 @@ class ChartsViewController: UIViewController {
             composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(self.chartsTitle.text!)_data_mesaurement\(count)_\(currentTime ?? "Couldn't get current time").csv")
         }
         self.present(composer, animated: true)
+        
     }
     
     private func createCSV(currentTime: String) -> [String]{
@@ -247,7 +268,6 @@ class ChartsViewController: UIViewController {
             sender.setTitle("Start", for: .normal)
             let data: UInt8 = 0
             var d: Data = Data(count: 1)
-    //        d[0] = data
             d = withUnsafeBytes(of: data) { Data($0) }
             let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
             BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
@@ -257,21 +277,11 @@ class ChartsViewController: UIViewController {
             sender.setTitle("Stop", for: .normal)
             let data: UInt8 = 1
             var d: Data = Data(count: 1)
-    //        d[0] = data
             d = withUnsafeBytes(of: data) { Data($0) }
             let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
             BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
         }
     }
-    
-    @IBAction func importButtonClicked(_ sender: Any) {
-        print("Import Button clicked.....")
-        let documentPicker = UIDocumentPickerViewController(documentTypes: [kUTTypePlainText as String], in: .import)
-        documentPicker.delegate = self
-        documentPicker.allowsMultipleSelection = false
-        present(documentPicker, animated: true, completion: nil)
-    }
-    
     
     private func readCharacteristicValue(characteristicName: String){
            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: characteristicName)!
@@ -316,7 +326,7 @@ class ChartsViewController: UIViewController {
     }
 }
 
-extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate, UIDocumentPickerDelegate{
+extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMailComposeViewControllerDelegate, UIDocumentPickerDelegate, ChartViewDelegate{
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         // do nothing.....
     }
@@ -385,6 +395,7 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
         else if characteristicUUIDString == "Queue Complete"{
             // do nothing.....
             print("Queue Complete....")
+            self.startStopLabel.setTitle("Start", for: .normal)
         }
         
         if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
@@ -431,7 +442,21 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
             }
         }
         else{
-            print("Write response received: \(name)")
+            print("Write response received: \(name ?? "nil")")
         }
+    }
+    
+    func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        timeLabel.text = "Time (sec): \(entry.x)"
+        yValueLabel.text = yAxisTitleLabel.text! + ": " + String(entry.y)
+        
+        floatingLabel.isHidden = false
+        floatingLabel.text = "(\(entry.x), \(entry.y))"
+        floatingLabel.frame = CGRect(x: highlight.xPx, y: chartView.frame.minY, width: 120, height: 15)
+    }
+    
+    func chartValueNothingSelected(_ chartView: ChartViewBase) {
+        print("Nothing selected.....")
+        floatingLabel.isHidden = true
     }
 }
