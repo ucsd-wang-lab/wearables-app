@@ -35,7 +35,7 @@
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZmW-QJ-oaW">
-                                <rect key="frame" x="298.5" y="796" width="90.5" height="36"/>
+                                <rect key="frame" x="268.5" y="796" width="120.5" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Repeat"/>
                                 <connections>
@@ -43,7 +43,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HPi-DK-Gbh">
-                                <rect key="frame" x="25" y="796" width="96.5" height="36"/>
+                                <rect key="frame" x="25" y="796" width="120.5" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
@@ -63,12 +63,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UaO-8B-PWQ">
-                                <rect key="frame" x="178.5" y="796" width="57" height="36"/>
+                                <rect key="frame" x="165.5" y="788" width="83" height="52"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="57" id="cu8-Hd-Uzo"/>
+                                    <constraint firstAttribute="width" secondItem="UaO-8B-PWQ" secondAttribute="height" multiplier="19:12" id="3L6-up-D4B"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Delete"/>
+                                <state key="normal" title="Delete All"/>
                                 <connections>
                                     <action selector="deleteButtonClicked:" destination="tAA-Ze-NAQ" eventType="touchUpInside" id="pkF-53-y4a"/>
                                 </connections>
@@ -137,14 +137,15 @@
                             <constraint firstItem="YQP-3m-gRz" firstAttribute="leading" secondItem="oPY-kF-cj8" secondAttribute="leadingMargin" id="pSK-5Y-9No"/>
                             <constraint firstItem="ay6-FP-IuJ" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="-30" id="pab-t1-D5s"/>
                             <constraint firstItem="5r8-40-6Td" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="5" id="tEQ-Oo-RKS"/>
-                            <constraint firstItem="UaO-8B-PWQ" firstAttribute="leading" secondItem="HPi-DK-Gbh" secondAttribute="trailing" constant="57" id="umh-Ty-ktE"/>
-                            <constraint firstItem="ZmW-QJ-oaW" firstAttribute="leading" secondItem="UaO-8B-PWQ" secondAttribute="trailing" constant="63" id="yIs-dk-XmB"/>
+                            <constraint firstItem="UaO-8B-PWQ" firstAttribute="leading" secondItem="HPi-DK-Gbh" secondAttribute="trailing" constant="20" id="umh-Ty-ktE"/>
+                            <constraint firstItem="ZmW-QJ-oaW" firstAttribute="leading" secondItem="UaO-8B-PWQ" secondAttribute="trailing" constant="20" id="yIs-dk-XmB"/>
                             <constraint firstItem="7I0-K8-D8T" firstAttribute="trailing" secondItem="ZmW-QJ-oaW" secondAttribute="trailing" constant="25" id="zFa-QD-gj6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7I0-K8-D8T"/>
                     </view>
                     <connections>
                         <outlet property="chartsTitle" destination="4qf-qd-7oj" id="lfd-h8-ZuA"/>
+                        <outlet property="deleteButton" destination="UaO-8B-PWQ" id="GaG-n8-s4x"/>
                         <outlet property="floatingLabel" destination="5Dk-uQ-ixA" id="QNr-xt-lja"/>
                         <outlet property="graphView" destination="cqw-fK-zNZ" id="kr4-kr-QQ0"/>
                         <outlet property="startStopLabel" destination="vJG-2a-ObL" id="QTC-aH-hEa"/>

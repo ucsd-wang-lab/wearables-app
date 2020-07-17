@@ -20,9 +20,11 @@ class ChartsViewController: UIViewController {
     @IBOutlet weak var yValueLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var floatingLabel: UILabel!
+    @IBOutlet weak var deleteButton: UIButton!
     
     
     var chartData = [Double]()
+    var chartsColor = [UIColor]()
     var spinner: UIActivityIndicatorView!
     
     var deviceName: String?
@@ -31,6 +33,8 @@ class ChartsViewController: UIViewController {
     var sampleCount = 0
     var currentTime: String!
     var samplePeriod: Double?
+    var selectedIndex: Int = -1
+    var numOfMeasurement = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,8 +88,9 @@ class ChartsViewController: UIViewController {
     
     func customizeChart(){
         graphView.data = nil
+        numOfMeasurement += 1
         let lineChartEntry = [ChartDataEntry]()
-        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement 1")
+        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(numOfMeasurement)")
         line.colors = [.orange]
         line.circleColors = [.orange]
         line.circleHoleColor = .orange
@@ -93,7 +98,8 @@ class ChartsViewController: UIViewController {
         line.setDrawHighlightIndicators(true)
         line.highlightEnabled = true
         line.highlightLineWidth = 1.5
-        line.highlightColor = .darkGray
+        line.highlightColor = line.color(atIndex: 0)
+        chartsColor.append(.orange)
         
         // User the following lines of code to enable background color
 //        line.fill = Fill.fillWithColor(.orange)
@@ -143,9 +149,9 @@ class ChartsViewController: UIViewController {
     
     // This function creates a new line to be added to the line chart data
     func updateChart(){
-        let num_of_lines = graphView.data?.dataSetCount ?? 1
+        numOfMeasurement += 1
         let lineChartEntry = [ChartDataEntry]()
-        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(num_of_lines + 1)")
+        let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(numOfMeasurement)")
 
         let color = UIColor.random
         line.colors = [color]
@@ -155,13 +161,15 @@ class ChartsViewController: UIViewController {
         line.setDrawHighlightIndicators(true)
         line.highlightEnabled = true
         line.highlightLineWidth = 1.5
-        line.highlightColor = .darkGray
+        line.highlightColor = line.color(atIndex: 0)
+        chartsColor.append(color)
        
         graphView.data?.dataSets.append(line)
         graphView.data?.setDrawValues(false)
     }
     
     @IBAction func repeatButtonClicked(_ sender: Any) {
+        startStopLabel.setTitle("Stop", for: .normal)
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d[0] = data
@@ -258,7 +266,18 @@ class ChartsViewController: UIViewController {
     }
     
     @IBAction func deleteButtonClicked(_ sender: Any) {
-        customizeChart()
+        if deleteButton.titleLabel?.text == "Delete All"{
+            customizeChart()
+        }
+        else if deleteButton.titleLabel?.text == "Delete Selected" && selectedIndex != -1{
+            graphView.data?.dataSets.remove(at: selectedIndex)
+            chartsColor.remove(at: selectedIndex)
+            let numOfDataset = graphView.data?.dataSets.count ?? 0
+            for i in 0..<numOfDataset{
+                graphView.data?.dataSets[i].setColor(chartsColor[i])
+            }
+            graphView.notifyDataSetChanged()
+        }
     }
     
 
@@ -453,10 +472,29 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
         floatingLabel.isHidden = false
         floatingLabel.text = "(\(entry.x), \(entry.y))"
         floatingLabel.frame = CGRect(x: highlight.xPx, y: chartView.frame.minY, width: 120, height: 15)
+        
+        print("DatasetIndex: \(highlight.dataSetIndex)")
+        let numOfDataset = graphView.data?.dataSets.count ?? 0
+        for i in 0..<numOfDataset{
+            if i != highlight.dataSetIndex{
+                graphView.data?.dataSets[i].setColor(UIColor.clear)
+            }
+            else{
+                graphView.data?.dataSets[i].setColor(chartsColor[i])
+                selectedIndex = highlight.dataSetIndex
+            }
+        }
+        deleteButton.setTitle("Delete Selected", for: .normal)
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
         print("Nothing selected.....")
         floatingLabel.isHidden = true
+        let numOfDataset = graphView.data?.dataSets.count ?? 0
+        for i in 0..<numOfDataset{
+            graphView.data?.dataSets[i].setColor(chartsColor[i])
+        }
+        deleteButton.setTitle("Delete All", for: .normal)
+        selectedIndex = -1
     }
 }
