@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tAA-Ze-NAQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="tAA-Ze-NAQ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -80,7 +80,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current (uA)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ay6-FP-IuJ">
-                                <rect key="frame" x="-35.5" y="437.5" width="95.5" height="21"/>
+                                <rect key="frame" x="-30" y="437.5" width="95.5" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -92,7 +92,6 @@
                             <constraint firstItem="HPi-DK-Gbh" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="25" id="4Uv-nn-K7D"/>
                             <constraint firstItem="UaO-8B-PWQ" firstAttribute="centerX" secondItem="cqw-fK-zNZ" secondAttribute="centerX" constant="-5" id="5ca-AO-Czj"/>
                             <constraint firstItem="vJG-2a-ObL" firstAttribute="trailing" secondItem="oPY-kF-cj8" secondAttribute="trailingMargin" id="6YE-x0-XZ1"/>
-                            <constraint firstItem="cqw-fK-zNZ" firstAttribute="leading" secondItem="ay6-FP-IuJ" secondAttribute="trailing" constant="-40" id="6xQ-jd-4Sm"/>
                             <constraint firstItem="ay6-FP-IuJ" firstAttribute="centerY" secondItem="cqw-fK-zNZ" secondAttribute="centerY" id="BVm-HQ-YnG"/>
                             <constraint firstItem="HPi-DK-Gbh" firstAttribute="baseline" secondItem="ZmW-QJ-oaW" secondAttribute="baseline" id="DCY-Mq-laq"/>
                             <constraint firstItem="4qf-qd-7oj" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="104" id="FhO-o8-WK9"/>
@@ -106,6 +105,7 @@
                             <constraint firstItem="4qf-qd-7oj" firstAttribute="centerX" secondItem="cqw-fK-zNZ" secondAttribute="centerX" constant="-5" id="gda-RV-WYR"/>
                             <constraint firstItem="vJG-2a-ObL" firstAttribute="top" secondItem="oPY-kF-cj8" secondAttribute="topMargin" id="kM9-vo-gdu"/>
                             <constraint firstItem="cqw-fK-zNZ" firstAttribute="centerY" secondItem="oPY-kF-cj8" secondAttribute="centerY" id="oW7-Hl-YnO"/>
+                            <constraint firstItem="ay6-FP-IuJ" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="-30" id="pab-t1-D5s"/>
                             <constraint firstItem="5r8-40-6Td" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="5" id="tEQ-Oo-RKS"/>
                             <constraint firstItem="UaO-8B-PWQ" firstAttribute="leading" secondItem="HPi-DK-Gbh" secondAttribute="trailing" constant="57" id="umh-Ty-ktE"/>
                             <constraint firstItem="ZmW-QJ-oaW" firstAttribute="leading" secondItem="UaO-8B-PWQ" secondAttribute="trailing" constant="63" id="yIs-dk-XmB"/>

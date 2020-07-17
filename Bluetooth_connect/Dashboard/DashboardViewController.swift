@@ -65,6 +65,34 @@ class DashboardViewController: UIViewController{
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let measurement = measurementType{
+            deviceNameLabel.text = measurement
+            if measurement == "Potentiometry"{
+                section_mapping[1]?.remove(at: 0)
+                section_mapping[1]?.remove(at: 3)
+                CHARACTERISTIC_VALUE.removeValue(forKey: "Potential")
+                CHARACTERISTIC_VALUE.removeValue(forKey: "Gain")
+                dashboardTableView.reloadData()
+
+            }
+            else if measurement == "Amperometry"{
+//                section_mapping[1]?.insert("Potential", at: 0)
+//                section_mapping[1]?.insert("Gain", at: 4)
+                CHARACTERISTIC_VALUE.updateValue("-1/+1", forKey: "Potential")
+                CHARACTERISTIC_VALUE.updateValue("xxxx", forKey: "Gain")
+                dashboardTableView.reloadData()
+            }
+        }
+        else{
+            deviceNameLabel.text = "Amperometry"
+        }
+        
+        readInitialValue()
+    }
+    
     // when touched anywhere on the screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("Touched somewhere on the screen...")
@@ -100,7 +128,11 @@ class DashboardViewController: UIViewController{
         for key in valueTextField.keys{
             let tf = valueTextField[key]
             if textField == tf {
-                let name = section_mapping[1]![key]
+                var name = section_mapping[1]![key]
+                if deviceNameLabel.text == "Potentiometry"{
+                    name += " - Potentio"
+                }
+                
                 print("name = ", name)
                 let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
                 let value = textField.text
@@ -145,7 +177,6 @@ class DashboardViewController: UIViewController{
         }
         
         cell.selectionStyle = .none
-//        addDoneButtonOnKeyboard(txtNumber: cell.value_label, tag: indexPath.row)
         cell.value_label.selectAll(nil)
         
         return cell
@@ -166,101 +197,6 @@ class DashboardViewController: UIViewController{
             view.backgroundColor = .clear
             return view
         }
-    }
-    
-    func addDoneButtonOnKeyboard(txtNumber: UITextField, tag: Int)
-    {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        doneToolbar.barStyle = UIBarStyle.default
-      
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Save", style: UIBarButtonItem.Style.done, target: self, action: #selector(saveClicked))
-        done.tag = tag
-      
-        var items = [UIBarButtonItem]()
-        items.append(flexSpace)
-        items.append(done)
-      
-        doneToolbar.items = items
-        doneToolbar.sizeToFit()
-      
-        txtNumber.inputAccessoryView = doneToolbar
-    }
-
-    @objc func saveClicked(_ sender: Any){
-        let button = sender as! UIBarButtonItem
-        let name = section_mapping[1]![button.tag]
-        print("name = ", name)
-        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: name)
-        let indexPath = IndexPath(item: button.tag, section: 1)
-        let cell = dashboardTableView.cellForRow(at: indexPath) as! DashboardEditableCell
-                
-        if let value = cell.value_label.text{
-            if value == ""{
-                showErrorMessage(message: "Value Field Cannot be empty")
-                cell.value_label.becomeFirstResponder()
-            }
-            else if Int(value) == nil{
-                showErrorMessage(message: "Value Field Must be a number")
-                cell.value_label.becomeFirstResponder()
-            }
-            else{
-                if name == "Electrode Mask"{
-                    let data = UInt8(value, radix: 2) ?? nil
-                    if data == nil {
-                        let message = "Value Field must be valid 8-bit binary input"
-                        showErrorMessage(message: message)
-                    }
-                    else{
-                        var d = Data(count: 1)
-                        d = withUnsafeBytes(of: data!) { Data($0) }
-                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    }
-                }
-                else if encodingType is UInt8{
-                    let data = UInt8(value) ?? nil
-                    if isValidValue(value: data, characteristicName: name){
-                        var d = Data(count: 1)
-                        d = withUnsafeBytes(of: data!) { Data($0) }
-                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                        
-                    }
-                }
-                else if encodingType is UInt16{
-                    let data = UInt16(value) ?? nil
-                    if isValidValue(value: data, characteristicName: name){
-                        var d = Data(count: 2)
-                        d = withUnsafeBytes(of: data!) { Data($0) }
-                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    }
-                }
-                else if encodingType is Int16{
-                    let data = Int16(value) ?? nil
-                    if isValidValue(value: data, characteristicName: name){
-                        var d = Data(count: 2)
-                        d = withUnsafeBytes(of: data!) { Data($0) }
-                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    }
-                }
-                else{
-                    showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
-                    cell.value_label.becomeFirstResponder()
-                }
-            }
-            
-        }
-        else{
-            showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
-        }
-        self.view.endEditing(true)
     }
     
     private func updateValue(name: String, encodingType: Any?, value: String?){
@@ -329,9 +265,14 @@ class DashboardViewController: UIViewController{
     }
     
     private func isValidValue(value: Any?, characteristicName: String) -> Bool {
-        let type = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristicName)
-        let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[characteristicName]!
-        let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[characteristicName]!
+        var charName: String = characteristicName
+        if deviceNameLabel.text == "Potentiometry"{
+            charName.removeLast(11)
+        }
+       
+        let type = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: charName)
+        let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[charName]!
+        let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[charName]!
                 
         if value == nil{
             let message = "Value Out of Range\nRange: " + String(minVal) + " to " + String(maxVal)
@@ -377,11 +318,8 @@ class DashboardViewController: UIViewController{
     @IBAction func startMeasurementClicked(_ sender: Any) {
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
-//        d[0] = data
         d = withUnsafeBytes(of: data) { Data($0) }
-//        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-//        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-        if let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: getMeasurementID[deviceNameLabel.text!]!){
+        if let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue"){
             BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
         }
         else{
@@ -402,6 +340,16 @@ class DashboardViewController: UIViewController{
             BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
         }
     
+    }
+    
+    private func readInitialValue(){
+        for characteristicName in section_mapping[1]!{
+            var char = characteristicName
+            if deviceNameLabel.text == "Potentiometry"{
+                char += " - Potentio"
+            }
+            BluetoothInterface.instance.readData(characteristicUUIDString: CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: char)!)
+        }
     }
     
     private func showErrorMessage(message: String){

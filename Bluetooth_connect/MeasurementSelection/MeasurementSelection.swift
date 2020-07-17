@@ -25,10 +25,14 @@ class MeasurementSelection: UIViewController {
     private var switchScreen = false
     
     var deviceName: String?
+    var measurementType: String?
+    var spinner: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         customizeLayout()
+        customizeLoadingIcon()
         
         measurementTableView.delegate = self
         measurementTableView.dataSource = self
@@ -78,19 +82,17 @@ class MeasurementSelection: UIViewController {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == measurementTableView{
-            
-            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
-            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
-            controller.deviceName = deviceName
-            controller.measurementType = measurement[indexPath.row]
-            controller.modalPresentationStyle = .fullScreen
-            self.present(controller, animated: true) {
-                // do nothing....
-                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
-                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
-                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            let data: UInt8 =  UInt8(bitPattern: Int8(indexPath.row))
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            if let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Mode Select"){
+                spinner.startAnimating()
+                BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                measurementType = measurement[indexPath.row]
             }
-            
+            else{
+                showErrorMessage(message: "Enable to setup device\nContact Developer")
+            }
         }
     }
     
@@ -213,4 +215,44 @@ extension MeasurementSelection: UITableViewDelegate, UITableViewDataSource, BLES
         }
     }
     
+    func writeResponseReceived(with characteristicUUIDString: String) {
+        if CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) == "Mode Select"{
+            let storyboard = UIStoryboard(name: "Dashboard", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! DashboardViewController
+            controller.deviceName = deviceName
+            controller.measurementType = measurementType
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true) {
+                // do nothing....
+                self.spinner.stopAnimating()
+                BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
+                BluetoothInterface.instance.detachBLECharacteristicObserver(id: self.id)
+                BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
+            }
+        }
+        else{
+            spinner.stopAnimating()
+        }
+    }
+    
+    private func showErrorMessage(message: String){
+        let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    private func customizeLoadingIcon(){
+        if traitCollection.userInterfaceStyle == .dark{
+            spinner = UIActivityIndicatorView(style: .white)
+        }
+        else{
+            spinner = UIActivityIndicatorView(style: .gray)
+        }
+        
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(spinner)
+        spinner.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        spinner.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
 }

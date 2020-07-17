@@ -52,6 +52,13 @@ class ChartsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        if chartTitle == "Amperometry"{
+            yAxisTitleLabel.text = "Current (uA)"
+        }
+        else if chartTitle == "Potentiometry"{
+            yAxisTitleLabel.text = "Potential (mV)"
+        }
     }
     
     func customizeLoadingIcon(){
@@ -375,6 +382,10 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
             print("data = ", data)
             updatChart(value: Double(data))
         }
+        else if characteristicUUIDString == "Queue Complete"{
+            // do nothing.....
+            print("Queue Complete....")
+        }
         
         if CHARACTERISTIC_VALUE[characteristicUUIDString] != nil {
             print("Incoming data.....")
@@ -418,6 +429,9 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
                 BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
                 BluetoothInterface.instance.detachBLEValueObserver(id: self.id)
             }
+        }
+        else{
+            print("Write response received: \(name)")
         }
     }
 }

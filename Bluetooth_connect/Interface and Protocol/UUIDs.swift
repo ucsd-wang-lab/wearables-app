@@ -64,7 +64,7 @@ var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
                                                  "Firmware Revision": -1,
                                                  "Potential": -1000,
                                                  "Initial Delay": 0,
-                                                 "Sample Period": 100,
+                                                 "Sample Period": 25,
                                                  "Sample Count": 0,
                                                  "Gain": 0,
                                                  "Electrode Mask": 0

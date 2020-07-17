@@ -59,7 +59,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         self.centralManager?.stopScan()
         self.connectedPeripheral = peripheral
         self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
-//        print("connected to: \(peripheral.name!)")
+        print("connected to: \(peripheral.name!)")
         isConnected = true
         self.notifyBLEStatusConnect(bleName: peripheral.name!)
         self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
@@ -111,7 +111,8 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 
             for service in services{
 //                print("service = ", ServiceUUID.instance.getServiceName(serviceUUID: service.uuid.uuidString))
-                self.connectedPeripheral.discoverCharacteristics(nil, for: service)
+//                self.connectedPeripheral.discoverCharacteristics(nil, for: service)
+                peripheral.discoverCharacteristics(nil, for: service)
             }
         }
     }
