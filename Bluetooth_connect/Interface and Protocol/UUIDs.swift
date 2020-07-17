@@ -115,6 +115,8 @@ class CharacteristicsUUID{
         // Sensing Configuration Serivce
         UUIDtoCharacteristicName.updateValue("Queue Repeat Count", forKey: "bbc837d1-b070-4d6c-9125-955eb64cd151".uppercased())
         UUIDtoCharacteristicName.updateValue("Start/Stop Queue", forKey: "aea9035c-96e9-4bca-bee4-4a1d3961bfef".uppercased())
+        UUIDtoCharacteristicName.updateValue("Queue Complete", forKey: "b49fc394-215b-466b-95b7-e41b88c45cd7".uppercased())
+        UUIDtoCharacteristicName.updateValue("Mode Select", forKey: "a27bcda3-ecac-4980-be9f-df3a69d8bf0f".uppercased())
         
         // Ampero Configuration Service
         UUIDtoCharacteristicName.updateValue("Electrode Mask", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
@@ -128,8 +130,14 @@ class CharacteristicsUUID{
         UUIDtoCharacteristicName.updateValue("Data Characteristic - current", forKey: "808C72E4-175E-4595-8CF1-AB07E49A8331")
 //        UUIDtoCharacteristicName.updateValue("Queue ID", forKey: "949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased())
         
+        // Potentiometric Configuration Service
+        UUIDtoCharacteristicName.updateValue("Electrode Mask - Potentio", forKey: "ef038284-c179-4000-a816-c282c04b29cc".uppercased())
+        UUIDtoCharacteristicName.updateValue("Initial Delay - Potentio", forKey: "f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased())
+        UUIDtoCharacteristicName.updateValue("Sample Count - Potentio", forKey: "9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased())
+        UUIDtoCharacteristicName.updateValue("Sample Period - Potentio", forKey: "1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased())
+        
         // Potentiometric Data Service
-        UUIDtoCharacteristicName.updateValue("Start/Stop Potentiometry", forKey: "2e0b45c2-e649-4591-ae5e-840960863efa".uppercased())
+//        UUIDtoCharacteristicName.updateValue("Start/Stop Potentiometry", forKey: "2e0b45c2-e649-4591-ae5e-840960863efa".uppercased())
         UUIDtoCharacteristicName.updateValue("Data Characteristic - Potential", forKey: "3e0152be-4183-4b6b-bd13-920322432016".uppercased())
     }
     
@@ -149,6 +157,8 @@ class CharacteristicsUUID{
         // Sensing Configuration Service
         characteristicNametoUUID.updateValue("bbc837d1-b070-4d6c-9125-955eb64cd151".uppercased(), forKey: "Queue Repeat Count")
         characteristicNametoUUID.updateValue("aea9035c-96e9-4bca-bee4-4a1d3961bfef".uppercased(), forKey: "Start/Stop Queue")
+        characteristicNametoUUID.updateValue("b49fc394-215b-466b-95b7-e41b88c45cd7".uppercased(), forKey: "Queue Complete")
+        characteristicNametoUUID.updateValue("a27bcda3-ecac-4980-be9f-df3a69d8bf0f".uppercased(), forKey: "Mode Select")
         
         // Ampero Configuration Service
         characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Electrode Mask")
@@ -162,8 +172,14 @@ class CharacteristicsUUID{
         characteristicNametoUUID.updateValue("808C72E4-175E-4595-8CF1-AB07E49A8331", forKey: "Data Characteristic - current")
 //        characteristicNametoUUID.updateValue("949b35e0-8d39-4b03-a9b2-8fb370fa332f".uppercased(), forKey: "Queue ID")
         
+        // Potentiometric Configuration Service
+        characteristicNametoUUID.updateValue("ef038284-c179-4000-a816-c282c04b29cc".uppercased(), forKey: "Electrode Mask - Potentio")
+        characteristicNametoUUID.updateValue("f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased(), forKey: "Initial Delay - Potentio")
+        characteristicNametoUUID.updateValue("9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased(), forKey: "Sample Count - Potentio")
+        characteristicNametoUUID.updateValue("1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased(), forKey: "Sample Period - Potentio")
+        
         // Potentiometric Data Service
-        characteristicNametoUUID.updateValue("2e0b45c2-e649-4591-ae5e-840960863efa".uppercased(), forKey:"Start/Stop Potentiometry")
+//        characteristicNametoUUID.updateValue("2e0b45c2-e649-4591-ae5e-840960863efa".uppercased(), forKey:"Start/Stop Potentiometry")
         characteristicNametoUUID.updateValue("3e0152be-4183-4b6b-bd13-920322432016".uppercased(), forKey: "Data Characteristic - Potential")
     }
     
@@ -183,6 +199,8 @@ class CharacteristicsUUID{
         // Sensing Configuration Service
         characteristicProperty.updateValue("Read/Write", forKey: "Queue Repeat Count")
         characteristicProperty.updateValue("Read/Write", forKey: "Start/Stop Queue")
+        characteristicProperty.updateValue("Read/Notify", forKey: "Queue Complete")
+        characteristicProperty.updateValue("Read/Write", forKey: "Mode Select")
         
         // Ampero Configuration Service
         characteristicProperty.updateValue("Read/Write", forKey: "Electrode Mask")
@@ -196,8 +214,14 @@ class CharacteristicsUUID{
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - current")
 //        characteristicProperty.updateValue("Read", forKey: "Queue ID")
         
+        // Potentiometric Configuration Service
+        characteristicProperty.updateValue("Read/Write", forKey: "Electrode Mask - Potentio")
+        characteristicProperty.updateValue("Read/Write", forKey: "Initial Delay - Potentio")
+        characteristicProperty.updateValue("Read/Write", forKey: "Sample Count - Potentio")
+        characteristicProperty.updateValue("Read/Write", forKey: "Sample Period - Potentio")
+        
         // Potentiometric Data Service
-        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
+//        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - Potential")
     }
     
@@ -220,6 +244,8 @@ class CharacteristicsUUID{
         // Sensing Configuration Service
         characteristicDataType.updateValue(UInt16(), forKey: "Queue Repeat Count")
         characteristicDataType.updateValue(UInt8(), forKey: "Start/Stop Queue")
+        characteristicDataType.updateValue(UInt8(), forKey: "Queue Complete")
+        characteristicDataType.updateValue(UInt8(), forKey: "Mode Select")
         
         // Ampero Configuration Service
         characteristicDataType.updateValue(UInt8(), forKey: "Electrode Mask")
@@ -232,6 +258,16 @@ class CharacteristicsUUID{
         // Ampero Output Data Service
         characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - current")
 //        characteristicDataType.updateValue(UInt8(), forKey: "Queue ID")
+        
+        // Potentiometric Configuration Service
+        characteristicDataType.updateValue(UInt8(), forKey: "Electrode Mask - Potentio")
+        characteristicDataType.updateValue(UInt16(), forKey: "Initial Delay - Potentio")
+        characteristicDataType.updateValue(UInt16(), forKey: "Sample Count - Potentio")
+        characteristicDataType.updateValue(UInt16(), forKey: "Sample Period - Potentio")
+        
+        // Potentiometric Data Service
+        //        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
+        characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - Potential")
     }
     
     private func setCharacteristicValue(){

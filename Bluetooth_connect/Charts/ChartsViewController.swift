@@ -50,6 +50,10 @@ class ChartsViewController: UIViewController {
         yAxisTitleLabel.transform = CGAffineTransform(rotationAngle: 3 * CGFloat.pi / 2)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     func customizeLoadingIcon(){
         if traitCollection.userInterfaceStyle == .dark{
             spinner = UIActivityIndicatorView(style: .white)
