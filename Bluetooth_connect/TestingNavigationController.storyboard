@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dob-cL-7KX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dob-cL-7KX">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -601,6 +601,7 @@
                                             <outlet property="cellRuntime" destination="Vjg-QM-Uau" id="B0Y-xO-40Q"/>
                                             <outlet property="cellTitle" destination="m1j-Vd-Aab" id="YUB-uA-dRU"/>
                                             <outlet property="fillerView" destination="rpd-1A-mQy" id="89g-Ga-ITu"/>
+                                            <outlet property="orangeView" destination="SVc-gQ-3KV" id="jAk-B8-Tha"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -699,6 +700,9 @@
                                     <segment title="Potentio"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" red="0.25490196079999999" green="0.69411764710000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="measurementTypeChanged:" destination="jlq-RA-dZC" eventType="valueChanged" id="qZ9-t7-mwo"/>
+                                </connections>
                             </segmentedControl>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="17G-qu-20t">
                                 <rect key="frame" x="20" y="165" width="374" height="31"/>

@@ -13,6 +13,7 @@ class TestTableViewCell: UITableViewCell, UITableViewDelegate {
     @IBOutlet weak var cellTitle: UILabel!
     @IBOutlet weak var cellRuntime: UILabel!
     
+    @IBOutlet weak var orangeView: UIView!
     @IBOutlet weak var fillerView: UIView!
     
     

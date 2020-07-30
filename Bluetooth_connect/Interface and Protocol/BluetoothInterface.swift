@@ -25,6 +25,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         centralManager = CBCentralManager(delegate: self, queue: nil)
         connectedPeripheral = nil
         self.serviceDictionary = [:]
+        isConnected = false
     }
     
     //This is a required function of the CBCentralManager
@@ -48,6 +49,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
             if name.contains("Microneedle"){
                 // do nothing
                 notifyBLEObserver(bleName: name, device: peripheral)
+                if self.autoConnect{
+                    connect(peripheral: peripheral)
+                }
             }
         }
         
@@ -55,18 +59,26 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.centralManager?.stopScan()
-        if nil == self.connectedPeripheral {
-            self.connectedPeripheral = peripheral
-            self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
-            print("connected to: \(peripheral.name!)")
-            self.notifyBLEStatusConnect(bleName: peripheral.name!)
-            self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
-        }
+        self.connectedPeripheral = peripheral
+        self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
+        print("connected to: \(peripheral.name!)")
+        isConnected = true
+        self.notifyBLEStatusConnect(bleName: peripheral.name!)
+        self.connectedPeripheral.discoverServices(nil)      //look f
+        
+//        if nil == self.connectedPeripheral {
+//            self.connectedPeripheral = peripheral
+//            self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
+//            print("connected to: \(peripheral.name!)")
+//            self.notifyBLEStatusConnect(bleName: peripheral.name!)
+//            self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
+//        }
         
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("failed to connect with device...", error.debugDescription)
+        isConnected = false
         notifyBLEFailToConnect(bleName: peripheral.name!, error: error)
     }
     
@@ -74,6 +86,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         //Do Nothing for now
         if let name = peripheral.name{
             print("Peripheral Disconnected: ", name)
+            isConnected = false
             notifyBLEStatusDisconnect(bleName: name)
         }
     }
@@ -141,7 +154,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 //        print("didUpdateValueFor: ", characteristic)
         if let data = characteristic.value {
             let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString)!
-            print("\n\nValue updated: \(name)")
+//            print("\n\nValue updated: \(name)")
             notifyBLEValueUpdate(bleName: name, data: data)
         }
     }
@@ -185,6 +198,8 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
     var connectedPeripheral: CBPeripheral!
     var deviceName = "Microneedle"
+    var autoConnect: Bool = false
+    var isConnected: Bool = false
     
     private var centralManager: CBCentralManager!
     private var serviceDictionary: [CBService: [CBCharacteristic]]!

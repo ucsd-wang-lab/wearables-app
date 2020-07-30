@@ -34,6 +34,7 @@ class BluetoothTableViewController: UITableViewController {
         bluetoothDeviceList.removeAll()
         self.tableView.reloadData()
         
+        BluetoothInterface.instance.autoConnect = false
         BluetoothInterface.instance.attachBLEStatusObserver(id: self.id, observer: self)
         BluetoothInterface.instance.attachBLEDiscoveredObserver(id: self.id, observer: self)
         BluetoothInterface.instance.initVar()
@@ -92,6 +93,7 @@ extension BluetoothTableViewController: BLEDiscoveredObserver, BLEStatusObserver
     
     // This function is called when the phone connect to a peripheral
     func deviceConnected(with device: String) {
+        BluetoothInterface.instance.autoConnect = true
         performSegue(withIdentifier: "toRenameController", sender: self)
     }
     

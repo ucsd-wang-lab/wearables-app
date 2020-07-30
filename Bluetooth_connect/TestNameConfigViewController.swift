@@ -76,8 +76,8 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
             }
             else{
                 configsList.append(tempTestConfig!)
-                tempTestConfig = nil
             }
+            tempTestConfig = nil
             self.navigationController?.popToViewController(viewController, animated: true)
         }
         

@@ -21,6 +21,7 @@ class TabBarViewController: UITabBarController {
     @objc func backButtonPressed(sender: UIBarButtonItem){
         if let bluetoothTableViewController = self.navigationController?.viewControllers[1]{
             self.navigationController?.popToViewController(bluetoothTableViewController, animated: true)
+            BluetoothInterface.instance.autoConnect = false
         }
     }
 }

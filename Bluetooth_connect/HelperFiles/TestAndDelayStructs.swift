@@ -18,6 +18,14 @@ struct DelayConfig: Config {
     var hour: Int
     var min: Int
     var sec: Int
+    var totalDelay: Int
+    
+    init() {
+        hour = -1
+        min = -1
+        sec = -1
+        totalDelay = -1
+    }
 }
 
 struct TestConfig: Config {
@@ -41,7 +49,7 @@ struct TestConfig: Config {
         initialDelay = 0
         
         testSettings = [:]
-        measurementTypeIndex = -1
+        measurementTypeIndex = 0
         leadConfigIndex = -1
     }
 }

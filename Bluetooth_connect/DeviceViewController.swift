@@ -142,6 +142,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
                 controller.isUpdate = true
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
+                print("\n\nVersion is not 13.0....cannot set default values\n\n")
                 performSegue(withIdentifier: "toDelayConfiguration", sender: self)
             }
         }
@@ -154,6 +155,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
                 tempTestConfig = configsList[indexPath.row] as? TestConfig
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
+                print("\n\nVersion is not 13.0....cannot set default values\n\n")
                 performSegue(withIdentifier: "toTestConfiguration", sender: self)
             }
         }

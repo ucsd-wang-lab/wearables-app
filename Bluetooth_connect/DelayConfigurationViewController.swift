@@ -120,7 +120,12 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             self.navigationController?.popViewController(animated: true)
         }
         else{
-            let delayConfig = DelayConfig(name: delayNameTextfield.text, hour: delayPickerView.selectedRow(inComponent: 0), min: delayPickerView.selectedRow(inComponent: 1), sec: delayPickerView.selectedRow(inComponent: 2))
+            var delayConfig = DelayConfig()
+            delayConfig.name = delayNameTextfield.text
+            delayConfig.hour = delayPickerView.selectedRow(inComponent: 0)
+            delayConfig.min = delayPickerView.selectedRow(inComponent: 1)
+            delayConfig.sec = delayPickerView.selectedRow(inComponent: 2)
+            delayConfig.totalDelay = (delayPickerView.selectedRow(inComponent: 0) * 3600) + (delayPickerView.selectedRow(inComponent: 1) * 60) + delayPickerView.selectedRow(inComponent: 2)
             configsList.append(delayConfig)
             self.navigationController?.popViewController(animated: true)
         }

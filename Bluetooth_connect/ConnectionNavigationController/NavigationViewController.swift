@@ -9,7 +9,9 @@
 import UIKit
 
 class NavigationViewController: UINavigationController {
-
+    
+    var timer:Timer!
+    var timeElapsed: Int!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -17,6 +19,9 @@ class NavigationViewController: UINavigationController {
 
         let textAttributes = [NSAttributedString.Key.font: UIFont(name: "Avenir-Heavy", size: 20), NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationBar.titleTextAttributes = textAttributes as [NSAttributedString.Key : Any]
+        
+        BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
     }
     
     
@@ -31,4 +36,87 @@ class NavigationViewController: UINavigationController {
     }
     */
 
+}
+
+extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
+    var id: Int {
+        20
+    }
+    
+    func deviceDisconnected(with device: String) {
+        if BluetoothInterface.instance.autoConnect{
+            BluetoothInterface.instance.startScan()
+        }
+        
+    }
+    
+    func deviceConnected(with device: String) {
+        BluetoothInterface.instance.autoConnect = true
+    }
+    
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
+            let data = value.int32
+            print("data = ", data)
+        }
+        else if characteristicUUIDString == "Queue Complete"{
+            // move to next test in the queue
+            print("\n\nQueue Complete....")
+            sendNextTest()
+//            queuePosition += 1
+//            if queuePosition == configsList.count{
+//                currentLoopCount += 1
+//                queuePosition = 0
+//            }
+//            if currentLoopCount <= loopCount!{
+//                let test = configsList[queuePosition]
+//                if test is TestConfig{
+//                    sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+//                }
+//                else if test is DelayConfig{
+//                    timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
+//                    timeElapsed = 0
+//                    timer.fire()
+//                }
+//            }
+        }
+        else{
+            print("\n\nUpdate Received: \(characteristicUUIDString)\n\n")
+        }
+    }
+    
+    private func sendNextTest(){
+        queuePosition += 1
+        if queuePosition == configsList.count{
+            currentLoopCount += 1
+            queuePosition = 0
+        }
+        if currentLoopCount <= loopCount!{
+            let test = configsList[queuePosition]
+            if test is TestConfig{
+                sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+            }
+            else if test is DelayConfig{
+                timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
+                timeElapsed = 0
+                timer.fire()
+            }
+        }
+        else{
+            queuePosition = 0
+            currentLoopCount = 1
+            let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
+    }
+    
+    @objc func timerFired(sender: Timer){
+        timeElapsed += 1
+        print("Timer interval: \(timeElapsed)")
+        if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDelay{
+            timer.invalidate()
+            sendNextTest()
+        }
+    }
 }

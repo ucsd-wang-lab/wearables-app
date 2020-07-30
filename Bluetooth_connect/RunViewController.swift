@@ -46,9 +46,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         
         listOfTestTableView.tableFooterView = UIView()  // Show no empty cell at the bottom
         listOfTestTableView.delegate = self
-        listOfTestTableView.dataSource = self
-        
-        BluetoothInterface.instance.attachBLEValueObserver(id: self.id, observer: self)
+        listOfTestTableView.dataSource = self        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -138,19 +136,26 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         if button.tag == 0{
             // Test is not running
             if listOfTestTableView.numberOfSections == 0{
-                showErrorMessage(message: "There must be a test present to start queue!")
+                showErrorMessage(message: "There must be a test present to start queue!", viewController: self)
             }
             else if loopCount == nil{
-                showErrorMessage(message: "Loop count must be provided!")
+                showErrorMessage(message: "Loop count must be provided!", viewController: self)
             }
             else if loopCount! < 0{
-                showErrorMessage(message: "Loop count must be non-negative!")
+                showErrorMessage(message: "Loop count must be non-negative!", viewController: self)
             }
             else{
                 if currentLoopCount == -1{
                     currentLoopCount = loopCount!
                 }
-                sendTestConfiguration(testCofig: testOrderList[0] )
+                let test = configsList[queuePosition]
+                if test is TestConfig{
+                    sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+                }
+                else{
+                    // do nothing....
+                }
+                
                 button.layer.backgroundColor = UIColor(red: 1, green: 0x3b/255, blue: 0x30/255, alpha: 1).cgColor
                 button.setTitle("Stop Queue", for: .normal)
                 button.tag = 1
@@ -161,120 +166,17 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             button.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
             button.setTitle("Start Queue", for: .normal)
             button.tag = 0
+            
+            // Sending Stop Signal
+            let data: UInt8 = 0
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
         }
     }
     
     @IBAction func saveDataButtonPressed(_ sender: Any) {
         
     }
-    
-    private func showErrorMessage(message: String){
-        let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    func sendTestConfiguration(testCofig: TestConfig){
-        for characteristics in testCofig.testSettings.keys{
-            let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristics)
-            let value = testCofig.testSettings[characteristics]!
-            updateValue(name: characteristics, encodingType: encodingType, value: String(value))
-        }
-        
-        // Sending Start Signal
-        let data: UInt8 = 1
-        var d: Data = Data(count: 1)
-        d = withUnsafeBytes(of: data) { Data($0) }
-        let measurementTypeIndex = testCofig.measurementTypeIndex
-
-        if measurementTypeIndex == 0{
-            // Ampero
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-        }
-        else if measurementTypeIndex == 1{
-            // Potentio
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Potentiometry")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-        }
-        else{
-            showErrorMessage(message: "Enable to start measurement\nContact Developer")
-        }
-    }
-    
-    private func updateValue(name: String, encodingType: Any?, value: String?){
-        if let value = value{
-            if value == ""{
-                showErrorMessage(message: "Value Field Cannot be empty")
-            }
-            else if Int(value) == nil{
-                showErrorMessage(message: "Value Field Must be a number")
-            }
-            else{
-                if name == "Electrode Mask"{
-                    let data = UInt8(value, radix: 2) ?? nil
-                    if data == nil {
-                        let message = "Value Field must be valid 8-bit binary input"
-                        showErrorMessage(message: message)
-                    }
-                    else{
-                        var d = Data(count: 1)
-                        d = withUnsafeBytes(of: data!) { Data($0) }
-                        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                        CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    }
-                }
-                else if encodingType is UInt8{
-                    let data = UInt8(value) ?? nil
-                    var d = Data(count: 1)
-                    d = withUnsafeBytes(of: data!) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                }
-                else if encodingType is UInt16{
-                    let data = UInt16(value) ?? nil
-                    var d = Data(count: 2)
-                    d = withUnsafeBytes(of: data!) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    
-                }
-                else if encodingType is Int16{
-                    let data = Int16(value) ?? nil
-                    var d = Data(count: 2)
-                    d = withUnsafeBytes(of: data!) { Data($0) }
-                    let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
-                    BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-                    CHARACTERISTIC_VALUE.updateValue(String(data!), forKey: name)
-                    
-                }
-                else{
-                    showErrorMessage(message: "Error Sending Data to Firmware\nInvalid Data Type")
-                }
-            }
-            
-        }
-        else{
-            showErrorMessage(message: "Error Sending Data to Firmware...Contact Developer")
-        }
-    }
-}
-
-extension RunViewController: BLEValueUpdateObserver{
-    var id: Int {
-        8
-    }
-    
-    func update(with characteristicUUIDString: String, with value: Data) {
-        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
-            let data = value.int32
-            print("data = ", data)
-        }
-    }
-    
-    
 }
