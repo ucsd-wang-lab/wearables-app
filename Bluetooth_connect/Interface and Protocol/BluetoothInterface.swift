@@ -170,10 +170,10 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     }
     
     func writeData(data: Data, characteristicUUIDString: String) {
-        print("writing to uuid: ", characteristicUUIDString)
+//        print("writing to uuid: ", characteristicUUIDString)
         let characteristic = characteristicDictionary[characteristicUUIDString]!
         
-        print("writing to ", CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) ?? "nil")
+        print("writing to \(CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) ?? "nil")\t \(characteristicUUIDString)" )
         
         if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.WRITE_WITHOUT_RESPONSE.rawValue) != 0 {
             self.connectedPeripheral?.writeValue(data, for: characteristic, type: .withoutResponse)

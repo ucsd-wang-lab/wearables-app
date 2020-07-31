@@ -57,12 +57,21 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     func update(with characteristicUUIDString: String, with value: Data) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
-            print("data = ", data)
-            
+            print("data = \(data)")
+            if var test = configsList[queuePosition] as? TestConfig{
+                var existingData = test.testData[currentLoopCount] ?? [Double]()
+                print("Existing Data: \(existingData)")
+                existingData.append(Double(data))
+                test.testData.updateValue(existingData, forKey: currentLoopCount)
+                configsList[queuePosition] = test
+                
+//                test.testData.insertData(loopCount: currentLoopCount, data: Double(data))
+                print("Data so far: \(test)")
+            }
         }
         else if characteristicUUIDString == "Queue Complete"{
             // move to next test in the queue
-            print("\n\nQueue Complete....")
+            print("\n\nQueue Complete....\(currentLoopCount)")
             sendNextTest()
         }
         else{

@@ -19,6 +19,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBOutlet weak var listOfTestTableView: UITableView!
     
     var testOrderList: [TestConfig] = []
+    var chartTitle: String?
+    var selectdTest: TestConfig?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,22 +97,22 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var chartTitle = ""
         if indexPath.row == 0{
             chartTitle = "Live View"
         }
         else{
             chartTitle = "Composite View"
         }
-        
-        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-        if #available(iOS 13.0, *) {
-            let controller = storyboard.instantiateViewController(identifier: "chartsView") as! ChartsViewController
-            controller.chartsTitle = chartTitle
-            self.navigationController?.pushViewController(controller, animated: true)
-        } else {
-            performSegue(withIdentifier: "toChartsView", sender: self)
-        }
+        selectdTest = testOrderList[indexPath.section]
+        performSegue(withIdentifier: "toChartsView", sender: self)
+//        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+//        if #available(iOS 13.0, *) {
+//            let controller = storyboard.instantiateViewController(identifier: "chartsView") as! ChartsViewController
+//            controller.chartsTitle = chartTitle
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        } else {
+//            performSegue(withIdentifier: "toChartsView", sender: self)
+//        }
     }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -148,6 +150,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             else{
                 if currentLoopCount == -1{
                     currentLoopCount = loopCount!
+                    currentLoopCount = 1
                 }
                 let test = configsList[queuePosition]
                 if test is TestConfig{
@@ -180,5 +183,12 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     @IBAction func saveDataButtonPressed(_ sender: Any) {
         
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destination = segue.destination as! ChartsViewController
+        destination.chartsTitle = chartTitle
+        destination.testConfig = selectdTest
+        print("Preparing for segue......")
     }
 }

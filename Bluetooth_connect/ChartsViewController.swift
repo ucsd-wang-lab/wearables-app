@@ -16,6 +16,7 @@ class ChartsViewController: UIViewController {
     @IBOutlet weak var detailLabel: UILabel!
     
     var chartsTitle:String?
+    var testConfig: TestConfig?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,6 +28,7 @@ class ChartsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         chartTitleLabel.text = chartsTitle
+        print("TestConfig: \(testConfig)")
     }
     
 

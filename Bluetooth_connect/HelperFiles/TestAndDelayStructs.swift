@@ -33,11 +33,11 @@ struct DelayConfig: Config {
     
     init(name: String) {
         self.name = name
-        hour = -1
-        min = -1
-        sec = -1
-        totalDelay = -1
-        numSettingSend = 1
+        hour = 0
+        min = 0
+        sec = 5
+        totalDelay = 5
+        numSettingSend = 0
     }
 }
 
@@ -51,7 +51,7 @@ struct TestConfig: Config {
     var numSettingSend:Int
     
     var testSettings:[String:Int]
-    var testData: [Int: [Double: Double]]   // loop: [x, y]
+    var testData: [Int: [Double]]
     
     var measurementTypeIndex: Int
     var leadConfigIndex: Int
@@ -103,7 +103,29 @@ struct TestData{
         data = [:]
     }
     
+    init(name: String?) {
+        self.name = name
+        data = [:]
+    }
+    
     mutating func insertData(loopCount: Int, data: Double){
-        self.data[loopCount]?.append(data)
+        if var existingData = self.data[loopCount]{
+            print("that.....")
+            existingData.append(data)
+            self.data.updateValue(existingData, forKey: loopCount)
+        }
+        else{
+            print("this....")
+            self.data.updateValue([data], forKey: loopCount)
+        }
+//        if let _ = self.data[loopCount]{
+//            print("This....")
+//            self.data[loopCount]!.append(data)
+//        }
+//        else{
+//            print("That.....")
+//            self.data.updateValue([data], forKey: loopCount)
+//        }
+        
     }
 }
