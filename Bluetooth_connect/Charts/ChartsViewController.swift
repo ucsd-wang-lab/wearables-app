@@ -91,9 +91,10 @@ class ChartsViewController: UIViewController {
         numOfMeasurement += 1
         let lineChartEntry = [ChartDataEntry]()
         let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(numOfMeasurement)")
-        line.colors = [.orange]
-        line.circleColors = [.orange]
-        line.circleHoleColor = .orange
+        let color = UIColor.colorArray[0]
+        line.colors = [color]
+        line.circleColors = [color]
+        line.circleHoleColor = color
         line.circleRadius = 1.0
         line.setDrawHighlightIndicators(true)
         line.highlightEnabled = true
@@ -153,7 +154,15 @@ class ChartsViewController: UIViewController {
         let lineChartEntry = [ChartDataEntry]()
         let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(numOfMeasurement)")
 
-        let color = UIColor.random
+        var color = UIColor.random
+        
+        if let num_of_lines = graphView.data?.dataSetCount {
+            if num_of_lines < UIColor.colorArray.count{
+                color = UIColor.colorArray[num_of_lines]
+            }
+        }
+        print("Measurement: \(numOfMeasurement)\tColor: \(color)")
+       
         line.colors = [color]
         line.circleColors = [color]
         line.circleHoleColor = color

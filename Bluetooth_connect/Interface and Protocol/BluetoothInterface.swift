@@ -38,6 +38,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         }
         else {
             notifyBTStatus(statue: false)
+            autoConnect = true
             print("Turn on Bluetooth on phone and Microneedle")
         }
     }
@@ -45,6 +46,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
         if let name = peripheral.name  {
+            print("Name: \(name)")
             if name.contains("Microneedle"){
                 notifyBLEObserver(bleName: name, device: peripheral)
                 if self.autoConnect{

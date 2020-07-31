@@ -101,4 +101,19 @@ extension UIColor {
                        blue: .random(in: 0...1),
                        alpha: 1.0)
     }
+    
+    static var colorArray: [UIColor] = [
+        UIColor.orange,
+        UIColor.red,
+        UIColor.black,
+        UIColor.blue,
+        UIColor.green,
+        UIColor.gray,
+        UIColor.cyan,
+        UIColor.magenta,
+        UIColor.brown,
+        UIColor.purple,
+        UIColor(red: 0.064582, green: 0.705481, blue: 0.874373, alpha: 1),
+        UIColor(red: 1, green: 0xb6/255, blue: 0x9d/255, alpha: 1)
+    ]
 }
