@@ -38,7 +38,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         }
         else {
             notifyBTStatus(statue: false)
-            autoConnect = true
+            autoConnect = hasConnected
             print("Turn on Bluetooth on phone and Microneedle")
         }
     }
@@ -63,6 +63,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         self.connectedPeripheral.delegate = self        //Allowing the peripheral to discover services
         print("connected to: \(peripheral.name!)")
         isConnected = true
+        hasConnected = true
         self.notifyBLEStatusConnect(bleName: peripheral.name!)
         self.connectedPeripheral.discoverServices(nil)      //look for services for the specified peripheral
         
@@ -198,6 +199,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     var connectedPeripheral: CBPeripheral!
     var deviceName = "Microneedle"
     var isConnected: Bool!
+    var hasConnected: Bool = false
     
     private var centralManager: CBCentralManager!
     private var serviceDictionary: [CBService: [CBCharacteristic]]!
