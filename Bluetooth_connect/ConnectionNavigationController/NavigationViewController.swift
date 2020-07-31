@@ -58,27 +58,12 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
             print("data = ", data)
+            
         }
         else if characteristicUUIDString == "Queue Complete"{
             // move to next test in the queue
             print("\n\nQueue Complete....")
             sendNextTest()
-//            queuePosition += 1
-//            if queuePosition == configsList.count{
-//                currentLoopCount += 1
-//                queuePosition = 0
-//            }
-//            if currentLoopCount <= loopCount!{
-//                let test = configsList[queuePosition]
-//                if test is TestConfig{
-//                    sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-//                }
-//                else if test is DelayConfig{
-//                    timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
-//                    timeElapsed = 0
-//                    timer.fire()
-//                }
-//            }
         }
         else{
             print("\n\nUpdate Received: \(characteristicUUIDString)\n\n")
@@ -104,7 +89,11 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         }
         else{
             queuePosition = 0
-            currentLoopCount = 1
+            currentLoopCount = -1
+            isTestRunning = false
+            startStopQueueButton?.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
+            startStopQueueButton?.setTitle("Start Queue", for: .normal)
+            startStopQueueButton?.tag = 0
             let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
             self.present(alert, animated: true)

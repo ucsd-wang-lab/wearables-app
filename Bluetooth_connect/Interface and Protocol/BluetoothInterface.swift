@@ -145,7 +145,11 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("write update received...")
+        print("write update received...\(characteristic.uuid.uuidString)")
+        
+        if currentLoopCount != -1 && isTestRunning == true{
+            configsList[queuePosition].numSettingSend += 1
+        }
         notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)
     }
     

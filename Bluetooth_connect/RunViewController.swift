@@ -60,6 +60,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         testOrderList = []
         constructTestOrder()
         listOfTestTableView.reloadData()
+        startStopQueueButton = runControlButton
     }
     
     @objc func doneButtonPressed(){
@@ -153,7 +154,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                     sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
                 }
                 else{
-                    // do nothing....
+                    // perform delay
                 }
                 
                 button.layer.backgroundColor = UIColor(red: 1, green: 0x3b/255, blue: 0x30/255, alpha: 1).cgColor
@@ -166,6 +167,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             button.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
             button.setTitle("Start Queue", for: .normal)
             button.tag = 0
+            isTestRunning = false
             
             // Sending Stop Signal
             let data: UInt8 = 0
