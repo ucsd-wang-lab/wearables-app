@@ -19,6 +19,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBOutlet weak var listOfTestTableView: UITableView!
     
     var testOrderList: [TestConfig] = []
+    var testIndexMapping: [Int: Int] = [:]     // Mapping from testOrderList --> configList
     var chartTitle: String?
     var selectdTest: TestConfig?
     
@@ -103,16 +104,9 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         else{
             chartTitle = "Composite View"
         }
-        selectdTest = testOrderList[indexPath.section]
+        selectdTest = configsList[testIndexMapping[indexPath.section]!] as? TestConfig
+        
         performSegue(withIdentifier: "toChartsView", sender: self)
-//        let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-//        if #available(iOS 13.0, *) {
-//            let controller = storyboard.instantiateViewController(identifier: "chartsView") as! ChartsViewController
-//            controller.chartsTitle = chartTitle
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        } else {
-//            performSegue(withIdentifier: "toChartsView", sender: self)
-//        }
     }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -128,10 +122,13 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     private func constructTestOrder(){
+        var count = 0
         for test in configsList{
             if test is TestConfig{
                 testOrderList.append(test as! TestConfig)
+                testIndexMapping.updateValue(count, forKey: testOrderList.count - 1)
             }
+            count += 1
         }
     }
     @IBAction func startStopQueueButtonClicked(_ sender: Any) {
@@ -189,6 +186,5 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         let destination = segue.destination as! ChartsViewController
         destination.chartsTitle = chartTitle
         destination.testConfig = selectdTest
-        print("Preparing for segue......")
     }
 }

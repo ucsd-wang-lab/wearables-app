@@ -35,8 +35,8 @@ struct DelayConfig: Config {
         self.name = name
         hour = 0
         min = 0
-        sec = 5
-        totalDelay = 5
+        sec = 1
+        totalDelay = 1
         numSettingSend = 0
     }
 }
@@ -52,6 +52,7 @@ struct TestConfig: Config {
     
     var testSettings:[String:Int]
     var testData: [Int: [Double]]
+    var timeStamp: [Int: String]
     
     var measurementTypeIndex: Int
     var leadConfigIndex: Int
@@ -66,6 +67,7 @@ struct TestConfig: Config {
         
         testSettings = [:]
         testData = [:]
+        timeStamp = [:]
         measurementTypeIndex = 0
         leadConfigIndex = -1
     }
@@ -79,6 +81,8 @@ struct TestConfig: Config {
         initialDelay = 0
         numSettingSend = 0
         testData = [:]
+        timeStamp = [:]
+
         
 //        [0: ["Potential": " mV"],
 //         1: ["Initial Delay": " ms"],
@@ -87,45 +91,8 @@ struct TestConfig: Config {
 //         4: ["Gain": " k\u{2126}"]
 //        ]
         
-        testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5, "Gain": 4]
+        testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 10, "Gain": 4]
         measurementTypeIndex = 0
         leadConfigIndex = -1
-    }
-}
-
-
-struct TestData{
-    
-    var name: String?
-    var data:[Int: [Double]]
-    
-    init() {
-        data = [:]
-    }
-    
-    init(name: String?) {
-        self.name = name
-        data = [:]
-    }
-    
-    mutating func insertData(loopCount: Int, data: Double){
-        if var existingData = self.data[loopCount]{
-            print("that.....")
-            existingData.append(data)
-            self.data.updateValue(existingData, forKey: loopCount)
-        }
-        else{
-            print("this....")
-            self.data.updateValue([data], forKey: loopCount)
-        }
-//        if let _ = self.data[loopCount]{
-//            print("This....")
-//            self.data[loopCount]!.append(data)
-//        }
-//        else{
-//            print("That.....")
-//            self.data.updateValue([data], forKey: loopCount)
-//        }
-        
     }
 }

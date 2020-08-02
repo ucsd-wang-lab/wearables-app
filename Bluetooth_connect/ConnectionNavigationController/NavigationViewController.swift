@@ -60,13 +60,10 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             print("data = \(data)")
             if var test = configsList[queuePosition] as? TestConfig{
                 var existingData = test.testData[currentLoopCount] ?? [Double]()
-                print("Existing Data: \(existingData)")
                 existingData.append(Double(data))
                 test.testData.updateValue(existingData, forKey: currentLoopCount)
                 configsList[queuePosition] = test
-                
-//                test.testData.insertData(loopCount: currentLoopCount, data: Double(data))
-                print("Data so far: \(test)")
+//                print("Data so far: \(test)")
             }
         }
         else if characteristicUUIDString == "Queue Complete"{
@@ -84,6 +81,10 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         if queuePosition == configsList.count{
             currentLoopCount += 1
             queuePosition = 0
+            
+            for i in 0..<configsList.count{
+                configsList[i].numSettingSend = 0
+            }
         }
         if currentLoopCount <= loopCount!{
             let test = configsList[queuePosition]
@@ -103,6 +104,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             startStopQueueButton?.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
             startStopQueueButton?.setTitle("Start Queue", for: .normal)
             startStopQueueButton?.tag = 0
+            print("Finished Testing!!!")
             let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
             self.present(alert, animated: true)
