@@ -42,6 +42,8 @@ class ChartsViewController: UIViewController {
             isLiveViewEnable = true
             canUpdateLiveGraph = true
             detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: 00:00:00s"
+            let rightBarButtonItem = UIBarButtonItem(title: "Start/Stop", style: .plain, target: self, action: nil)
+            navigationItem.rightBarButtonItem = rightBarButtonItem
             generateLiveView()
         }
         else if chartTitleLabel.text == "Composite View"{

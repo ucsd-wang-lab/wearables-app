@@ -11,22 +11,26 @@ protocol Config {
     var hour: Int {get set}
     var min: Int {get set}
     var sec: Int {get set}
+    var milSec: Int {get set}
     var numSettingSend:Int {get set}
 }
 
 struct DelayConfig: Config {
+    
     var numSettingSend: Int
     
     var name: String?
     var hour: Int
     var min: Int
     var sec: Int
+    var milSec: Int
     var totalDelay: Int
     
     init() {
         hour = -1
         min = -1
         sec = -1
+        milSec = -1
         totalDelay = -1
         numSettingSend = 1
     }
@@ -36,6 +40,7 @@ struct DelayConfig: Config {
         hour = 0
         min = 0
         sec = 1
+        milSec = 0
         totalDelay = 1
         numSettingSend = 0
     }
@@ -78,8 +83,8 @@ struct TestConfig: Config {
         self.name = name
         hour = 0
         min = 0
-        sec = 0
-        milSec = 0
+        sec = 10
+        milSec = 400
         initialDelay = 0
         numSettingSend = 0
         testData = [:]

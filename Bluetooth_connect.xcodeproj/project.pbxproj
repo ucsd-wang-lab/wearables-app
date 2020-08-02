@@ -155,7 +155,6 @@
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
 				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
 				5EF2980724B30FFE006394CA /* ConnectionNavigationController */,
-				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */,
 				5EA2A74B24B65A910066392D /* TabBarViewController.swift */,
 				5EF2980C24B31858006394CA /* DeviceViewController.swift */,
@@ -169,6 +168,7 @@
 				5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */,
 				5EB65FBC24BB077D002814ED /* ChartsViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
+				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
 			);

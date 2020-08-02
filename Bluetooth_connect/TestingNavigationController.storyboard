@@ -167,10 +167,10 @@
                                 <color key="textColor" red="0.25490196079999999" green="0.69411764710000001" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000:00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9H-XH-1Sv">
-                                <rect key="frame" x="309" y="174" width="85" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00.000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O9H-XH-1Sv">
+                                <rect key="frame" x="274" y="174" width="120" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="85" id="MML-YS-zkU"/>
+                                    <constraint firstAttribute="width" constant="120" id="MML-YS-zkU"/>
                                     <constraint firstAttribute="height" constant="25" id="PnQ-lB-kqB"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
@@ -480,11 +480,11 @@
                                 <color key="textColor" red="0.19215686274509802" green="0.18823529411764706" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAv-dd-T7z">
-                                <rect key="frame" x="309" y="788" width="85" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00.000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAv-dd-T7z">
+                                <rect key="frame" x="294" y="788" width="100" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="SVU-HH-I6V"/>
-                                    <constraint firstAttribute="width" constant="85" id="hY7-TF-xfF"/>
+                                    <constraint firstAttribute="width" constant="100" id="hY7-TF-xfF"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                                 <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -607,7 +607,7 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Duration:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hw-0e-y3y">
-                                <rect key="frame" x="134" y="788" width="175" height="25"/>
+                                <rect key="frame" x="119" y="788" width="175" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="175" id="Hvx-qk-Xri"/>
                                     <constraint firstAttribute="height" constant="25" id="XiF-TJ-2hh"/>

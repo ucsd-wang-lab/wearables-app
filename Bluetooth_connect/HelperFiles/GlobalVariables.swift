@@ -28,14 +28,16 @@ var canUpdateLiveGraph: Bool = false    // Keeps track if live view should be up
 var totalHr: Int = 0
 var totalMin: Int = 0
 var totalSec: Int = 0
+var totalMilSec: Int = 0
 var tempTestConfig:TestConfig?
 
 
 
 
-func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
+func constructDelayString(hour: Int, min: Int, sec: Int, milSec: Int) -> String{
     var delayStr = ""
     
+    // Hour
     if hour < 10{
         delayStr = delayStr + "0" + String(hour) + ":"
     }
@@ -43,6 +45,7 @@ func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
         delayStr = delayStr + String(hour) + ":"
     }
     
+    // Min
     if min < 10{
         delayStr = delayStr + "0" + String(min) + ":"
     }
@@ -50,12 +53,25 @@ func constructDelayString(hour: Int, min: Int, sec: Int) -> String{
         delayStr = delayStr + String(min) + ":"
     }
     
+    // Sec
     if sec < 10{
-        delayStr = delayStr + "0" + String(sec)
+        delayStr = delayStr + "0" + String(sec) + "."
     }
     else{
-        delayStr = delayStr + String(sec)
+        delayStr = delayStr + String(sec) + "."
     }
+    
+    // MilliSec
+    if milSec < 10{
+        delayStr = delayStr + "00" + String(milSec)
+    }
+    else if milSec < 100{
+        delayStr = delayStr + "0" + String(milSec)
+    }
+    else{
+        delayStr = delayStr + String(milSec)
+    }
+    
     return delayStr
 }
 

@@ -51,6 +51,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
             measurementTypeSegmentedControl.selectedSegmentIndex = tempTestConfig!.measurementTypeIndex
             measurementTypeChanged(measurementTypeSegmentedControl)
         }
+        calculateDuration(characteristicName: "", value: "")
     }
     
     // when touched anywhere on the screen
@@ -252,7 +253,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
             tempTestConfig?.hour += temp / 60
             tempTestConfig?.min = temp % 60
             
-            durationLabel.text = "Duration: " + constructDelayString(hour: tempTestConfig!.hour, min: tempTestConfig!.min, sec: tempTestConfig!.sec)
+            durationLabel.text = "Duration: " + constructDelayString(hour: tempTestConfig!.hour, min: tempTestConfig!.min, sec: tempTestConfig!.sec, milSec: tempTestConfig!.milSec)
         }
     }
     

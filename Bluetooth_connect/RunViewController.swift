@@ -59,7 +59,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             loopCountTextField.text = String(lCount)
         }
         
-        timeRemainingLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec)
+        timeRemainingLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
         testOrderList = []
         constructTestOrder()
         listOfTestTableView.reloadData()

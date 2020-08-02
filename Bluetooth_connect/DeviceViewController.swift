@@ -76,6 +76,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalHr = 0
         totalMin = 0
         totalSec = 0
+        totalMilSec = 0
     }
        
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,18 +215,23 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         let hour = config.hour
         let min = config.min
         let sec = config.sec
-        let delayStr = constructDelayString(hour: hour, min: min, sec: sec)
+        let milSec = config.milSec
+        let delayStr = constructDelayString(hour: hour, min: min, sec: sec, milSec: milSec)
         
         cell.cellTitle.text = config.name
         cell.cellRuntime.text = "Run Time: " + delayStr
         
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
-        updateTotalDuration(hour: hour, min: min, sec: sec)
+        updateTotalDuration(hour: hour, min: min, sec: sec, milSec: milSec)
         return cell
     }
     
-    private func updateTotalDuration(hour: Int, min: Int, sec: Int){
+    private func updateTotalDuration(hour: Int, min: Int, sec: Int, milSec: Int){
+        totalMilSec += milSec
+        totalSec += totalMilSec / 1000
+        totalMilSec %= 1000
+        
         totalSec += sec
         totalMin += totalSec / 60
         totalSec %= 60
@@ -235,10 +241,11 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalMin %= 60
         
         totalHr += hour
-        delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec)
+        delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
     }
     
     @IBAction func addTestButtonClicked(_ sender: Any) {
+        tempTestConfig = nil
         performSegue(withIdentifier: "toTestConfiguration", sender: self)
     }
     
