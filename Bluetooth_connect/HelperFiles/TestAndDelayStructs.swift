@@ -64,6 +64,7 @@ struct TestConfig: Config {
     var numSettingSend:Int
     
     var initialDelay: Int
+    var testMode: Int8
     var testSettings:[String:Int]
     var testData: [Int: [Double]]       // loopNumber: Data Array
     var startTimeStamp: [Int: String]   // loopNumber: StartTime
@@ -79,6 +80,7 @@ struct TestConfig: Config {
         totalDuration = 0
         initialDelay = 0
         numSettingSend = 0
+        testMode = -1
         
         testSettings = [:]
         testData = [:]
@@ -99,6 +101,7 @@ struct TestConfig: Config {
         testData = [:]
         startTimeStamp = [:]
         endTimeStamp = [:]
+        testMode = 0
 
         
 //        [0: ["Potential": " mV"],

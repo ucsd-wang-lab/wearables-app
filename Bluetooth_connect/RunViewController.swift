@@ -58,6 +58,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        globalProgressView = progressView
+        globalTimeElapsedLabel = timeElapsedLabel
         
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
@@ -68,7 +70,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         constructTestOrder()
         listOfTestTableView.reloadData()
         startStopQueueButton = runControlButton
-        updateTimeElapsedLabel()
+        timeElapsedLabel.text = updateTimeElapsedLabel() + " of " + timeRemainingLabel.text!
     }
     
     @objc func doneButtonPressed(){
@@ -195,56 +197,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     private func updateProgressBar(){
         progressView.progress = Float(testTimeElapsed) / Float(totalRunTime)
-        updateTimeElapsedLabel()
+        timeElapsedLabel.text = updateTimeElapsedLabel() + " of " + timeRemainingLabel.text!
         print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
-    }
-    
-    private func updateTimeElapsedLabel(){
-        var temp = testTimeElapsed
-        
-        // Hr
-        var label = ""
-        if temp / 3600000 < 10{
-            label += "0" + String(temp / 3600000)
-        }
-        else{
-            label += String(temp / 3600000)
-        }
-        temp %=  3600000
-        
-        // Min
-        label = label + ":"
-        if temp / 60000 < 10{
-            label += "0" +  String(temp / 60000)
-        }
-        else{
-            label += String(temp / 60000)
-        }
-        temp %= 60000
-        
-        // Sec
-        label = label + ":"
-        if temp / 1000 < 10{
-            label += "0" + String(temp / 1000)
-        }
-        else{
-            label += String(temp / 1000)
-        }
-        temp %= 1000
-        
-        // ms
-        label = label + "."
-        if temp < 10{
-            label += "00" +  String(temp)
-        }
-        else if temp < 100{
-            label += "0" +  String(temp)
-        }
-        else{
-            label += String(temp)
-        }
-        
-        timeElapsedLabel.text = label + " of " + timeRemainingLabel.text!
     }
 }
 
@@ -259,12 +213,12 @@ extension RunViewController: BLEValueUpdateObserver{
                 if let mode = test.testSettings["Mode Select"]{
                     if mode == 0{
                         if let samplePeriod = test.testSettings["Sample Period"]{
-                            testTimeElapsed += Int64(samplePeriod)
+                            testTimeElapsed += UInt64(samplePeriod)
                         }
                     }
                     else if mode == 1{
                         if let samplePeriod = test.testSettings["Sample Period - Potentio"]{
-                            testTimeElapsed += Int64(samplePeriod)
+                            testTimeElapsed += UInt64(samplePeriod)
                         }
                     }
                     updateProgressBar()
@@ -272,6 +226,4 @@ extension RunViewController: BLEValueUpdateObserver{
             }
         }
     }
-    
-    
 }

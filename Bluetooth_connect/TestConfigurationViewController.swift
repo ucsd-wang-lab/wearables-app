@@ -291,7 +291,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         controller.isUpdate = isUpdate
         controller.updateIndex = updateIndex
         tempTestConfig?.leadConfigIndex = leadConfigSegmentedControl.selectedSegmentIndex
-        tempTestConfig?.testSettings["Mode Select"] = measurementTypeSegmentedControl.selectedSegmentIndex
+//        tempTestConfig?.testSettings["Mode Select"] = measurementTypeSegmentedControl.selectedSegmentIndex
+        tempTestConfig?.testMode = Int8(measurementTypeSegmentedControl.selectedSegmentIndex)
     }
 
 }

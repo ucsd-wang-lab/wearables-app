@@ -11,8 +11,9 @@ import UIKit
 class NavigationViewController: UINavigationController {
     
     var timer:Timer!
-    var timeElapsed: Double!
-    var startTime: Double!
+    var timeElapsed: UInt64!
+    var startTime: DispatchTime!
+    var endTime: DispatchTime!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +25,11 @@ class NavigationViewController: UINavigationController {
         
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
-        startTime = 0
     }
     
-    
+    public func attachDelayObserver(){
+        print("Delay observer attached.....")
+    }
 
     /*
     // MARK: - Navigation
@@ -98,7 +100,8 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
                 sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
             }
             else if test is DelayConfig{
-                startTime = Date().timeIntervalSinceReferenceDate
+                startTime = DispatchTime.now()
+                timeElapsed = 0
                 timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
                 timeElapsed = 0
                 timer.fire()
@@ -119,9 +122,16 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     }
     
     @objc func timerFired(sender: Timer){
-        timeElapsed = Date().timeIntervalSinceReferenceDate - startTime
-        testTimeElapsed += 100
-        if timeElapsed >= Double((configsList[queuePosition] as! DelayConfig).totalDuration){
+        endTime = DispatchTime.now()
+        timeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
+        startTime = endTime
+        
+        testTimeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
+        globalTimeElapsedLabel?.text = updateTimeElapsedLabel() + " of " + constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
+        globalProgressView?.progress = Float(testTimeElapsed) / Float(totalRunTime)
+        
+//        print("Delay: \(timeElapsed)\t updatedLabel: \(updateTimeElapsedLabel())")
+        if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDuration{
             timer.invalidate()
             sendNextTest()
         }
