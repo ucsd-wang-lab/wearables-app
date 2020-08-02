@@ -31,17 +31,32 @@ class ChartsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         chartTitleLabel.text = chartsTitle
         print("TestConfig: \(testConfig)")
         
+        navigationItem.title = testConfig?.name
+        
         customizeChart()
         if chartTitleLabel.text == "Live View"{
+            isLiveViewEnable = true
+            canUpdateLiveGraph = true
             detailLabel.text = "Repeat Numder: \(currentLoopCount)\n Start Time: 00:00:00s"
+            generateLiveView()
         }
         else if chartTitleLabel.text == "Composite View"{
             detailLabel.text = "Select a trace for details"
-            generateCompositeGrap()
+            generateCompositeGraph()
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        chartsTitle = nil
+        isLiveViewEnable = false
+        canUpdateLiveGraph = false
+        customizeChart()
+        print("View Did Disappear....")
     }
     
     func customizeChart(){
@@ -82,24 +97,24 @@ class ChartsViewController: UIViewController {
         lineChartView.legend.enabled = false
     }
     
-    private func generateCompositeGrap(){
+    private func generateCompositeGraph(){
         // Draw the Composite Graph
         if let test = testConfig{
 //            for loopNumber in test.testData.keys.sorted(){
             for loopNumber in Array(test.testData.keys).sorted(){
                                 
                 // Populate the current plot
-                guard let samplePeriod = test.testSettings["Sample Period"]else {
+                guard let samplePeriod = test.testSettings["Sample Period"] else {
                     continue
                 }
-                print("Sample Period: \(samplePeriod)")
+                
                 for newValue in test.testData[loopNumber]!{
-                    print("loop: \(loopNumber)\t value: \(newValue)")
                     let numOfPoints = lineChartView.data?.dataSets[loopNumber - 1 ].entryCount ?? 0
                     let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: newValue / 1e6)
                     lineChartView.data?.addEntry(newDataPoint, dataSetIndex: loopNumber - 1)
-                    lineChartView.notifyDataSetChanged()
                 }
+                lineChartView.notifyDataSetChanged()
+
                 
                 // Add new plot
                 let lineChartEntry = [ChartDataEntry]()
@@ -120,18 +135,29 @@ class ChartsViewController: UIViewController {
         }
     }
     
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func generateLiveView(){
+        if let test = testConfig{
+            guard let samplePeriod = test.testSettings["Sample Period"] else {
+                return
+            }
+            
+            if let testData = test.testData[currentLoopCount]{
+                for value in testData{
+                    let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
+                    let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: value / 1e6)
+                    lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+                }
+                lineChartView.notifyDataSetChanged()
+            }
+        }
     }
-    */
 
+    private func notifyLiveDataChange(value: Double, samplePeriod: Double){
+        let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
+        let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: value / 1e6)
+        lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+        lineChartView.notifyDataSetChanged()
+    }
 }
 
 extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
@@ -142,7 +168,30 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
     func update(with characteristicUUIDString: String, with value: Data) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
-            print("data from chartsView = \(data)")
+            if chartsTitle == "Live View"{
+                if var test = configsList[queuePosition] as? TestConfig{
+                    var existingData = test.testData[currentLoopCount] ?? [Double]()
+                    existingData.append(Double(data))
+                    test.testData.updateValue(existingData, forKey: currentLoopCount)
+                    configsList[queuePosition] = test
+                    
+                    if canUpdateLiveGraph {
+                        guard let samplePeriod = test.testSettings["Sample Period"] else{
+                            return
+                        }
+                        notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
+                    }
+                }
+                
+                
+            }
+        }
+        else if characteristicUUIDString == "Queue Complete"{
+            // move to next test in the queue
+            print("\n\nQueue Complete....\(currentLoopCount)")
+            if chartsTitle == "Live View"{
+                canUpdateLiveGraph = false
+            }
         }
     }
     

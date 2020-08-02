@@ -17,12 +17,14 @@ var configsList:[Config] = [
 ]
 
 //var configsList:[Config] = []
-var startStopQueueButton: UIButton? // Button that control the start and stop for the Test Queue
-var connectedDeiviceName:String?    // Name of the connected BLE device
-var loopCount:Int? = 2              // The number of times to loop through the queue
-var queuePosition: Int = 0          // The current test that is being run
-var currentLoopCount = -1           // The current loop counter for testing
-var isTestRunning: Bool = false     // Keeps track if test is running or paused or stop
+var startStopQueueButton: UIButton?     // Button that control the start and stop for the Test Queue
+var connectedDeiviceName:String?        // Name of the connected BLE device
+var loopCount:Int? = 2                  // The number of times to loop through the queue
+var queuePosition: Int = 0              // The current test that is being run
+var currentLoopCount = -1               // The current loop counter for testing
+var isTestRunning: Bool = false         // Keeps track if test is running or paused or stop
+var isLiveViewEnable: Bool = false      // Keeps track if live view is being shown or not
+var canUpdateLiveGraph: Bool = false    // Keeps track if live view should be updated or not
 var totalHr: Int = 0
 var totalMin: Int = 0
 var totalSec: Int = 0
