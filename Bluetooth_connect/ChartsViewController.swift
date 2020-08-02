@@ -33,7 +33,7 @@ class ChartsViewController: UIViewController {
         super.viewDidAppear(animated)
         
         chartTitleLabel.text = chartsTitle
-        print("TestConfig: \(testConfig)")
+//        print("TestConfig: \(testConfig)")
         
         navigationItem.title = testConfig?.name
         
@@ -41,7 +41,7 @@ class ChartsViewController: UIViewController {
         if chartTitleLabel.text == "Live View"{
             isLiveViewEnable = true
             canUpdateLiveGraph = true
-            detailLabel.text = "Repeat Numder: \(currentLoopCount)\n Start Time: 00:00:00s"
+            detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: 00:00:00s"
             generateLiveView()
         }
         else if chartTitleLabel.text == "Composite View"{
@@ -158,6 +158,14 @@ class ChartsViewController: UIViewController {
         lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
         lineChartView.notifyDataSetChanged()
     }
+    
+    private func resetGraphColor(){
+        if let dataSets = lineChartView.data?.dataSets{
+            for dataSet in dataSets{
+                dataSet.setColor(UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1))
+            }
+        }
+    }
 }
 
 extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
@@ -175,7 +183,7 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
                     test.testData.updateValue(existingData, forKey: currentLoopCount)
                     configsList[queuePosition] = test
                     
-                    if canUpdateLiveGraph {
+                    if canUpdateLiveGraph && test.name ==  navigationItem.title{
                         guard let samplePeriod = test.testSettings["Sample Period"] else{
                             return
                         }
@@ -196,15 +204,14 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
     }
     
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        resetGraphColor()
         lineChartView.data?.getDataSetByIndex(highlight.dataSetIndex)?.setColor(UIColor.black)
         dataSetSelectedIndex = highlight.dataSetIndex
-        detailLabel.text = "Repeat Numder: \(highlight.dataSetIndex)\n Start Time: 00:00:00s\n End Time: 00:00:00s"
+        detailLabel.text = "Repeat Number: \(highlight.dataSetIndex)\n Start Time: 00:00:00s\n End Time: 00:00:00s"
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
         detailLabel.text = "Select a trace for details"
-        if let selectedIndex = dataSetSelectedIndex{
-            lineChartView.data?.getDataSetByIndex(selectedIndex)?.setColor(UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1))
-        }
+        resetGraphColor()
     }
 }
