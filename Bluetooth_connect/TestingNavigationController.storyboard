@@ -209,7 +209,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otw-rk-AQA">
                                 <rect key="frame" x="0.0" y="793" width="414" height="20"/>
                                 <subviews>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="fHa-Wt-xS1">
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fHa-Wt-xS1">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="5"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="5" id="1Xs-Vl-tdo"/>
@@ -353,8 +353,10 @@
                         <outlet property="deviceNameLabel" destination="xVi-ln-T6U" id="iZE-mM-qya"/>
                         <outlet property="listOfTestTableView" destination="Eaf-1W-5gl" id="lzc-8b-aBl"/>
                         <outlet property="loopCountTextField" destination="ZWi-bO-OWU" id="oSe-N4-Epb"/>
+                        <outlet property="progressView" destination="fHa-Wt-xS1" id="nKL-bp-g3A"/>
                         <outlet property="runControlButton" destination="LsF-lS-xuJ" id="SBx-zB-1eD"/>
                         <outlet property="saveDataButton" destination="h05-Nd-1LH" id="waA-ji-TnO"/>
+                        <outlet property="timeElapsedLabel" destination="V2q-DY-Btk" id="p65-vx-VRw"/>
                         <outlet property="timeRemainingLabel" destination="O9H-XH-1Sv" id="UIo-4T-bZd"/>
                         <segue destination="bJd-4b-vMh" kind="show" identifier="toChartsView" id="PcS-4G-KBf"/>
                     </connections>

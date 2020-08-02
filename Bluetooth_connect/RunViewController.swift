@@ -17,6 +17,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBOutlet weak var saveDataButton: UIButton!
     @IBOutlet weak var runControlButton: UIButton!
     @IBOutlet weak var listOfTestTableView: UITableView!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var timeElapsedLabel: UILabel!
     
     var testOrderList: [TestConfig] = []
     var testIndexMapping: [Int: Int] = [:]     // Mapping from testOrderList --> configList
@@ -39,17 +41,19 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
 
         // Do any additional setup after loading the view.
         let tabBarItem = UITabBarItem(title: "Run", image: UIImage(named: "2")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), selectedImage: UIImage(named: "2sel")?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal))
-       self.tabBarItem = tabBarItem
+        self.tabBarItem = tabBarItem
 
-       UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
-       UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(red: 0x31/255, green: 0x30/255, blue: 0x30/255, alpha: 1)], for: .selected)
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(red: 0x31/255, green: 0x30/255, blue: 0x30/255, alpha: 1)], for: .selected)
         
         saveDataButton.layer.cornerRadius = saveDataButton.layer.bounds.height / 3
         runControlButton.layer.cornerRadius = runControlButton.layer.bounds.height / 3
         
         listOfTestTableView.tableFooterView = UIView()  // Show no empty cell at the bottom
         listOfTestTableView.delegate = self
-        listOfTestTableView.dataSource = self        
+        listOfTestTableView.dataSource = self
+        
+        BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -64,6 +68,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         constructTestOrder()
         listOfTestTableView.reloadData()
         startStopQueueButton = runControlButton
+        updateTimeElapsedLabel()
     }
     
     @objc func doneButtonPressed(){
@@ -187,4 +192,86 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         destination.chartsTitle = chartTitle
         destination.testConfig = selectdTest
     }
+    
+    private func updateProgressBar(){
+        progressView.progress = Float(testTimeElapsed) / Float(totalRunTime)
+        updateTimeElapsedLabel()
+        print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
+    }
+    
+    private func updateTimeElapsedLabel(){
+        var temp = testTimeElapsed
+        
+        // Hr
+        var label = ""
+        if temp / 3600000 < 10{
+            label += "0" + String(temp / 3600000)
+        }
+        else{
+            label += String(temp / 3600000)
+        }
+        temp %=  3600000
+        
+        // Min
+        label = label + ":"
+        if temp / 60000 < 10{
+            label += "0" +  String(temp / 60000)
+        }
+        else{
+            label += String(temp / 60000)
+        }
+        temp %= 60000
+        
+        // Sec
+        label = label + ":"
+        if temp / 1000 < 10{
+            label += "0" + String(temp / 1000)
+        }
+        else{
+            label += String(temp / 1000)
+        }
+        temp %= 1000
+        
+        // ms
+        label = label + "."
+        if temp < 10{
+            label += "00" +  String(temp)
+        }
+        else if temp < 100{
+            label += "0" +  String(temp)
+        }
+        else{
+            label += String(temp)
+        }
+        
+        timeElapsedLabel.text = label + " of " + timeRemainingLabel.text!
+    }
+}
+
+extension RunViewController: BLEValueUpdateObserver{
+    var id: Int {
+        15
+    }
+    
+    func update(with characteristicUUIDString: String, with value: Data) {
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
+            if let test = configsList[queuePosition] as? TestConfig{
+                if let mode = test.testSettings["Mode Select"]{
+                    if mode == 0{
+                        if let samplePeriod = test.testSettings["Sample Period"]{
+                            testTimeElapsed += Int64(samplePeriod)
+                        }
+                    }
+                    else if mode == 1{
+                        if let samplePeriod = test.testSettings["Sample Period - Potentio"]{
+                            testTimeElapsed += Int64(samplePeriod)
+                        }
+                    }
+                    updateProgressBar()
+                }
+            }
+        }
+    }
+    
+    
 }

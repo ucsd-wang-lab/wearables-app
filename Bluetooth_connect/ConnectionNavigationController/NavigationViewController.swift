@@ -11,7 +11,9 @@ import UIKit
 class NavigationViewController: UINavigationController {
     
     var timer:Timer!
-    var timeElapsed: Int!
+    var timeElapsed: Double!
+    var startTime: Double!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,6 +24,7 @@ class NavigationViewController: UINavigationController {
         
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
+        startTime = 0
     }
     
     
@@ -57,15 +60,14 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     func update(with characteristicUUIDString: String, with value: Data) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
-            print("data = \(data)")
+//            print("data = \(data)")
             
             if isLiveViewEnable == false{
                 if var test = configsList[queuePosition] as? TestConfig{
-                var existingData = test.testData[currentLoopCount] ?? [Double]()
-                existingData.append(Double(data))
-                test.testData.updateValue(existingData, forKey: currentLoopCount)
-                configsList[queuePosition] = test
-//                print("Data so far: \(test)")
+                    var existingData = test.testData[currentLoopCount] ?? [Double]()
+                    existingData.append(Double(data))
+                    test.testData.updateValue(existingData, forKey: currentLoopCount)
+                    configsList[queuePosition] = test
                 }
             }
         }
@@ -80,6 +82,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     }
     
     private func sendNextTest(){
+        print("Sending Next Test....")
         queuePosition += 1
         if queuePosition == configsList.count{
             currentLoopCount += 1
@@ -95,7 +98,8 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
                 sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
             }
             else if test is DelayConfig{
-                timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
+                startTime = Date().timeIntervalSinceReferenceDate
+                timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
                 timeElapsed = 0
                 timer.fire()
             }
@@ -115,9 +119,9 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     }
     
     @objc func timerFired(sender: Timer){
-        timeElapsed += 1
-        print("Timer interval: \(timeElapsed)")
-        if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDelay{
+        timeElapsed = Date().timeIntervalSinceReferenceDate - startTime
+        testTimeElapsed += 100
+        if timeElapsed >= Double((configsList[queuePosition] as! DelayConfig).totalDuration){
             timer.invalidate()
             sendNextTest()
         }

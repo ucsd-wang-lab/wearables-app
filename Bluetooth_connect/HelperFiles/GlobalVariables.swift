@@ -29,6 +29,8 @@ var totalHr: Int = 0
 var totalMin: Int = 0
 var totalSec: Int = 0
 var totalMilSec: Int = 0
+var totalRunTime: Int64 = 0             // Total run time for all the test, in ms
+var testTimeElapsed: Int64 = 0          // Time elapsed since the start of the queue, in ms
 var tempTestConfig:TestConfig?
 
 
@@ -84,6 +86,7 @@ func showErrorMessage(message: String, viewController: UIViewController){
     
 func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
     isTestRunning = true
+    print("Sending TestConfiguration....")
     for characteristics in testCofig.testSettings.keys{
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristics)
         let value = testCofig.testSettings[characteristics]!

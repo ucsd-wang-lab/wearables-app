@@ -139,6 +139,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
                 controller.delayHour = config.hour
                 controller.delayMin = config.min
                 controller.delaySec = config.sec
+                controller.delayMS = config.milSec
                 controller.updateIndex = indexPath.row
                 controller.isUpdate = true
                 self.navigationController?.pushViewController(controller, animated: true)
@@ -241,6 +242,8 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalMin %= 60
         
         totalHr += hour
+        totalRunTime = Int64(totalHr * 3600000) + Int64(totalMin * 60000) + Int64(totalSec * 1000) + Int64(totalMilSec)
+        
         delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
     }
     

@@ -209,7 +209,7 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
         resetGraphColor()
         lineChartView.data?.getDataSetByIndex(highlight.dataSetIndex)?.setColor(UIColor.black)
         dataSetSelectedIndex = highlight.dataSetIndex
-        detailLabel.text = "Repeat Number: \(highlight.dataSetIndex)\n Start Time: 00:00:00s\n End Time: 00:00:00s"
+        detailLabel.text = "Repeat Number: \(highlight.dataSetIndex + 1)\n Start Time: 00:00:00s\n End Time: 00:00:00s"
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {

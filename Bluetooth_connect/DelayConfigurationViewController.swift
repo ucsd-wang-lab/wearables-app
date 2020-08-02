@@ -19,6 +19,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     var delayHour:Int?
     var delayMin:Int?
     var delaySec:Int?
+    var delayMS: Int?
     var isUpdate:Bool?
     var updateIndex:Int?
     
@@ -45,16 +46,16 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             delayNameTextfield.text = name
         }
         
-        if let hr = delayHour{
-            delayPickerView.selectRow(hr, inComponent: 0, animated: true)
-        }
-        
         if let min = delayMin{
-            delayPickerView.selectRow(min, inComponent: 1, animated: true)
+            delayPickerView.selectRow(min, inComponent: 0, animated: true)
         }
         
         if let sec = delaySec{
-            delayPickerView.selectRow(sec, inComponent: 2, animated: true)
+            delayPickerView.selectRow(sec, inComponent: 1, animated: true)
+        }
+        
+        if let ms = delayMS{
+            delayPickerView.selectRow(ms, inComponent: 2, animated: true)
         }
         
         if let _ = isUpdate{
@@ -88,23 +89,26 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if component == 0{
-            return 24
+        if component == 0 || component == 1{
+            return 60
+        }
+        else if  component == 2{
+            return 1000
         }
         else{
-            return 60
+            return 1000
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if component == 0{
-            return "\(row) hr"
-        }
-        else if component == 1{
             return "\(row) min"
         }
-        else if component == 2{
+        else if component == 1{
             return "\(row) sec"
+        }
+        else if component == 2{
+            return "\(row) ms"
         }
         return nil
     }
@@ -114,21 +118,21 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
         if let _ = isUpdate, let index = updateIndex{
             // do nothing....
             configsList[index].name = delayNameTextfield.text
-            configsList[index].hour = delayPickerView.selectedRow(inComponent: 0)
-            configsList[index].min = delayPickerView.selectedRow(inComponent: 1)
-            configsList[index].sec = delayPickerView.selectedRow(inComponent: 2)
-            configsList[index].milSec = 0
+            configsList[index].hour = 0
+            configsList[index].min = delayPickerView.selectedRow(inComponent: 0)
+            configsList[index].sec = delayPickerView.selectedRow(inComponent: 1)
+            configsList[index].milSec = delayPickerView.selectedRow(inComponent: 2)
+            configsList[index].updateTotalDuration()
             self.navigationController?.popViewController(animated: true)
         }
         else{
             var delayConfig = DelayConfig()
             delayConfig.name = delayNameTextfield.text
-            delayConfig.hour = delayPickerView.selectedRow(inComponent: 0)
-            delayConfig.min = delayPickerView.selectedRow(inComponent: 1)
-            delayConfig.sec = delayPickerView.selectedRow(inComponent: 2)
-            delayConfig.milSec = 0
-            delayConfig.totalDelay = (delayPickerView.selectedRow(inComponent: 0) * 3600) + (delayPickerView.selectedRow(inComponent: 1) * 60) + delayPickerView.selectedRow(inComponent: 2)
-            configsList.append(delayConfig)
+            delayConfig.hour = 0
+            delayConfig.min = delayPickerView.selectedRow(inComponent: 0)
+            delayConfig.sec = delayPickerView.selectedRow(inComponent: 1)
+            delayConfig.milSec = delayPickerView.selectedRow(inComponent: 2)
+            delayConfig.updateTotalDuration()
             self.navigationController?.popViewController(animated: true)
         }
         

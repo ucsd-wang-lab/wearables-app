@@ -48,7 +48,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
             tempTestConfig = TestConfig()
         }
         else{
-            measurementTypeSegmentedControl.selectedSegmentIndex = tempTestConfig!.measurementTypeIndex
             measurementTypeChanged(measurementTypeSegmentedControl)
         }
         calculateDuration(characteristicName: "", value: "")
@@ -173,6 +172,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                             4: ["Gain": " k\u{2126}"]
                            ]
             testConfigTableView.reloadData()
+            calculateDuration(characteristicName: "", value: "")
         }
         else if sender.selectedSegmentIndex == 1{
             unitsMapping.removeAll()
@@ -181,6 +181,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                             2: ["Sample Count": ""]
                            ]
             testConfigTableView.reloadData()
+            calculateDuration(characteristicName: "", value: "")
         }
     }
     
@@ -289,8 +290,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         let controller = segue.destination as! LeadSelectionViewController
         controller.isUpdate = isUpdate
         controller.updateIndex = updateIndex
-        tempTestConfig?.measurementTypeIndex = measurementTypeSegmentedControl.selectedSegmentIndex
         tempTestConfig?.leadConfigIndex = leadConfigSegmentedControl.selectedSegmentIndex
+        tempTestConfig?.testSettings["Mode Select"] = measurementTypeSegmentedControl.selectedSegmentIndex
     }
 
 }
