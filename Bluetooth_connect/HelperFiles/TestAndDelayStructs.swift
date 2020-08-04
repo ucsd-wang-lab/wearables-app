@@ -111,12 +111,57 @@ struct TestConfig: Config {
 //         4: ["Gain": " k\u{2126}"]
 //        ]
         
-        testSettings = ["Mode Select": 0, "Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5, "Gain": 4]
+        testSettings = ["Mode Select": 0, "Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
         leadConfigIndex = -1
         updateTotalDuration()
+        generateTestData()
+    }
+    
+    init(name: String, mode: Int8){
+        self.name = name
+        hour = 0
+        min = 0
+        sec = 0
+        milSec = 900
+        totalDuration = 0
+        initialDelay = 0
+        numSettingSend = 0
+        testData = [:]
+        startTimeStamp = [:]
+        endTimeStamp = [:]
+        testMode = mode
+
+            
+    //        [0: ["Potential": " mV"],
+    //         1: ["Initial Delay": " ms"],
+    //         2: ["Sample Period": " ms"],
+    //         3: ["Sample Count": ""],
+    //         4: ["Gain": " k\u{2126}"]
+    //        ]
+        if mode == 0{
+            testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
+        }
+        else{
+            testSettings = ["Initial Delay - Potentio": 400, "Sample Period - Potentio": 100, "Sample Count - Potentio": 5]
+        }
+        leadConfigIndex = -1
+        updateTotalDuration()
+        generateTestData()
     }
     
     mutating func updateTotalDuration() {
         totalDuration = Int64(hour * 3600000) + Int64(min * 60000) + Int64(sec * 1000) + Int64(milSec)
+    }
+    
+    mutating func generateTestData(){
+        
+        for loopNum in 1..<3{
+            var data: [Double] = []
+            for newData in 0..<10{
+                data.append(Double(newData * loopNum))
+            }
+            testData.updateValue(data, forKey: loopNum)
+        }
+        
     }
 }

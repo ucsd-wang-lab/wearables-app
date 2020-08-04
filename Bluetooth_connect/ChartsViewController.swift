@@ -42,7 +42,16 @@ class ChartsViewController: UIViewController {
             isLiveViewEnable = true
             canUpdateLiveGraph = true
             detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: 00:00:00s"
-            let rightBarButtonItem = UIBarButtonItem(title: "Start/Stop", style: .plain, target: self, action: nil)
+            
+            var buttonTitle = "Start/Stop"
+            if isTestRunning{
+                buttonTitle = "Stop"
+            }
+            else{
+                buttonTitle = "Start"
+            }
+            
+            let rightBarButtonItem = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(startStopButtonPressed(sender:)))
             navigationItem.rightBarButtonItem = rightBarButtonItem
             generateLiveView()
         }
@@ -166,6 +175,28 @@ class ChartsViewController: UIViewController {
             for dataSet in dataSets{
                 dataSet.setColor(UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1))
             }
+        }
+    }
+    
+    @objc func startStopButtonPressed(sender: Any){
+        if isTestRunning{
+            // Sending Stop Signal
+            let data: UInt8 = 0
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            navigationItem.rightBarButtonItem?.title = "Start"
+        }
+        else{
+            // Sending Start Signal
+            let data: UInt8 = 1
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            navigationItem.rightBarButtonItem?.title = "Stop"
+
         }
     }
 }

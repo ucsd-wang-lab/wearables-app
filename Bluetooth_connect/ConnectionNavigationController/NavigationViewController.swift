@@ -84,7 +84,6 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     }
     
     private func sendNextTest(){
-        print("Sending Next Test....")
         queuePosition += 1
         if queuePosition == configsList.count{
             currentLoopCount += 1
@@ -102,7 +101,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             else if test is DelayConfig{
                 startTime = DispatchTime.now()
                 timeElapsed = 0
-                timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
+                timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
                 timeElapsed = 0
                 timer.fire()
             }
@@ -126,6 +125,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         timeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
         startTime = endTime
         
+        print("Delay: \(timeElapsed)")
         testTimeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
         globalTimeElapsedLabel?.text = updateTimeElapsedLabel() + " of " + constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
         globalProgressView?.progress = Float(testTimeElapsed) / Float(totalRunTime)

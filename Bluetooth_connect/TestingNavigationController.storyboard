@@ -706,7 +706,7 @@
                                     <action selector="measurementTypeChanged:" destination="jlq-RA-dZC" eventType="valueChanged" id="qZ9-t7-mwo"/>
                                 </connections>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="17G-qu-20t">
+                            <segmentedControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="17G-qu-20t">
                                 <rect key="frame" x="20" y="165" width="374" height="31"/>
                                 <color key="backgroundColor" red="0.46274509800000002" green="0.46274509800000002" blue="0.50196078430000002" alpha="0.31" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <constraints>

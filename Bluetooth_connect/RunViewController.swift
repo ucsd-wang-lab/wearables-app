@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MessageUI
+import MobileCoreServices
 
 class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 
@@ -186,7 +188,48 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     @IBAction func saveDataButtonPressed(_ sender: Any) {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let currentTime = df.string(from: Date())
+        let csvStrings = generateCSVString()
         
+        guard MFMailComposeViewController.canSendMail() else{
+            let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
+
+        let composer = MFMailComposeViewController()
+        composer.mailComposeDelegate = self
+            composer.setToRecipients(["rap004@ucsd.edu"])
+        composer.setSubject("Data Collected on: \(currentTime)")
+        composer.setMessageBody("Attached is the data collected on: \(currentTime)", isHTML: true)
+        var count = 1
+        for csvString in csvStrings{
+            composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "test_\(count).csv")
+            count += 1
+        }
+        self.present(composer, animated: true)
+    }
+    
+    private func generateCSVString() -> [String]{
+        var csvStringArray: [String] = []
+        for test in configsList{
+            if test is TestConfig{
+                let t = test as! TestConfig
+                var csvString = ""
+                print("testData: \(t.testData)")
+                for testSettingKey in t.testSettings.keys{
+                    csvString.append("\(testSettingKey), \(t.testSettings[testSettingKey]!)")
+                }
+                
+                csvStringArray.append(csvString)
+            }
+        }
+        print("csvStringArray: \(csvStringArray)")
+        return csvStringArray
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -202,9 +245,47 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
 }
 
-extension RunViewController: BLEValueUpdateObserver{
+extension RunViewController: BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
     var id: Int {
         15
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if let err = error{
+            print("Error: ", err)
+            let alert = UIAlertController(title: "Error!!", message: "Cannot sent email: \(err)", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            controller.dismiss(animated: true, completion: nil)
+        }
+        
+        controller.dismiss(animated: true, completion: nil)
+        
+        switch result {
+        case .cancelled:
+            print("Cancelled!")
+        case .failed:
+            print("Failed!")
+            let alert = UIAlertController(title: "Error!!", message: "Failed to sent email!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        case .saved:
+            print("Email Saved!")
+            let alert = UIAlertController(title: "Success!!", message: "Email saved to Drafts!", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        case .sent:
+            print("Email Sent!")
+            let alert = UIAlertController(title: "Success!!", message: "Email Sent! It may take a few minutes to arrive.", preferredStyle: .alert)
+
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        @unknown default:
+            print("Unknown Default!")
+        }
     }
     
     func update(with characteristicUUIDString: String, with value: Data) {

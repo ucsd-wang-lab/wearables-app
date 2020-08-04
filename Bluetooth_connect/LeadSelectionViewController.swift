@@ -46,6 +46,9 @@ class LeadSelectionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if tempTestConfig?.testMode == 1{
+            leadSelectionSegmentedControl.isHidden = true
+        }
         
         E1Button.tag = 1
         E2Button.tag = 2

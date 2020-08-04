@@ -22,7 +22,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                                                  1: ["Initial Delay": " ms"],
                                                  2: ["Sample Period": " ms"],
                                                  3: ["Sample Count": ""],
-                                                 4: ["Gain": " k\u{2126}"]
                                                 ]
     
     var isUpdate:Bool?
@@ -48,9 +47,10 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
             tempTestConfig = TestConfig()
         }
         else{
+            measurementTypeSegmentedControl.selectedSegmentIndex = Int(tempTestConfig!.testMode)
             measurementTypeChanged(measurementTypeSegmentedControl)
         }
-        calculateDuration(characteristicName: "", value: "")
+        calculateDuration(characteristicName: "", value: "")        
     }
     
     // when touched anywhere on the screen
@@ -164,17 +164,18 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     @IBAction func measurementTypeChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0{
+            leadConfigSegmentedControl.selectedSegmentIndex = 1
             unitsMapping.removeAll()
             unitsMapping = [0: ["Potential": " mV"],
                             1: ["Initial Delay": " ms"],
                             2: ["Sample Period": " ms"],
                             3: ["Sample Count": ""],
-                            4: ["Gain": " k\u{2126}"]
                            ]
             testConfigTableView.reloadData()
             calculateDuration(characteristicName: "", value: "")
         }
         else if sender.selectedSegmentIndex == 1{
+            leadConfigSegmentedControl.selectedSegmentIndex = 0
             unitsMapping.removeAll()
             unitsMapping = [0: ["Initial Delay": " ms"],
                             1: ["Sample Period": " ms"],

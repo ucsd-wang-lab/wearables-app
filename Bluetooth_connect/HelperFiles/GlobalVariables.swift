@@ -11,7 +11,7 @@ import UIKit
 var configsList:[Config] = [
     TestConfig(name: "Test 1"),
     DelayConfig(name: "Delay 1"),
-    TestConfig(name: "Test 2")
+    TestConfig(name: "Test 2", mode: 1)
 //    DelayConfig(name: "Delay 2"),
 //    TestConfig(name: "Test 3")
 ]
@@ -88,7 +88,6 @@ func showErrorMessage(message: String, viewController: UIViewController){
     
 func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
     isTestRunning = true
-    print("Sending TestConfiguration....")
     
     let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: "Mode Select")
     let value = testCofig.testMode
