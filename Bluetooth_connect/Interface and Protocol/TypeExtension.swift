@@ -159,3 +159,9 @@ extension UITextField {
     @objc func cancelButtonTapped() { self.resignFirstResponder() }
 }
 
+extension Collection where Indices.Iterator.Element == Index {
+    // for checking for IndexOutOfBound exception
+    subscript (exist index: Index) -> Iterator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}

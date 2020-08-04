@@ -111,7 +111,7 @@ struct TestConfig: Config {
 //         4: ["Gain": " k\u{2126}"]
 //        ]
         
-        testSettings = ["Mode Select": 0, "Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
+        testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
         leadConfigIndex = -1
         updateTotalDuration()
         generateTestData()
@@ -162,6 +162,11 @@ struct TestConfig: Config {
             }
             testData.updateValue(data, forKey: loopNum)
         }
+        var data: [Double] = []
+        for newData in 0..<5{
+            data.append(Double(newData))
+        }
+        testData.updateValue(data, forKey: 3)
         
     }
 }

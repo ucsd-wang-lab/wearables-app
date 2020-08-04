@@ -191,8 +191,41 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let currentTime = df.string(from: Date())
+        print("currentTime: \(currentTime)")
         let csvStrings = generateCSVString()
         
+        var index = 0
+        for test in configsList{
+            if test is TestConfig{
+                let csvString = csvStrings[index]
+                let fileName = "\(test.name ?? "NULL")"
+                var directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                directoryURL.appendPathComponent(currentTime, isDirectory: true)
+
+                do{
+                    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+
+                } catch let error as NSError{
+                    print("Unable to create directory \(error.debugDescription)")
+                }
+
+
+                let fileURL = URL(fileURLWithPath: fileName, relativeTo: directoryURL).appendingPathExtension("csv")
+
+                do {
+                    try csvString.write(to: fileURL, atomically: true, encoding: .ascii)
+                    print("File saved: \(fileURL.absoluteURL)")
+                } catch  {
+                    let alert = UIAlertController(title: "Error!!", message: "Cannot save File! \(error.localizedDescription))", preferredStyle: .alert)
+
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    return
+                }
+                index += 1
+            }
+        }
+
         guard MFMailComposeViewController.canSendMail() else{
             let alert = UIAlertController(title: "Error!!", message: "Cannot sent email! Ensure the Mail app is functioning properly!", preferredStyle: .alert)
 
@@ -206,10 +239,15 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             composer.setToRecipients(["rap004@ucsd.edu"])
         composer.setSubject("Data Collected on: \(currentTime)")
         composer.setMessageBody("Attached is the data collected on: \(currentTime)", isHTML: true)
-        var count = 1
-        for csvString in csvStrings{
-            composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "test_\(count).csv")
-            count += 1
+        
+        index = 0
+        for test in configsList{
+            if test is TestConfig{
+                let csvString = csvStrings[index]
+                let fileName = "\(test.name ?? "NULL")"
+                composer.addAttachmentData(csvString.data(using: .ascii)!, mimeType: "text/csv", fileName: "\(fileName).csv")
+                index += 1
+            }
         }
         self.present(composer, animated: true)
     }
@@ -220,9 +258,41 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             if test is TestConfig{
                 let t = test as! TestConfig
                 var csvString = ""
+                if t.testMode == 0{
+                    csvString.append("Amperometric Measurement\n\n")
+                }
+                else{
+                    csvString.append("Potentiometric Measurement\n\n")
+                }
                 print("testData: \(t.testData)")
-                for testSettingKey in t.testSettings.keys{
-                    csvString.append("\(testSettingKey), \(t.testSettings[testSettingKey]!)")
+                for testSettingKey in Array(t.testSettings.keys).sorted(){
+                    csvString.append("\(testSettingKey), \(t.testSettings[testSettingKey]!)\n")
+                }
+                csvString.append("\n\n")
+                
+                if t.testMode == 1{
+                    csvString.append("\n")  // one extra space for potentiometric measurement
+                }
+                
+                var maxCount = 0
+                for testDataKey in Array(t.testData.keys).sorted(){
+                    csvString.append("Loop \(testDataKey),")
+                    if t.testData[testDataKey]!.count >= maxCount{
+                        maxCount = t.testData[testDataKey]!.count
+                    }
+                }
+                csvString.append("\n")
+                
+                for i in 0..<maxCount{
+                    for testDataKey in Array(t.testData.keys).sorted(){
+                        if let data = t.testData[testDataKey]![exist: i]{
+                            csvString.append("\(data),")
+                        }
+                        else{
+                            csvString.append(",")
+                        }
+                    }
+                    csvString.append("\n")
                 }
                 
                 csvStringArray.append(csvString)
