@@ -66,6 +66,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
+            scaledTotalRunTime = totalRunTime * UInt64(lCount)
         }
         
         if let name = sensorName{
@@ -102,6 +103,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     
     @objc func doneButtonPressed(){
         loopCount = Int(loopCountTextField.text ?? "0")
+        scaleTotalRunTime()
         self.view.endEditing(true)
     }
     
@@ -229,22 +231,30 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     private func updateTotalDuration(hour: Int, min: Int, sec: Int, milSec: Int){
-        totalMilSec += milSec
-        totalSec += totalMilSec / 1000
+        totalMilSec += UInt64(milSec)
+        totalSec += UInt64(totalMilSec / 1000)
         totalMilSec %= 1000
         
-        totalSec += sec
+        totalSec += UInt64(sec)
         totalMin += totalSec / 60
         totalSec %= 60
         
-        totalMin += min
+        totalMin += UInt64(min)
         totalHr += totalMin / 60
         totalMin %= 60
         
-        totalHr += hour
-        totalRunTime = Int64(totalHr * 3600000) + Int64(totalMin * 60000) + Int64(totalSec * 1000) + Int64(totalMilSec)
+        totalHr += UInt64(hour)
+        totalRunTime = (totalHr * 3600000)
+        totalRunTime += (totalMin * 60000)
+        totalRunTime += (totalSec * 1000) + totalMilSec
         
-        delayLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
+        delayLabel.text = constructDelayString(hour: Int(totalHr), min: Int(totalMin), sec: Int(totalSec), milSec: Int(totalMilSec))
+    }
+    
+    private func scaleTotalRunTime(){
+        if let loopCount = loopCount{
+            scaledTotalRunTime = totalRunTime * UInt64(loopCount)
+        }
     }
     
     @IBAction func addTestButtonClicked(_ sender: Any) {

@@ -26,6 +26,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     var testIndexMapping: [Int: Int] = [:]     // Mapping from testOrderList --> configList
     var chartTitle: String?
     var selectdTest: TestConfig?
+    var selectedRow: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,28 +56,30 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         listOfTestTableView.delegate = self
         listOfTestTableView.dataSource = self
         
-        BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachBLEValueRecordedObserver(id: id, observer: self)
+        BluetoothInterface.instance.attachDelayObserver(id: id, observer: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        globalProgressView = progressView
-        globalTimeElapsedLabel = timeElapsedLabel
         
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
+            scaledTotalRunTime = totalRunTime * UInt64(lCount)
         }
         
-        timeRemainingLabel.text = constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
+        timeRemainingLabel.text = constructDelayString(hour: Int(totalHr), min: Int(totalMin), sec: Int(totalSec), milSec: Int(totalMilSec))
         testOrderList = []
         constructTestOrder()
         listOfTestTableView.reloadData()
-        startStopQueueButton = runControlButton
-        timeElapsedLabel.text = updateTimeElapsedLabel() + " of " + timeRemainingLabel.text!
+        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime)
     }
     
     @objc func doneButtonPressed(){
         loopCount = Int(loopCountTextField.text ?? "0")
+        if let loopCount = loopCount{
+            scaledTotalRunTime = totalRunTime * UInt64(loopCount)
+        }
         self.view.endEditing(true)
     }
     
@@ -107,15 +110,15 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectdTest = configsList[testIndexMapping[indexPath.section]!] as? TestConfig
+        selectedRow = indexPath.row
+        
         if indexPath.row == 0{
-            chartTitle = "Live View"
+            performSegue(withIdentifier: "toLiveView", sender: self)
         }
         else{
-            chartTitle = "Composite View"
+            performSegue(withIdentifier: "toCompositeView", sender: self)
         }
-        selectdTest = configsList[testIndexMapping[indexPath.section]!] as? TestConfig
-        
-        performSegue(withIdentifier: "toChartsView", sender: self)
     }
        
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -143,7 +146,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBAction func startStopQueueButtonClicked(_ sender: Any) {
         let button = sender as! UIButton
         if button.tag == 0{
-            // Test is not running
+            // Running the test for the first time
             if listOfTestTableView.numberOfSections == 0{
                 showErrorMessage(message: "There must be a test present to start queue!", viewController: self)
             }
@@ -154,10 +157,17 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 showErrorMessage(message: "Loop count must be non-negative!", viewController: self)
             }
             else{
-                if currentLoopCount == -1{
-                    currentLoopCount = loopCount!
-                    currentLoopCount = 1
-                }
+                button.layer.backgroundColor = UIColor.MICRONEEDLE_YELLOW.cgColor
+                button.setTitleColor(.darkGray, for: .normal)
+                button.setTitle("Pause Queue", for: .normal)
+                button.tag = 2
+                
+                saveDataButton.layer.backgroundColor = UIColor.MICRONEEDLE_RED.cgColor
+                saveDataButton.setTitle("Stop Queue", for: .normal)
+                saveDataButton.tag = 1
+                
+                isTestRunning = true
+                
                 let test = configsList[queuePosition]
                 if test is TestConfig{
                     sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
@@ -165,17 +175,28 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 else{
                     // perform delay
                 }
-                
-                button.layer.backgroundColor = UIColor(red: 1, green: 0x3b/255, blue: 0x30/255, alpha: 1).cgColor
-                button.setTitle("Stop Queue", for: .normal)
-                button.tag = 1
             }
         }
+        else if button.tag == 1{
+            // Test is paused, resume test
+            button.layer.backgroundColor = UIColor.MICRONEEDLE_YELLOW.cgColor
+            button.setTitleColor(.darkGray, for: .normal)
+            button.setTitle("Pause Queue", for: .normal)
+            button.tag = 2
+            
+            // Sending Stop Signal
+            let data: UInt8 = 1
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+        }
         else{
-            // Test is running
-            button.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
-            button.setTitle("Start Queue", for: .normal)
-            button.tag = 0
+            // Test is running, pause running test
+            button.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
+            button.setTitleColor(.white, for: .normal)
+            button.setTitle("Resume Queue", for: .normal)
+            button.tag = 1
             isTestRunning = false
             
             // Sending Stop Signal
@@ -188,6 +209,25 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     @IBAction func saveDataButtonPressed(_ sender: Any) {
+        if saveDataButton.tag == 1{
+              // Sending Stop Signal
+//            let data: UInt8 = 0
+//            var d: Data = Data(count: 1)
+//            d = withUnsafeBytes(of: data) { Data($0) }
+//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            
+            runControlButton.layer.backgroundColor = UIColor.MICRONEEDLE_ORANGE.cgColor
+            runControlButton.setTitleColor(.white, for: .normal)
+            runControlButton.setTitle("Start Queue", for: .normal)
+            runControlButton.tag = 0
+            
+            saveDataButton.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
+            saveDataButton.setTitle("Save Data", for: .normal)
+            saveDataButton.tag = 0
+            return
+        }
+        
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let currentTime = df.string(from: Date())
@@ -302,20 +342,29 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         return csvStringArray
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination as! ChartsViewController
-        destination.chartsTitle = chartTitle
-        destination.testConfig = selectdTest
+    private func updateProgressBar(){
+        progressView.progress = Float(testTimeElapsed) / Float(scaledTotalRunTime)
+        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime)
+//        print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
     }
     
-    private func updateProgressBar(){
-        progressView.progress = Float(testTimeElapsed) / Float(totalRunTime)
-        timeElapsedLabel.text = updateTimeElapsedLabel() + " of " + timeRemainingLabel.text!
-        print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if selectedRow == 0{
+            // To Live View
+            let destination = segue.destination as! LiveChartsViewController
+            destination.testConfig = selectdTest
+        }
+        else{
+            // To Composite View
+            let destination = segue.destination as! CompositeChartsViewController
+            destination.testConfig = selectdTest
+        }
     }
+    
 }
 
-extension RunViewController: BLEValueUpdateObserver, MFMailComposeViewControllerDelegate{
+extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMailComposeViewControllerDelegate{
     var id: Int {
         15
     }
@@ -358,23 +407,39 @@ extension RunViewController: BLEValueUpdateObserver, MFMailComposeViewController
         }
     }
     
-    func update(with characteristicUUIDString: String, with value: Data) {
+    func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             if let test = configsList[queuePosition] as? TestConfig{
-                if let mode = test.testSettings["Mode Select"]{
-                    if mode == 0{
+                    if test.testMode == 0{
                         if let samplePeriod = test.testSettings["Sample Period"]{
                             testTimeElapsed += UInt64(samplePeriod)
                         }
                     }
-                    else if mode == 1{
+                    else if test.testMode == 1{
                         if let samplePeriod = test.testSettings["Sample Period - Potentio"]{
                             testTimeElapsed += UInt64(samplePeriod)
                         }
                     }
                     updateProgressBar()
-                }
             }
         }
+    }
+    
+    func delayUpdate(by value: UInt64) {
+        print("Delay Update.....\(value)")
+        testTimeElapsed += value
+        updateProgressBar()
+    }
+    
+    func testFinish() {
+        runControlButton.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
+        runControlButton.setTitle("Start Queue", for: .normal)
+        runControlButton.setTitleColor(.white, for: .normal)
+        runControlButton.tag = 0
+        
+        saveDataButton.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
+        saveDataButton.setTitle("Save Data", for: .normal)
+        saveDataButton.tag = 0
+        updateProgressBar()
     }
 }

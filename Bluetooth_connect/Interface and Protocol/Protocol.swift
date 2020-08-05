@@ -32,8 +32,22 @@ protocol BLECharacteristicObserver {
     func characteristicDiscovered(with characteristicUUIDString: String)   // didDiscoveredCharacteristics
 }
 
+/*
+ * Protocol for when new data in coming in through BLE
+ */
 @objc protocol BLEValueUpdateObserver {
     var id : Int { get } // property to get an id
     func update(with characteristicUUIDString: String, with value: Data)   // valueUpdatedforCharacteristics
     @objc optional func writeResponseReceived(with characteristicUUIDString: String)
+}
+
+protocol BLEValueRecordedObserver {
+    var id: Int{ get }
+    func valueRecorded(with characteristicUUIDString: String, with value: Data?)
+}
+
+protocol DelayUpdatedObserver {
+    var id: Int{ get }
+    func delayUpdate(by value: UInt64)
+    func testFinish()
 }

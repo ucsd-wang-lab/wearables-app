@@ -26,10 +26,12 @@
 		5E685B1224B6E2BE00F74A68 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E685B1124B6E2BE00F74A68 /* GlobalVariables.swift */; };
 		5E685B1424B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */; };
 		5E697152243556DE0060FE7C /* UUIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697151243556DE0060FE7C /* UUIDs.swift */; };
-		5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* BLEProtocol.swift */; };
+		5E69715A243564500060FE7C /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E697159243564500060FE7C /* Protocol.swift */; };
 		5E7ED5782471B2C900950064 /* BluetoothViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E7ED5772471B2C900950064 /* BluetoothViewController.swift */; };
 		5E7ED57E2471EBE700950064 /* BluetoothAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */; };
 		5E82A02B24B6D9CE00955677 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E82A02A24B6D9CE00955677 /* RunViewController.swift */; };
+		5E85468624DA54CB0032E2D3 /* LiveChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E85468524DA54CB0032E2D3 /* LiveChartsViewController.swift */; };
+		5E85468824DA54F20032E2D3 /* CompositeChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E85468724DA54F20032E2D3 /* CompositeChartsViewController.swift */; };
 		5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EA2A74B24B65A910066392D /* TabBarViewController.swift */; };
 		5EB235B924B6F8F2002BD42E /* TestNameConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */; };
 		5EB65FBD24BB077D002814ED /* ChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB65FBC24BB077D002814ED /* ChartsViewController.swift */; };
@@ -86,10 +88,12 @@
 		5E685B1124B6E2BE00F74A68 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDisplayModeTableViewCell.swift; sourceTree = "<group>"; };
 		5E697151243556DE0060FE7C /* UUIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUIDs.swift; sourceTree = "<group>"; };
-		5E697159243564500060FE7C /* BLEProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEProtocol.swift; sourceTree = "<group>"; };
+		5E697159243564500060FE7C /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		5E7ED5772471B2C900950064 /* BluetoothViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothViewController.swift; sourceTree = "<group>"; };
 		5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = BluetoothAnimation.json; path = icons/BluetoothAnimation.json; sourceTree = SOURCE_ROOT; };
 		5E82A02A24B6D9CE00955677 /* RunViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
+		5E85468524DA54CB0032E2D3 /* LiveChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveChartsViewController.swift; sourceTree = "<group>"; };
+		5E85468724DA54F20032E2D3 /* CompositeChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositeChartsViewController.swift; sourceTree = "<group>"; };
 		5EA2A74B24B65A910066392D /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		5EB235B824B6F8F2002BD42E /* TestNameConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNameConfigViewController.swift; sourceTree = "<group>"; };
 		5EB65FBC24BB077D002814ED /* ChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +171,8 @@
 				5E82A02A24B6D9CE00955677 /* RunViewController.swift */,
 				5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */,
 				5EB65FBC24BB077D002814ED /* ChartsViewController.swift */,
+				5E85468524DA54CB0032E2D3 /* LiveChartsViewController.swift */,
+				5E85468724DA54F20032E2D3 /* CompositeChartsViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
@@ -216,7 +222,7 @@
 		5EB689692435019E0017A1FC /* Interface and Protocol */ = {
 			isa = PBXGroup;
 			children = (
-				5E697159243564500060FE7C /* BLEProtocol.swift */,
+				5E697159243564500060FE7C /* Protocol.swift */,
 				5E6736982437F88800FA03E9 /* TypeExtension.swift */,
 				5E30DF7B242AA290007D8277 /* BluetoothInterface.swift */,
 				5E697151243556DE0060FE7C /* UUIDs.swift */,
@@ -399,7 +405,8 @@
 				5E09C78824B4708100FE6808 /* TestConfigurationViewController.swift in Sources */,
 				5EF901D4246FBFBF00279AAE /* BluetoothTableViewController.swift in Sources */,
 				5ECBDECB24B55EBC0096F688 /* TestConfigTableViewCell.swift in Sources */,
-				5E69715A243564500060FE7C /* BLEProtocol.swift in Sources */,
+				5E85468824DA54F20032E2D3 /* CompositeChartsViewController.swift in Sources */,
+				5E69715A243564500060FE7C /* Protocol.swift in Sources */,
 				5E2D5F8C24B4609F009A68F1 /* TestTableViewCell.swift in Sources */,
 				5EF2980D24B31858006394CA /* DeviceViewController.swift in Sources */,
 				5EB6F50B2468CFE4006626A0 /* MeasurementCell.swift in Sources */,
@@ -413,6 +420,7 @@
 				5EB65FBD24BB077D002814ED /* ChartsViewController.swift in Sources */,
 				5EA2A74C24B65A910066392D /* TabBarViewController.swift in Sources */,
 				5E30DF7E242AA552007D8277 /* BluetoothCell.swift in Sources */,
+				5E85468624DA54CB0032E2D3 /* LiveChartsViewController.swift in Sources */,
 				5EF901D6246FDB2200279AAE /* RenameViewController.swift in Sources */,
 				0FC47D4022DE8E32006E931E /* AppDelegate.swift in Sources */,
 				5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */,

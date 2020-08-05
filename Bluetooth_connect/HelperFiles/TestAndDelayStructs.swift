@@ -42,9 +42,9 @@ struct DelayConfig: Config {
         self.name = name
         hour = 0
         min = 0
-        sec = 1
+        sec = 10
         milSec = 0
-        totalDuration = 1000
+        totalDuration = 10000
         numSettingSend = 0
     }
     
@@ -114,7 +114,7 @@ struct TestConfig: Config {
         testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
         leadConfigIndex = -1
         updateTotalDuration()
-        generateTestData()
+//        generateTestData()
     }
     
     init(name: String, mode: Int8){
@@ -164,7 +164,7 @@ struct TestConfig: Config {
         }
         var data: [Double] = []
         for newData in 0..<5{
-            data.append(Double(newData))
+            data.append(Double(newData * newData))
         }
         testData.updateValue(data, forKey: 3)
         

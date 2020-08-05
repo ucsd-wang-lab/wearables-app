@@ -62,20 +62,26 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     func update(with characteristicUUIDString: String, with value: Data) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             let data = value.int32
-//            print("data = \(data)")
+            print("data = \(data)")
             
-            if isLiveViewEnable == false{
-                if var test = configsList[queuePosition] as? TestConfig{
-                    var existingData = test.testData[currentLoopCount] ?? [Double]()
-                    existingData.append(Double(data))
-                    test.testData.updateValue(existingData, forKey: currentLoopCount)
-                    configsList[queuePosition] = test
+            if var test = configsList[queuePosition] as? TestConfig{
+                var existingData = test.testData[currentLoopCount] ?? [Double]()
+                if existingData.count == 0{
+                    test.startTimeStamp.updateValue(updateTimeElapsedLabel(timeInMS: testTimeElapsed), forKey: currentLoopCount)
                 }
+                existingData.append(Double(data))
+                test.testData.updateValue(existingData, forKey: currentLoopCount)
+                configsList[queuePosition] = test
             }
+            BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: value)
         }
         else if characteristicUUIDString == "Queue Complete"{
             // move to next test in the queue
             print("\n\nQueue Complete....\(currentLoopCount)")
+            if var test = configsList[queuePosition] as? TestConfig{
+                test.endTimeStamp.updateValue(updateTimeElapsedLabel(timeInMS: testTimeElapsed), forKey: currentLoopCount)
+            }
+            BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: nil)
             sendNextTest()
         }
         else{
@@ -110,9 +116,8 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             queuePosition = 0
             currentLoopCount = -1
             isTestRunning = false
-            startStopQueueButton?.layer.backgroundColor = UIColor(red: 0xfd/255, green: 0x5c/255, blue: 0x3c/255, alpha: 1).cgColor
-            startStopQueueButton?.setTitle("Start Queue", for: .normal)
-            startStopQueueButton?.tag = 0
+            testTimeElapsed = scaledTotalRunTime
+            BluetoothInterface.instance.notifyQueueComplete()
             print("Finished Testing!!!")
             let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
@@ -125,10 +130,9 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         timeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
         startTime = endTime
         
-        print("Delay: \(timeElapsed)")
-        testTimeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
-        globalTimeElapsedLabel?.text = updateTimeElapsedLabel() + " of " + constructDelayString(hour: totalHr, min: totalMin, sec: totalSec, milSec: totalMilSec)
-        globalProgressView?.progress = Float(testTimeElapsed) / Float(totalRunTime)
+//        print("Delay: \(timeElapsed)")
+//        testTimeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
+        BluetoothInterface.instance.notifyDelayUpdate(by: 50)
         
 //        print("Delay: \(timeElapsed)\t updatedLabel: \(updateTimeElapsedLabel())")
         if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDuration{

@@ -147,9 +147,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         print("write update received...\(characteristic.uuid.uuidString)")
         
-        if currentLoopCount != -1 && isTestRunning == true{
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) ?? "nil"
+        
+        if name.contains("Mode Select") || name.contains("Potential") || name.contains("Sample Count") || name.contains("Sample Period") || name.contains("Initial Delay") || name.contains("Electrode Mask"){
             configsList[queuePosition].numSettingSend += 1
         }
+        
         notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)
     }
     
@@ -217,6 +220,8 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     private var bleStatusObserver: [Int: BLEStatusObserver] = [:]
     private var bleCharacteristicObserver: [Int: BLECharacteristicObserver] = [:]
     private var bleValueUpdateObserver: [Int: BLEValueUpdateObserver] = [:]
+    private var bleValueRecordedObserver: [Int: BLEValueRecordedObserver] = [:]
+    private var delayObserver: [Int: DelayUpdatedObserver] = [:]
     
     // START: BLEDiscoveredObserver
     func attachBLEDiscoveredObserver(id: Int, observer: BLEDiscoveredObserver){
@@ -305,5 +310,44 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         }
     }
     // END: BLEValueUpdateObserver
+    
+    // START: BLEValueRecordedObserver
+    func attachBLEValueRecordedObserver(id: Int, observer: BLEValueRecordedObserver){
+        bleValueRecordedObserver.updateValue(observer, forKey: id)
+    }
+    
+    func detachBLEValueRecordedObserver(id: Int){
+        bleValueRecordedObserver.removeValue(forKey: id)
+    }
+    
+    func notifyBLEValueRecordedObserver(with characteristicUUIDString: String, with value: Data?){
+        for (_, observer) in bleValueRecordedObserver{
+            observer.valueRecorded(with: characteristicUUIDString, with: value)
+        }
+        
+    }
+    // END: BLEValueRecordedObserver
+    
+    // START: DelayUpdatedObserver
+    func attachDelayObserver(id: Int, observer: DelayUpdatedObserver){
+        delayObserver.updateValue(observer, forKey: id)
+    }
+    
+    func detachDelayObserver(id: Int){
+        delayObserver.removeValue(forKey: id)
+    }
+    
+    func notifyDelayUpdate(by value: UInt64){
+        for (_, observer) in delayObserver{
+            observer.delayUpdate(by: value)
+        }
+    }
+    
+    func notifyQueueComplete(){
+        for (_, observer) in delayObserver{
+            observer.testFinish()
+        }
+    }
+    // END: DelayUpdatedObserver
 
 }

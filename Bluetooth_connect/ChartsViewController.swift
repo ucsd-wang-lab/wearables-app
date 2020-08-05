@@ -33,14 +33,12 @@ class ChartsViewController: UIViewController {
         super.viewDidAppear(animated)
         
         chartTitleLabel.text = chartsTitle
-//        print("TestConfig: \(testConfig)")
+        print("TestConfig: \(testConfig)")
         
         navigationItem.title = testConfig?.name
         
         customizeChart()
         if chartTitleLabel.text == "Live View"{
-            isLiveViewEnable = true
-            canUpdateLiveGraph = true
             detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: 00:00:00s"
             
             var buttonTitle = "Start/Stop"
@@ -64,8 +62,6 @@ class ChartsViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         chartsTitle = nil
-        isLiveViewEnable = false
-        canUpdateLiveGraph = false
         customizeChart()
         print("View Did Disappear....")
     }
@@ -215,23 +211,7 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
                     existingData.append(Double(data))
                     test.testData.updateValue(existingData, forKey: currentLoopCount)
                     configsList[queuePosition] = test
-                    
-                    if canUpdateLiveGraph && test.name ==  navigationItem.title{
-                        guard let samplePeriod = test.testSettings["Sample Period"] else{
-                            return
-                        }
-                        notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
-                    }
                 }
-                
-                
-            }
-        }
-        else if characteristicUUIDString == "Queue Complete"{
-            // move to next test in the queue
-            print("\n\nQueue Complete....\(currentLoopCount)")
-            if chartsTitle == "Live View"{
-                canUpdateLiveGraph = false
             }
         }
     }
@@ -240,7 +220,7 @@ extension ChartsViewController: BLEValueUpdateObserver, ChartViewDelegate{
         resetGraphColor()
         lineChartView.data?.getDataSetByIndex(highlight.dataSetIndex)?.setColor(UIColor.black)
         dataSetSelectedIndex = highlight.dataSetIndex
-        detailLabel.text = "Repeat Number: \(highlight.dataSetIndex + 1)\n Start Time: 00:00:00s\n End Time: 00:00:00s"
+        detailLabel.text = "Repeat Number: \(highlight.dataSetIndex + 1)\n Start Time: \(testConfig?.startTimeStamp[highlight.dataSetIndex + 1] ?? "")s\n End Time: \(testConfig?.endTimeStamp[highlight.dataSetIndex + 1] ?? "")s"
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {

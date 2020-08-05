@@ -9,30 +9,26 @@
 import UIKit
 
 var configsList:[Config] = [
-    TestConfig(name: "Test 1"),
-    DelayConfig(name: "Delay 1"),
-    TestConfig(name: "Test 2", mode: 1)
+    TestConfig(name: "Test 1", mode: 0),
+    DelayConfig(name: "Delay 1")
+//    TestConfig(name: "Test 2", mode: 1)
 //    DelayConfig(name: "Delay 2"),
 //    TestConfig(name: "Test 3")
 ]
 
 //var configsList:[Config] = []
-var startStopQueueButton: UIButton?     // Button that control the start and stop for the Test Queue
 var connectedDeiviceName:String?        // Name of the connected BLE device
 var loopCount:Int? = 2                  // The number of times to loop through the queue
 var queuePosition: Int = 0              // The current test that is being run
-var currentLoopCount = -1               // The current loop counter for testing
+var currentLoopCount = 1                // The current loop counter for testing
 var isTestRunning: Bool = false         // Keeps track if test is running or paused or stop
-var isLiveViewEnable: Bool = false      // Keeps track if live view is being shown or not
-var canUpdateLiveGraph: Bool = false    // Keeps track if live view should be updated or not
-var totalHr: Int = 0
-var totalMin: Int = 0
-var totalSec: Int = 0
-var totalMilSec: Int = 0
-var totalRunTime: Int64 = 0             // Total run time for all the test, in ms
+var totalHr: UInt64 = 0
+var totalMin: UInt64 = 0
+var totalSec: UInt64 = 0
+var totalMilSec: UInt64 = 0
+var totalRunTime: UInt64 = 0             // Total run time for all the test, in ms
+var scaledTotalRunTime: UInt64 = 0             // Total run time for all the test, in ms
 var testTimeElapsed: UInt64 = 0         // Time elapsed since the start of the queue, in ms
-var globalProgressView: UIProgressView? // ProgressView to keep track of progress made from running test
-var globalTimeElapsedLabel: UILabel?    // Gloabl time elapsed label to keep track of running test
 var tempTestConfig:TestConfig?
 
 
@@ -87,7 +83,7 @@ func showErrorMessage(message: String, viewController: UIViewController){
 }
     
 func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
-    isTestRunning = true
+//    isTestRunning = true
     
     let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: "Mode Select")
     let value = testCofig.testMode
@@ -172,8 +168,8 @@ func updateValue(name: String, encodingType: Any?, value: String?, viewControlle
     }
 }
 
-func updateTimeElapsedLabel() -> String{
-    var temp = testTimeElapsed
+func updateTimeElapsedLabel(timeInMS: UInt64) -> String{
+    var temp = timeInMS
     
     // Hr
     var label = ""

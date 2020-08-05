@@ -159,6 +159,39 @@ extension UITextField {
     @objc func cancelButtonTapped() { self.resignFirstResponder() }
 }
 
+extension UIColor {
+    static var random: UIColor {
+        return UIColor(red: .random(in: 0...1),
+                       green: .random(in: 0...1),
+                       blue: .random(in: 0...1),
+                       alpha: 1.0)
+    }
+    
+    static var MICRONEEDLE_GREEN = UIColor(red: 0x41/255, green: 0xB1/255, blue: 0x5B/255, alpha: 1)
+    static var MICRONEEDLE_RED = UIColor(red: 1, green: 0x3B/255, blue: 0x30/255, alpha: 1)
+    static var MICRONEEDLE_ORANGE = UIColor(red: 0xFD/255, green: 0x5C/255, blue: 0x3C/255, alpha: 1)
+    static var MICRONEEDLE_YELLOW = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+    static var MICRONEEDLE_BLACK = UIColor(red: 31/255, green: 30/255, blue: 30/255, alpha: 1)
+    static var MICRONEEDLE_PURPLE = UIColor(red: 130/255, green: 131/255, blue: 142/255, alpha: 1)
+
+
+
+    static var colorArray: [UIColor] = [
+        UIColor.orange,
+        UIColor.red,
+        UIColor.black,
+        UIColor.blue,
+        UIColor.green,
+        UIColor.gray,
+        UIColor.cyan,
+        UIColor.magenta,
+        UIColor.brown,
+        UIColor.purple,
+        UIColor(red: 0.064582, green: 0.705481, blue: 0.874373, alpha: 1),
+        UIColor(red: 1, green: 0xb6/255, blue: 0x9d/255, alpha: 1)
+    ]
+}
+
 extension Collection where Indices.Iterator.Element == Index {
     // for checking for IndexOutOfBound exception
     subscript (exist index: Index) -> Iterator.Element? {
