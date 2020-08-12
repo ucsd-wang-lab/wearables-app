@@ -207,7 +207,7 @@ class DashboardViewController: UIViewController{
                 showErrorMessage(message: "Value Field Must be a number")
             }
             else{
-                if name == "Electrode Mask"{
+                if name.contains("Electrode Mask"){
                     let data = UInt8(value, radix: 2) ?? nil
                     if data == nil {
                         let message = "Value Field must be valid 8-bit binary input"
@@ -439,6 +439,18 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
             controller.deviceName = self.deviceName
             controller.chartTitle = measurementType
             
+            if measurementType == "Potentiometry"{
+                let value = CHARACTERISTIC_VALUE["Sample Period - Potentio"]!
+                controller.samplePeriod = Double(value) ?? -1
+//                print("Setting period: \(value)")
+            }
+            else{
+                let value = CHARACTERISTIC_VALUE["Sample Period"]!
+                controller.samplePeriod = Double(value) ?? -1
+//                print("Setting period: \(value)")
+            }
+            
+            print("Characteristiv value: ", CHARACTERISTIC_VALUE)
             self.present(controller, animated: true) {
                 // do nothing....
                 BluetoothInterface.instance.detachBLEStatusObserver(id: self.id)
