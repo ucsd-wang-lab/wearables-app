@@ -278,7 +278,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                 canSegue = false
             }
         }
-        canSegue = true
+//        canSegue = true
         if canSegue{
             performSegue(withIdentifier: "toLeadConfig", sender: self)
         }

@@ -20,6 +20,7 @@ class LeadSelectionViewController: UIViewController {
     
     var isUpdate:Bool?
     var updateIndex:Int?
+    var maskString: String!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -48,6 +49,13 @@ class LeadSelectionViewController: UIViewController {
         super.viewDidAppear(animated)
         if tempTestConfig?.testMode == 1{
             leadSelectionSegmentedControl.isHidden = true
+        }
+        
+        if tempTestConfig?.testMode == 0{
+            maskString = "Electrode Mask"
+        }
+        else{
+            maskString = "Electrode Mask - Potentio"
         }
         
         E1Button.tag = 1
@@ -83,26 +91,25 @@ class LeadSelectionViewController: UIViewController {
     
     @objc func leadSelectionButtonClicked(sender: UIButton){
         print("\nTag = \(sender.tag)")
-        
         if sender.backgroundColor?.isEqual(UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)) ?? false{
             // Button selected
             sender.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
-            if let mask = tempTestConfig?.testSettings["Electrode Mask"]{
+            if let mask = tempTestConfig?.testSettings[maskString]{
                 let electrodeMask = mask | sender.tag
-                tempTestConfig?.testSettings["Electrode Mask"] = electrodeMask
+                tempTestConfig?.testSettings[maskString] = electrodeMask
                 print("New mask: \(String(electrodeMask, radix: 2))")
             }
             else{
-                tempTestConfig?.testSettings["Electrode Mask"] = sender.tag
-                print("New mask: \(String(tempTestConfig?.testSettings["Electrode Mask"] ?? 0, radix: 2))")
+                tempTestConfig?.testSettings[maskString] = sender.tag
+                print("New mask: \(String(tempTestConfig?.testSettings[maskString] ?? 0, radix: 2))")
             }
         }
         else{
             // Button unselected
             sender.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
-            if let mask = tempTestConfig?.testSettings["Electrode Mask"]{
+            if let mask = tempTestConfig?.testSettings[maskString]{
                 let electrodeMask = mask - sender.tag
-                tempTestConfig?.testSettings["Electrode Mask"] = electrodeMask
+                tempTestConfig?.testSettings[maskString] = electrodeMask
                 print("New mask: \(String(electrodeMask, radix: 2))")
             }
         }
@@ -149,8 +156,8 @@ class LeadSelectionViewController: UIViewController {
         controller.isUpdate = isUpdate
         controller.updateIndex = updateIndex
         
-        if tempTestConfig?.testSettings["Electrode Mask"] == nil{
-            tempTestConfig?.testSettings["Electrode Mask"] = 0
+        if tempTestConfig?.testSettings[maskString] == nil{
+            tempTestConfig?.testSettings[maskString] = 0
         }
     }
 }

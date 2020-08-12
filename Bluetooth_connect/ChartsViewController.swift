@@ -42,12 +42,6 @@ class ChartsViewController: UIViewController {
             detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: 00:00:00s"
             
             var buttonTitle = "Start/Stop"
-            if isTestRunning{
-                buttonTitle = "Stop"
-            }
-            else{
-                buttonTitle = "Start"
-            }
             
             let rightBarButtonItem = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(startStopButtonPressed(sender:)))
             navigationItem.rightBarButtonItem = rightBarButtonItem
@@ -175,25 +169,7 @@ class ChartsViewController: UIViewController {
     }
     
     @objc func startStopButtonPressed(sender: Any){
-        if isTestRunning{
-            // Sending Stop Signal
-            let data: UInt8 = 0
-            var d: Data = Data(count: 1)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-            navigationItem.rightBarButtonItem?.title = "Start"
-        }
-        else{
-            // Sending Start Signal
-            let data: UInt8 = 1
-            var d: Data = Data(count: 1)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
-            navigationItem.rightBarButtonItem?.title = "Stop"
-
-        }
+        // do nothing....
     }
 }
 

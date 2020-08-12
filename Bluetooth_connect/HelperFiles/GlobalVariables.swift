@@ -8,7 +8,7 @@
 
 import UIKit
 
-var configsList:[Config] = [
+var configsList2:[Config] = [
     TestConfig(name: "Test 1", mode: 0),
     DelayConfig(name: "Delay 1")
 //    TestConfig(name: "Test 2", mode: 1)
@@ -16,12 +16,12 @@ var configsList:[Config] = [
 //    TestConfig(name: "Test 3")
 ]
 
-//var configsList:[Config] = []
+var configsList:[Config] = []
 var connectedDeiviceName:String?        // Name of the connected BLE device
-var loopCount:Int? = 2                  // The number of times to loop through the queue
+var loopCount:Int?                  // The number of times to loop through the queue
+//var loopCount:Int? = 2                  // The number of times to loop through the queue
 var queuePosition: Int = 0              // The current test that is being run
 var currentLoopCount = 1                // The current loop counter for testing
-var isTestRunning: Bool = false         // Keeps track if test is running or paused or stop
 var totalHr: UInt64 = 0
 var totalMin: UInt64 = 0
 var totalSec: UInt64 = 0
@@ -82,9 +82,7 @@ func showErrorMessage(message: String, viewController: UIViewController){
     viewController.present(alert, animated: true)
 }
     
-func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
-//    isTestRunning = true
-    
+func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){    
     let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: "Mode Select")
     let value = testCofig.testMode
     updateValue(name: "Mode Select", encodingType: encodingType, value: String(value), viewController: viewController)

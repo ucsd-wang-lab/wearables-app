@@ -153,8 +153,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             else if loopCount == nil{
                 showErrorMessage(message: "Loop count must be provided!", viewController: self)
             }
-            else if loopCount! < 0{
-                showErrorMessage(message: "Loop count must be non-negative!", viewController: self)
+            else if loopCount! <= 0{
+                showErrorMessage(message: "Loop count must be postive!", viewController: self)
             }
             else{
                 button.layer.backgroundColor = UIColor.MICRONEEDLE_YELLOW.cgColor
@@ -166,14 +166,22 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 saveDataButton.setTitle("Stop Queue", for: .normal)
                 saveDataButton.tag = 1
                 
-                isTestRunning = true
+                // TODO: undo this duiring production
+//                resetData()
                 
-                let test = configsList[queuePosition]
-                if test is TestConfig{
-                    sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-                }
-                else{
-                    // perform delay
+                print("configList: \(configsList)")
+                // Skip all the initial delay and start with the first test
+                while queuePosition < configsList.count{
+                    let test = configsList[queuePosition]
+                    if test is TestConfig{
+                        sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+                        return
+                    }
+                    else{
+                        testTimeElapsed += UInt64(test.totalDuration)
+                        updateProgressBar()
+                        queuePosition += 1
+                    }
                 }
             }
         }
@@ -197,7 +205,6 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             button.setTitleColor(.white, for: .normal)
             button.setTitle("Resume Queue", for: .normal)
             button.tag = 1
-            isTestRunning = false
             
             // Sending Stop Signal
             let data: UInt8 = 0
@@ -211,15 +218,15 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBAction func saveDataButtonPressed(_ sender: Any) {
         if saveDataButton.tag == 1{
               // Sending Stop Signal
-//            let data: UInt8 = 0
-//            var d: Data = Data(count: 1)
-//            d = withUnsafeBytes(of: data) { Data($0) }
-//            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-//            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            let data: UInt8 = 0
+            var d: Data = Data(count: 1)
+            d = withUnsafeBytes(of: data) { Data($0) }
+            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
             
             runControlButton.layer.backgroundColor = UIColor.MICRONEEDLE_ORANGE.cgColor
             runControlButton.setTitleColor(.white, for: .normal)
-            runControlButton.setTitle("Start Queue", for: .normal)
+            runControlButton.setTitle("Restart Queue", for: .normal)
             runControlButton.tag = 0
             
             saveDataButton.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
@@ -348,6 +355,20 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
 //        print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
     }
     
+    private func resetData(){
+        testTimeElapsed = 0
+        queuePosition = 0
+        currentLoopCount = 1
+        for test in configsList{
+            if test is TestConfig{
+                var t = test as! TestConfig
+                t.testData.removeAll()
+                t.startTimeStamp.removeAll()
+                t.endTimeStamp.removeAll()
+            }
+        }
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if selectedRow == 0{
@@ -423,10 +444,13 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
                     updateProgressBar()
             }
         }
+        else if characteristicUUIDString == "Battery Level" {
+            let data = value!.uint8
+            batteryLevelLabel.text = String(data) + "%"
+        }
     }
     
     func delayUpdate(by value: UInt64) {
-        print("Delay Update.....\(value)")
         testTimeElapsed += value
         updateProgressBar()
     }

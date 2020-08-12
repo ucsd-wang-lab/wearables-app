@@ -115,7 +115,6 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         else{
             queuePosition = 0
             currentLoopCount = -1
-            isTestRunning = false
             testTimeElapsed = scaledTotalRunTime
             BluetoothInterface.instance.notifyQueueComplete()
             print("Finished Testing!!!")
@@ -130,11 +129,9 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         timeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
         startTime = endTime
         
-//        print("Delay: \(timeElapsed)")
-//        testTimeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
         BluetoothInterface.instance.notifyDelayUpdate(by: 50)
         
-//        print("Delay: \(timeElapsed)\t updatedLabel: \(updateTimeElapsedLabel())")
+        print("Queue Position: \(queuePosition)")
         if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDuration{
             timer.invalidate()
             sendNextTest()

@@ -42,9 +42,9 @@ struct DelayConfig: Config {
         self.name = name
         hour = 0
         min = 0
-        sec = 10
+        sec = 1
         milSec = 0
-        totalDuration = 10000
+        totalDuration = 1000
         numSettingSend = 0
     }
     

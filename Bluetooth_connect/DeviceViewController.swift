@@ -266,3 +266,18 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         performSegue(withIdentifier: "toDelayConfiguration", sender: self)
     }
 }
+
+extension DeviceViewController: BLEValueRecordedObserver{
+    var id: Int {
+        60
+    }
+    
+    func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
+        if characteristicUUIDString == "Battery Level" {
+            let data = value!.uint8
+            batteryLevelLabel.text = String(data) + "%"
+        }
+    }
+    
+    
+}
