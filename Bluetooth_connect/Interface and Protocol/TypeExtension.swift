@@ -167,14 +167,12 @@ extension UIColor {
                        alpha: 1.0)
     }
     
-    static var MICRONEEDLE_GREEN = UIColor(red: 0x41/255, green: 0xB1/255, blue: 0x5B/255, alpha: 1)
-    static var MICRONEEDLE_RED = UIColor(red: 1, green: 0x3B/255, blue: 0x30/255, alpha: 1)
-    static var MICRONEEDLE_ORANGE = UIColor(red: 0xFD/255, green: 0x5C/255, blue: 0x3C/255, alpha: 1)
-    static var MICRONEEDLE_YELLOW = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
-    static var MICRONEEDLE_BLACK = UIColor(red: 31/255, green: 30/255, blue: 30/255, alpha: 1)
-    static var MICRONEEDLE_PURPLE = UIColor(red: 130/255, green: 131/255, blue: 142/255, alpha: 1)
-
-
+    static let MICRONEEDLE_GREEN = UIColor(red: 0x41/255, green: 0xB1/255, blue: 0x5B/255, alpha: 1)
+    static let MICRONEEDLE_RED = UIColor(red: 1, green: 0x3B/255, blue: 0x30/255, alpha: 1)
+    static let MICRONEEDLE_ORANGE = UIColor(red: 0xFD/255, green: 0x5C/255, blue: 0x3C/255, alpha: 1)
+    static let MICRONEEDLE_YELLOW = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+    static let MICRONEEDLE_BLACK = UIColor(red: 31/255, green: 30/255, blue: 30/255, alpha: 1)
+    static let MICRONEEDLE_PURPLE = UIColor(red: 130/255, green: 131/255, blue: 142/255, alpha: 1)
 
     static var colorArray: [UIColor] = [
         UIColor.orange,

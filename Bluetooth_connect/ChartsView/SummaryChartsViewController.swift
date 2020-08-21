@@ -1,36 +1,31 @@
 //
-//  LiveChartViewController.swift
+//  SummaryChartsViewController.swift
 //  Bluetooth_connect
 //
-//  Created by Ravi Patel on 8/4/20.
+//  Created by Ravi Patel on 8/21/20.
 //  Copyright © 2020 neel shah. All rights reserved.
 //
 
 import UIKit
 import Charts
 
-class LiveChartsViewController: UIViewController {
+class SummaryChartsViewController: UIViewController {
+
     @IBOutlet weak var lineChartView: LineChartView!
     @IBOutlet weak var floatingLabel: UILabel!
-    @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var chartsLabel: UILabel!
     
-    
     var testConfig: TestConfig?
-    var canUpdate: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         lineChartView.delegate = self
-        BluetoothInterface.instance.attachBLEValueRecordedObserver(id: id, observer: self)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        navigationItem.title = testConfig?.name
-        detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount] ?? "")s"
+        print("TestConfig: \(testConfig)")
         
         if testConfig?.testMode == 0{
             chartsLabel.text = "Current (uA)"
@@ -38,8 +33,9 @@ class LiveChartsViewController: UIViewController {
         else if testConfig?.testMode == 1{
             chartsLabel.text = "Potential (mV)"
         }
+        
         customizeChart()
-        canUpdate = true
+        drawChart()
     }
     
     func customizeChart(){
@@ -55,10 +51,6 @@ class LiveChartsViewController: UIViewController {
         line.highlightEnabled = true
         line.highlightLineWidth = 1.5
         line.highlightColor = line.color(atIndex: 0)
-        
-        // Use the following lines of code to enable background color
-//        line.fill = Fill.fillWithColor(.orange)
-//        line.drawFilledEnabled = true
         
         let data = LineChartData()
         data.addDataSet(line)
@@ -80,45 +72,37 @@ class LiveChartsViewController: UIViewController {
         lineChartView.legend.enabled = false
     }
     
-    private func notifyLiveDataChange(value: Double, samplePeriod: Double){
-        let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
-        let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: value / 1e6)
-        lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
-        lineChartView.notifyDataSetChanged()
+    private func drawChart(){
+        if let testData = testConfig?.testData{
+            let newDataPoint = ChartDataEntry(x: 0, y: 0)
+            lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+            for loopNumber in Array(testData.keys).sorted(){
+                if let lastElement = testData[loopNumber]?.last{
+                    let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
+                    let newDataPoint = ChartDataEntry(x: Double(numOfPoints), y: lastElement)
+                    lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+                }
+            }
+            lineChartView.notifyDataSetChanged()
+            lineChartView.xAxis.setLabelCount(testData.keys.count + 1, force: true)
+        }
     }
 }
 
-extension LiveChartsViewController: ChartViewDelegate, BLEValueRecordedObserver{
-    var id: Int {
-        45
-    }
-    
-    func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
-        // incoming data....update chart
-        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
-            
-            guard let samplePeriod = (testConfig?.testMode == 0) ? testConfig?.testSettings["Sample Period"]  : testConfig?.testSettings["Sample Period - Potentio"] else { return }
-            
-            let data = value!.int32
-            detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount] ?? "")s"
-            
-            if canUpdate == true{
-                notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
-            }
-        }
-        else if characteristicUUIDString == "Queue Complete"{
-            canUpdate = false
-        }
-    }
-    
+extension SummaryChartsViewController: ChartViewDelegate{
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
+        
         floatingLabel.isHidden = false
         floatingLabel.text = "(\(entry.x), \(entry.y))"
         floatingLabel.frame = CGRect(x: highlight.xPx, y: chartView.frame.minY - 5, width: 120, height: 15)
+        
+        if floatingLabel.frame.maxX >= self.view.frame.maxX{
+            let difference = floatingLabel.frame.maxX - self.view.frame.maxX
+            floatingLabel.frame.origin.x -= difference
+        }
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
         floatingLabel.isHidden = true
-//        detailLabel.text = "Select a trace for details"
     }
 }

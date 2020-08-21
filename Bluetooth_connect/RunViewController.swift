@@ -88,7 +88,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-           return 2
+           return 3
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -116,8 +116,11 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         if indexPath.row == 0{
             performSegue(withIdentifier: "toLiveView", sender: self)
         }
-        else{
+        else if indexPath.row == 1{
             performSegue(withIdentifier: "toCompositeView", sender: self)
+        }
+        else{
+            performSegue(withIdentifier: "toSummaryView", sender: self)
         }
     }
        
@@ -126,8 +129,11 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         if indexPath.row == 0{
             cell.deviceNameLabel.text = "Live"
         }
-        else{
+        else if indexPath.row == 1{
             cell.deviceNameLabel.text = "Composite"
+        }
+        else{
+            cell.deviceNameLabel.text = "Summary"
         }
         
         return cell
@@ -376,9 +382,13 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             let destination = segue.destination as! LiveChartsViewController
             destination.testConfig = selectdTest
         }
-        else{
+        else if selectedRow == 1{
             // To Composite View
             let destination = segue.destination as! CompositeChartsViewController
+            destination.testConfig = selectdTest
+        }
+        else{
+            let destination = segue.destination as! SummaryChartsViewController
             destination.testConfig = selectdTest
         }
     }

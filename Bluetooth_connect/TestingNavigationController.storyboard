@@ -109,6 +109,82 @@
             </objects>
             <point key="canvasLocation" x="2335" y="-382"/>
         </scene>
+        <!--Summary Charts View Controller-->
+        <scene sceneID="baw-9D-C9v">
+            <objects>
+                <viewController id="ShP-PC-CRi" customClass="SummaryChartsViewController" customModule="Microneedle" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xHL-t9-IPw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Summary View" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDx-ff-NtY">
+                                <rect key="frame" x="0.0" y="20" width="414" height="48.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="QDx-ff-NtY" secondAttribute="height" multiplier="17:2" id="XgT-3W-Qsb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <color key="textColor" red="0.99215686270000003" green="0.36078431370000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sk0-ov-5uf" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="20" y="88.5" width="374" height="409"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Sk0-ov-5uf" secondAttribute="height" multiplier="374:409" id="odJ-gf-as2"/>
+                                </constraints>
+                            </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="floating label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LtG-tc-kKe">
+                                <rect key="frame" x="324" y="20" width="70" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Charts Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vtd-5s-S5W">
+                                <rect key="frame" x="20" y="65.5" width="89" height="23"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="vtd-5s-S5W" secondAttribute="height" multiplier="89:23" id="V43-pa-uk1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Measurement" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KRA-Tz-b7L">
+                                <rect key="frame" x="158" y="497.5" width="98" height="27.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="KRA-Tz-b7L" secondAttribute="height" multiplier="79:22" id="OLV-Mf-ZwR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="KRA-Tz-b7L" firstAttribute="top" secondItem="Sk0-ov-5uf" secondAttribute="bottom" id="5Ad-9h-gJi"/>
+                            <constraint firstItem="vtd-5s-S5W" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leadingMargin" id="74Y-Y0-PgI"/>
+                            <constraint firstItem="KRA-Tz-b7L" firstAttribute="centerX" secondItem="xHL-t9-IPw" secondAttribute="centerX" id="DPm-cm-qhJ"/>
+                            <constraint firstItem="Sk0-ov-5uf" firstAttribute="top" secondItem="vtd-5s-S5W" secondAttribute="bottom" id="G1R-VL-13d"/>
+                            <constraint firstItem="Sk0-ov-5uf" firstAttribute="top" secondItem="QDx-ff-NtY" secondAttribute="bottom" constant="20" id="Htw-cN-aZt"/>
+                            <constraint firstItem="Sk0-ov-5uf" firstAttribute="trailing" secondItem="xHL-t9-IPw" secondAttribute="trailingMargin" id="Q8b-TY-Amb"/>
+                            <constraint firstAttribute="trailing" secondItem="QDx-ff-NtY" secondAttribute="trailing" id="UOi-BH-jbI"/>
+                            <constraint firstItem="QDx-ff-NtY" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leading" id="lzF-dA-kDg"/>
+                            <constraint firstItem="QDx-ff-NtY" firstAttribute="top" secondItem="ERt-xF-jaT" secondAttribute="top" constant="20" id="o2v-Xb-CY4"/>
+                            <constraint firstItem="Sk0-ov-5uf" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leadingMargin" id="yOk-pJ-H7A"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ERt-xF-jaT"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="KwS-o6-H8k"/>
+                    <connections>
+                        <outlet property="chartsLabel" destination="vtd-5s-S5W" id="9an-7Y-p6F"/>
+                        <outlet property="floatingLabel" destination="LtG-tc-kKe" id="2Xz-YV-TNa"/>
+                        <outlet property="lineChartView" destination="Sk0-ov-5uf" id="iQB-BS-jll"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cwp-Me-rz9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1387" y="1604"/>
+        </scene>
         <!--Run-->
         <scene sceneID="q6h-VY-Od3">
             <objects>
@@ -360,6 +436,7 @@
                         <outlet property="timeRemainingLabel" destination="O9H-XH-1Sv" id="UIo-4T-bZd"/>
                         <segue destination="bJd-4b-vMh" kind="show" identifier="toLiveView" id="PcS-4G-KBf"/>
                         <segue destination="hxc-8n-Msi" kind="show" identifier="toCompositeView" id="KDF-aF-LrH"/>
+                        <segue destination="ShP-PC-CRi" kind="show" identifier="toSummaryView" id="vjm-4n-yP3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kmg-jl-Uh2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

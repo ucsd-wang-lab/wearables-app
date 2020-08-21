@@ -42,6 +42,7 @@
 		5EB6F50F2468D2F6006626A0 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB6F50E2468D2F6006626A0 /* InfoCell.swift */; };
 		5EB99F3D24B67ADF00C0B84C /* TestAndDelayStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB99F3C24B67ADF00C0B84C /* TestAndDelayStructs.swift */; };
 		5EC2549324BB931400737DE8 /* LeadSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC2549224BB931400737DE8 /* LeadSelectionViewController.swift */; };
+		5EC7AEFC24F08729003D8B06 /* SummaryChartsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC7AEFB24F08729003D8B06 /* SummaryChartsViewController.swift */; };
 		5ECBABD524B4534D00C304FC /* DelayConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */; };
 		5ECBDECB24B55EBC0096F688 /* TestConfigTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */; };
 		5EE0B45F246FAD7F003CE092 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */; };
@@ -104,6 +105,7 @@
 		5EB6F50E2468D2F6006626A0 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		5EB99F3C24B67ADF00C0B84C /* TestAndDelayStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAndDelayStructs.swift; sourceTree = "<group>"; };
 		5EC2549224BB931400737DE8 /* LeadSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadSelectionViewController.swift; sourceTree = "<group>"; };
+		5EC7AEFB24F08729003D8B06 /* SummaryChartsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryChartsViewController.swift; sourceTree = "<group>"; };
 		5ECBABD424B4534D00C304FC /* DelayConfigurationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DelayConfigurationViewController.swift; sourceTree = "<group>"; };
 		5ECBDECA24B55EBC0096F688 /* TestConfigTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConfigTableViewCell.swift; sourceTree = "<group>"; };
 		5EE0B45E246FAD7F003CE092 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
@@ -157,8 +159,8 @@
 				5E225294242AB6BE00A676CB /* Dashboard */,
 				5EB6F5092468CCFA006626A0 /* MeasurementSelection */,
 				5E30DF7F242AA5E6007D8277 /* Bluetooth */,
-				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
 				5EF2980724B30FFE006394CA /* ConnectionNavigationController */,
+				5EC7AEFD24F08733003D8B06 /* ChartsView */,
 				5EF2980824B3117A006394CA /* TestingNavigationController.storyboard */,
 				5EA2A74B24B65A910066392D /* TabBarViewController.swift */,
 				5EF2980C24B31858006394CA /* DeviceViewController.swift */,
@@ -171,11 +173,10 @@
 				5E82A02A24B6D9CE00955677 /* RunViewController.swift */,
 				5E685B1324B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift */,
 				5EB65FBC24BB077D002814ED /* ChartsViewController.swift */,
-				5E85468524DA54CB0032E2D3 /* LiveChartsViewController.swift */,
-				5E85468724DA54F20032E2D3 /* CompositeChartsViewController.swift */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
+				0FC47D4622DE8E37006E931E /* Assets.xcassets */,
 				5E7ED57D2471EBE700950064 /* BluetoothAnimation.json */,
 			);
 			path = Bluetooth_connect;
@@ -239,6 +240,16 @@
 				5EB6F50E2468D2F6006626A0 /* InfoCell.swift */,
 			);
 			path = MeasurementSelection;
+			sourceTree = "<group>";
+		};
+		5EC7AEFD24F08733003D8B06 /* ChartsView */ = {
+			isa = PBXGroup;
+			children = (
+				5E85468524DA54CB0032E2D3 /* LiveChartsViewController.swift */,
+				5E85468724DA54F20032E2D3 /* CompositeChartsViewController.swift */,
+				5EC7AEFB24F08729003D8B06 /* SummaryChartsViewController.swift */,
+			);
+			path = ChartsView;
 			sourceTree = "<group>";
 		};
 		5EF2980424B304E3006394CA /* HelperFiles */ = {
@@ -396,6 +407,7 @@
 			files = (
 				5E697152243556DE0060FE7C /* UUIDs.swift in Sources */,
 				5EB99F3D24B67ADF00C0B84C /* TestAndDelayStructs.swift in Sources */,
+				5EC7AEFC24F08729003D8B06 /* SummaryChartsViewController.swift in Sources */,
 				5EB6F50D2468D0E8006626A0 /* MeasurementSelection.swift in Sources */,
 				5EB235B924B6F8F2002BD42E /* TestNameConfigViewController.swift in Sources */,
 				5E685B1424B6F04A00F74A68 /* TestDisplayModeTableViewCell.swift in Sources */,
@@ -574,7 +586,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -597,7 +609,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";

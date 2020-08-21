@@ -142,6 +142,11 @@ extension CompositeChartsViewController: ChartViewDelegate, BLEValueRecordedObse
         floatingLabel.text = "(\(entry.x), \(entry.y))"
         floatingLabel.frame = CGRect(x: highlight.xPx, y: chartView.frame.minY - 5, width: 120, height: 15)
         
+        if floatingLabel.frame.maxX >= self.view.frame.maxX{
+            let difference = floatingLabel.frame.maxX - self.view.frame.maxX
+            floatingLabel.frame.origin.x -= difference
+        }
+        
         let numOfDataset = lineChartView.data?.dataSets.count ?? 0
         for i in 0..<numOfDataset{
             if i != highlight.dataSetIndex{
