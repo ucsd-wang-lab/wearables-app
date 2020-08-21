@@ -105,7 +105,6 @@ extension UIColor {
     static var colorArray: [UIColor] = [
         UIColor.orange,
         UIColor.red,
-        UIColor.black,
         UIColor.blue,
         UIColor.green,
         UIColor.gray,

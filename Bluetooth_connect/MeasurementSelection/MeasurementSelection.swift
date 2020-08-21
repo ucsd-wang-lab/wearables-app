@@ -149,11 +149,15 @@ extension MeasurementSelection: UITableViewDelegate, UITableViewDataSource, BLES
     
     func characteristicDiscovered(with characteristicUUIDString: String) {
         if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
-
-           if CHARACTERISTIC_VALUE[name] != nil{
+            
+            if CHARACTERISTIC_VALUE[name] != nil{
                 let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
                 BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-           }
+            }
+            else if name.contains(" - Potentio"){
+                let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+            }
         }
     }
     

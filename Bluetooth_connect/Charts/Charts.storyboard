@@ -79,8 +79,11 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current (uA)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ay6-FP-IuJ">
-                                <rect key="frame" x="-30" y="437.5" width="95.5" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Potential (mV)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ay6-FP-IuJ">
+                                <rect key="frame" x="-40" y="437.5" width="108.5" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="ay6-FP-IuJ" secondAttribute="height" multiplier="36:7" id="DA4-lb-ueS"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -135,7 +138,7 @@
                             <constraint firstAttribute="bottomMargin" secondItem="HPi-DK-Gbh" secondAttribute="bottom" constant="30" id="kOC-uC-KIa"/>
                             <constraint firstItem="cqw-fK-zNZ" firstAttribute="centerY" secondItem="oPY-kF-cj8" secondAttribute="centerY" id="oW7-Hl-YnO"/>
                             <constraint firstItem="YQP-3m-gRz" firstAttribute="leading" secondItem="oPY-kF-cj8" secondAttribute="leadingMargin" id="pSK-5Y-9No"/>
-                            <constraint firstItem="ay6-FP-IuJ" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="-30" id="pab-t1-D5s"/>
+                            <constraint firstItem="ay6-FP-IuJ" firstAttribute="leading" secondItem="7I0-K8-D8T" secondAttribute="leading" constant="-40" id="pab-t1-D5s"/>
                             <constraint firstItem="5r8-40-6Td" firstAttribute="top" secondItem="7I0-K8-D8T" secondAttribute="top" constant="5" id="tEQ-Oo-RKS"/>
                             <constraint firstItem="UaO-8B-PWQ" firstAttribute="leading" secondItem="HPi-DK-Gbh" secondAttribute="trailing" constant="20" id="umh-Ty-ktE"/>
                             <constraint firstItem="ZmW-QJ-oaW" firstAttribute="leading" secondItem="UaO-8B-PWQ" secondAttribute="trailing" constant="20" id="yIs-dk-XmB"/>

@@ -58,7 +58,11 @@ var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
                                               "Sample Period": "xxxx",
                                               "Sample Count": "xxx",
                                               "Gain": "xxxx",
-                                              "Electrode Mask": "xxxxxxxx"
+                                              "Electrode Mask": "xxxxxxxx",
+                                              "Initial Delay - Potentio": "xxx",
+                                              "Sample Period - Potentio": "xxxx",
+                                              "Sample Count - Potentio": "xxx",
+                                              "Electrode Mask - Potentio": "xxxxxxxx"
                                             ]
 var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
                                                  "Firmware Revision": -1,

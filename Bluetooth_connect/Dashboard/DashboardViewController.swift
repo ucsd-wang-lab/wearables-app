@@ -67,7 +67,7 @@ class DashboardViewController: UIViewController{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+                
         if let measurement = measurementType{
             deviceNameLabel.text = measurement
             if measurement == "Potentiometry"{
@@ -163,7 +163,12 @@ class DashboardViewController: UIViewController{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "editable_cell") as! DashboardEditableCell
         cell.key_label.text = section_mapping[indexPath.section]![indexPath.row]
-        cell.value_label.text = CHARACTERISTIC_VALUE[section_mapping[indexPath.section]![indexPath.row]]
+        if  measurementType == "Potentiometry" && indexPath.section == 1{
+            cell.value_label.text = CHARACTERISTIC_VALUE[section_mapping[indexPath.section]![indexPath.row] + " - Potentio"]
+        }
+        else{
+            cell.value_label.text = CHARACTERISTIC_VALUE[section_mapping[indexPath.section]![indexPath.row]]
+        }
 
         cell.value_label.delegate = self
         cell.suffix_label.text = suffix_mapping[section_mapping[indexPath.section]![indexPath.row]]
@@ -384,10 +389,14 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
     func characteristicDiscovered(with characteristicUUIDString: String) {
         if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) {
 
-           if CHARACTERISTIC_VALUE[name] != nil{
+            if CHARACTERISTIC_VALUE[name] != nil{
                 let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
                 BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
-           }
+            }
+            else if name.contains(" - Potentio"){
+                let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                BluetoothInterface.instance.readData(characteristicUUIDString: charUUID)
+            }
         }
     }
        

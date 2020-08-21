@@ -70,7 +70,6 @@ class ChartsViewController: UIViewController {
         else if chartTitle == "Potentiometry"{
             yAxisTitleLabel.text = "Potential (mV)"
         }
-        print("samplePeriod: \(samplePeriod)")
     }
     
     func customizeLoadingIcon(){
@@ -125,6 +124,9 @@ class ChartsViewController: UIViewController {
         graphView.xAxis.labelTextColor = .orange
         
         graphView.legend.enabled = true
+        if traitCollection.userInterfaceStyle == .dark{
+            graphView.legend.textColor = .white
+        }
     }
     
     func updatChart(value: Double){
@@ -137,14 +139,14 @@ class ChartsViewController: UIViewController {
             let newValue = ChartDataEntry(x: Double(numOfPoints) * samplePeriod! / 1000, y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
             timeLabel.text = "Time (sec): \(Double(numOfPoints) * samplePeriod! / 1000)"
-            yValueLabel.text = yAxisTitleLabel.text! + ": \(value / 1e6)"
+            yValueLabel.text = yAxisTitleLabel.text! + ":  \(String(value / 1e6).prefix(8))"
             graphView.notifyDataSetChanged()
         }
         else{
             let newValue = ChartDataEntry(x: Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0), y: value / 1e6)
             graphView.data?.addEntry(newValue, dataSetIndex: num_of_lines - 1)
             timeLabel.text = "Time (sec): \(Double(graphView.data?.dataSets[num_of_lines - 1 ].entryCount ?? 0))"
-            yValueLabel.text = yAxisTitleLabel.text! + ": \(value / 1e6)"
+            yValueLabel.text = yAxisTitleLabel.text! + ": \(String(value / 1e6).prefix(8))"
             graphView.notifyDataSetChanged()
         }
     }
@@ -154,7 +156,6 @@ class ChartsViewController: UIViewController {
         numOfMeasurement += 1
         let lineChartEntry = [ChartDataEntry]()
         let line = LineChartDataSet(entries: lineChartEntry, label: "Measurement \(numOfMeasurement)")
-
         var color = UIColor.random
         
         if let num_of_lines = graphView.data?.dataSetCount {
@@ -491,6 +492,11 @@ extension ChartsViewController: BLEStatusObserver, BLEValueUpdateObserver, MFMai
         floatingLabel.isHidden = false
         floatingLabel.text = "(\(entry.x), \(entry.y))"
         floatingLabel.frame = CGRect(x: highlight.xPx, y: chartView.frame.minY, width: 120, height: 15)
+        
+        if floatingLabel.frame.maxX >= self.view.frame.maxX{
+            let difference = floatingLabel.frame.maxX - self.view.frame.maxX
+            floatingLabel.frame.origin.x -= difference
+        }
         
         print("DatasetIndex: \(highlight.dataSetIndex)")
         let numOfDataset = graphView.data?.dataSets.count ?? 0
