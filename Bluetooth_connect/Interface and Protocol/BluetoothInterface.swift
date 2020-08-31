@@ -125,7 +125,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
             self.serviceDictionary[service] = service.characteristics
 
             for characteristic in characteristics{
-//                print("Characteristics = ", characteristic.uuid.uuidString)
                 if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
                     print("characteristics = \(name)")
                     
@@ -136,6 +135,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 //                        print("characteristics notify = ", name)
                         self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
+                }
+                else{
+                    print("Characteristics = ", characteristic.uuid.uuidString)
                 }
             }
         }

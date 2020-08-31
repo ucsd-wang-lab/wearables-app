@@ -25,14 +25,15 @@ class DashboardViewController: UIViewController{
                                             "Sample Period": " ms",
                                             "Sample Count": "",
                                             "Gain": " x",
-                                            "Electrode Mask": ""
+                                            "Electrode Mask": "",
+                                            "Filter Level": ""
                                              ]
     
     
     // Section 0: read-only value; Section 1: modifiable values
     var section_mapping: [Int: [String]] = [0:["Battery Level", "Firmware Revision"],
                                         1: ["Potential", "Initial Delay", "Sample Period",
-                                            "Sample Count", "Gain", "Electrode Mask"]
+                                            "Sample Count", "Gain", "Electrode Mask", "Filter Level"]
                                         ]
     
     
@@ -75,14 +76,17 @@ class DashboardViewController: UIViewController{
                 section_mapping[1]?.remove(at: 3)
                 CHARACTERISTIC_VALUE.removeValue(forKey: "Potential")
                 CHARACTERISTIC_VALUE.removeValue(forKey: "Gain")
+                CHARACTERISTIC_VALUE.updateValue("xxx", forKey: "Filter Level - Potentio")
                 dashboardTableView.reloadData()
 
             }
             else if measurement == "Amperometry"{
 //                section_mapping[1]?.insert("Potential", at: 0)
 //                section_mapping[1]?.insert("Gain", at: 4)
+                section_mapping[1]?.remove(at: 6)
                 CHARACTERISTIC_VALUE.updateValue("-1/+1", forKey: "Potential")
                 CHARACTERISTIC_VALUE.updateValue("xxxx", forKey: "Gain")
+                CHARACTERISTIC_VALUE.removeValue(forKey: "Filter Level - Potentio")
                 dashboardTableView.reloadData()
             }
         }
@@ -373,6 +377,16 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource, U
             BluetoothInterface.instance.disconnect()
             BluetoothInterface.instance.autoConnect = true
             BluetoothInterface.instance.startScan()
+            
+            let alert = UIAlertController(title: "Disconnected", message: "Device disconnected from \(device)", preferredStyle: .actionSheet)
+            self.present(alert, animated: true, completion: nil)
+            
+            // change to desired number of seconds (in this case 5 seconds)
+            let when = DispatchTime.now() + 2
+            DispatchQueue.main.asyncAfter(deadline: when){
+              // your code with delay
+              alert.dismiss(animated: true, completion: nil)
+            }
             
 //           let storyboard = UIStoryboard(name: "BTSelectionScreen", bundle: nil)
 //           let controller = storyboard.instantiateInitialViewController() as! BTSelectionScreen

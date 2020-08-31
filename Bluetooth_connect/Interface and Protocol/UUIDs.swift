@@ -62,7 +62,8 @@ var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
                                               "Initial Delay - Potentio": "xxx",
                                               "Sample Period - Potentio": "xxxx",
                                               "Sample Count - Potentio": "xxx",
-                                              "Electrode Mask - Potentio": "xxxxxxxx"
+                                              "Electrode Mask - Potentio": "xxxxxxxx",
+                                              "Filter Level": "xxx"
                                             ]
 var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
                                                  "Firmware Revision": -1,
@@ -71,7 +72,8 @@ var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
                                                  "Sample Period": 100,
                                                  "Sample Count": 0,
                                                  "Gain": 0,
-                                                 "Electrode Mask": 0
+                                                 "Electrode Mask": 0,
+                                                 "Filter Level": 0
                                             ]
 
 var CHARACTERISTIC_VALUE_MAX_VALUE: [String: Int] = ["Battery Level": 100,
@@ -81,7 +83,8 @@ var CHARACTERISTIC_VALUE_MAX_VALUE: [String: Int] = ["Battery Level": 100,
                                                      "Sample Period": Int(UInt16.max),
                                                      "Sample Count": Int(UInt16.max),
                                                      "Gain": 27,
-                                                     "Electrode Mask": Int(UInt8.max)
+                                                     "Electrode Mask": Int(UInt8.max),
+                                                     "Filter Level": Int(UInt8.max)
                                                     ]
 
 class CharacteristicsUUID{
@@ -139,6 +142,7 @@ class CharacteristicsUUID{
         UUIDtoCharacteristicName.updateValue("Initial Delay - Potentio", forKey: "f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased())
         UUIDtoCharacteristicName.updateValue("Sample Count - Potentio", forKey: "9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased())
         UUIDtoCharacteristicName.updateValue("Sample Period - Potentio", forKey: "1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased())
+        UUIDtoCharacteristicName.updateValue("Filter Level - Potentio", forKey: "31EFBCE5-0036-4F83-8F34-F3FFFA31D30C")
         
         // Potentiometric Data Service
 //        UUIDtoCharacteristicName.updateValue("Start/Stop Potentiometry", forKey: "2e0b45c2-e649-4591-ae5e-840960863efa".uppercased())
@@ -181,6 +185,7 @@ class CharacteristicsUUID{
         characteristicNametoUUID.updateValue("f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased(), forKey: "Initial Delay - Potentio")
         characteristicNametoUUID.updateValue("9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased(), forKey: "Sample Count - Potentio")
         characteristicNametoUUID.updateValue("1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased(), forKey: "Sample Period - Potentio")
+        characteristicNametoUUID.updateValue("31EFBCE5-0036-4F83-8F34-F3FFFA31D30C", forKey: "Filter Level - Potentio")
         
         // Potentiometric Data Service
 //        characteristicNametoUUID.updateValue("2e0b45c2-e649-4591-ae5e-840960863efa".uppercased(), forKey:"Start/Stop Potentiometry")
@@ -223,6 +228,7 @@ class CharacteristicsUUID{
         characteristicProperty.updateValue("Read/Write", forKey: "Initial Delay - Potentio")
         characteristicProperty.updateValue("Read/Write", forKey: "Sample Count - Potentio")
         characteristicProperty.updateValue("Read/Write", forKey: "Sample Period - Potentio")
+        characteristicProperty.updateValue("Read/Write", forKey: "Filter Level - Potentio")
         
         // Potentiometric Data Service
 //        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
@@ -268,6 +274,7 @@ class CharacteristicsUUID{
         characteristicDataType.updateValue(UInt16(), forKey: "Initial Delay - Potentio")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Count - Potentio")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Period - Potentio")
+        characteristicDataType.updateValue(UInt8(), forKey: "Filter Level - Potentio")
         
         // Potentiometric Data Service
         //        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
