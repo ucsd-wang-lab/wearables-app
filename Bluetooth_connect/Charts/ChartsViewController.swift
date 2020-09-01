@@ -244,11 +244,13 @@ class ChartsViewController: UIViewController {
         for i in 0..<num_of_lines{
             var csvString = "\("Timestamp"),\(currentTime)\n\n"
             
-            if chartTitle == "Potentiometry" {
-                csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay - Potentio"]!),ms\n")
-                csvString.append("Sample Period,\(CHARACTERISTIC_VALUE["Sample Period - Potentio"]!),ms\n")
-                csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count - Potentio"]!)\n")
-                csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask - Potentio"]!)\n\n")
+            if let chartTitle = chartTitle{
+                if chartTitle == "Potentiometry"{
+                    csvString.append("Initial Delay,\(CHARACTERISTIC_VALUE["Initial Delay - Potentio"]!),ms\n")
+                    csvString.append("Sample Period,\(CHARACTERISTIC_VALUE["Sample Period - Potentio"]!),ms\n")
+                    csvString.append("Sample Count,\(CHARACTERISTIC_VALUE["Sample Count - Potentio"]!)\n")
+                    csvString.append("Electrode Mask,\(CHARACTERISTIC_VALUE["Electrode Mask - Potentio"]!)\n\n")
+                }
             }
             else{
                 csvString.append("Potential,\(CHARACTERISTIC_VALUE["Potential"]!),mV\n")
