@@ -216,15 +216,6 @@ extension MeasurementSelection: UITableViewDelegate, UITableViewDataSource, BLES
                 BluetoothInterface.instance.autoConnect = true
                 BluetoothInterface.instance.startScan()
             }
-            let alert = UIAlertController(title: "Disconnected", message: "Device disconnected from \(device)", preferredStyle: .actionSheet)
-            self.present(alert, animated: true, completion: nil)
-            
-            // change to desired number of seconds (in this case 5 seconds)
-            let when = DispatchTime.now() + 2
-            DispatchQueue.main.asyncAfter(deadline: when){
-              // your code with delay
-              alert.dismiss(animated: true, completion: nil)
-            }
         }
     }
     
