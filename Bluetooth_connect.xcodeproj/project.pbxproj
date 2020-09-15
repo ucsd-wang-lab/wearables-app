@@ -132,9 +132,9 @@
 				5EF2980424B304E3006394CA /* HelperFiles */,
 				5EB689692435019E0017A1FC /* Interface and Protocol */,
 				5EF2980724B30FFE006394CA /* ConnectionNavigationController */,
-				5EC7AEFD24F08733003D8B06 /* ChartsView */,
-				5EC73362251048F30015A279 /* AddTestOrDelay */,
 				5EC73363251049340015A279 /* TabBarController */,
+				5EC73362251048F30015A279 /* AddTestOrDelay */,
+				5EC7AEFD24F08733003D8B06 /* ChartsView */,
 				0FC47D4B22DE8E37006E931E /* Info.plist */,
 				0FC47D4822DE8E37006E931E /* LaunchScreen.storyboard */,
 				5EB68967243468120017A1FC /* GoogleService-Info.plist */,
@@ -522,7 +522,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -545,7 +545,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.microneedle.Microneedle-phase1";
 				PRODUCT_NAME = Microneedle;
 				PROVISIONING_PROFILE_SPECIFIER = "";

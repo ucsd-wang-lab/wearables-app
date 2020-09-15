@@ -314,17 +314,22 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 if t.testMode == 0{
                     csvString.append("Amperometric Measurement\n\n")
                 }
-                else{
+                else if t.testMode == 1{
                     csvString.append("Potentiometric Measurement\n\n")
                 }
-                print("testData: \(t.testData)")
-                for testSettingKey in Array(t.testSettings.keys).sorted(){
-                    csvString.append("\(testSettingKey), \(t.testSettings[testSettingKey]!)\n")
+                else{
+                    csvString.append("Square Wave Measurement\n\n")
                 }
+                print("testData: \(t.testData)")
+                let testSettings = t.testSettings2[Int(t.testMode)]!
+                for testSettingKeys in Array(testSettings.keys).sorted(){
+                    csvString.append("\(testSettingKeys), \(testSettings[testSettingKeys]!)\n")
+                }
+
                 csvString.append("\n\n")
                 
-                if t.testMode == 1{
-                    csvString.append("\n")  // one extra space for potentiometric measurement
+                if t.testMode == 3{
+                    csvString.append("\n")  // one extra space for SW measurement
                 }
                 
                 var maxCount = 0
@@ -442,17 +447,12 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
     func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             if let test = configsList[queuePosition] as? TestConfig{
-                    if test.testMode == 0{
-                        if let samplePeriod = test.testSettings["Sample Period"]{
+                if test.testMode == 0 || test.testMode == 1{
+                        if let samplePeriod = test.testSettings2[Int(test.testMode)]!["Sample Period"]{
                             testTimeElapsed += UInt64(samplePeriod)
                         }
-                    }
-                    else if test.testMode == 1{
-                        if let samplePeriod = test.testSettings["Sample Period - Potentio"]{
-                            testTimeElapsed += UInt64(samplePeriod)
-                        }
-                    }
-                    updateProgressBar()
+                }
+                updateProgressBar()
             }
         }
         else if characteristicUUIDString == "Battery Level" {

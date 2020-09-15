@@ -97,7 +97,9 @@ extension LiveChartsViewController: ChartViewDelegate, BLEValueRecordedObserver{
         // incoming data....update chart
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             
-            guard let samplePeriod = (testConfig?.testMode == 0) ? testConfig?.testSettings["Sample Period"]  : testConfig?.testSettings["Sample Period - Potentio"] else { return }
+//            guard let samplePeriod = (testConfig?.testMode == 0) ? testConfig?.testSettings["Sample Period"]  : testConfig?.testSettings["Sample Period - Potentio"] else { return }
+            
+            guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"]  else { return }
             
             let data = value!.int32
             detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount] ?? "")s"

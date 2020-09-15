@@ -87,7 +87,7 @@ class CompositeChartsViewController: UIViewController {
             for loopNumber in Array(test.testData.keys).sorted(){
                                 
                 // Populate the current plot
-                guard let samplePeriod = (test.testMode == 0) ? test.testSettings["Sample Period"]  : test.testSettings["Sample Period - Potentio"] else { continue }
+                guard let samplePeriod = test.testSettings2[Int(test.testMode)]?["Sample Period"]  else { continue }
                 
                 for newValue in test.testData[loopNumber]!{
                     let numOfPoints = lineChartView.data?.dataSets[loopNumber - 1 ].entryCount ?? 0
