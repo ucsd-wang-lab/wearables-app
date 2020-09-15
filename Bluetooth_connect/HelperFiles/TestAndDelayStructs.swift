@@ -14,11 +14,13 @@ protocol Config {
     var milSec: Int {get set}
     var totalDuration: Int64{get set}
     var numSettingSend:Int {get set}
+    var testMode: Int8 { get set }
     
     mutating func updateTotalDuration()
 }
 
 struct DelayConfig: Config {
+    
     
     var name: String?
     var hour: Int
@@ -27,6 +29,8 @@ struct DelayConfig: Config {
     var milSec: Int
     var totalDuration: Int64                 // Total delay in ms
     var numSettingSend: Int
+    var testMode: Int8
+
 
     
     init() {
@@ -36,6 +40,7 @@ struct DelayConfig: Config {
         milSec = -1
         totalDuration = -1
         numSettingSend = 1
+        testMode = 4
     }
     
     init(name: String) {
@@ -46,6 +51,7 @@ struct DelayConfig: Config {
         milSec = 0
         totalDuration = 1000
         numSettingSend = 0
+        testMode = 4
     }
     
     mutating func updateTotalDuration(){
@@ -69,6 +75,7 @@ struct TestConfig: Config {
     var testData: [Int: [Double]]       // loopNumber: Data Array
     var startTimeStamp: [Int: String]   // loopNumber: StartTime
     var endTimeStamp: [Int: String]     // loopNumber: EndTime
+    var testSettings2: [Int: [String: Int]]  // Measurement Type: [Key: Value]
     
     var leadConfigIndex: Int
     
@@ -87,6 +94,7 @@ struct TestConfig: Config {
         startTimeStamp = [:]
         endTimeStamp = [:]
         leadConfigIndex = -1
+        testSettings2 = [:]
     }
     
     init(name: String){
@@ -101,6 +109,7 @@ struct TestConfig: Config {
         testData = [:]
         startTimeStamp = [:]
         endTimeStamp = [:]
+        testSettings2 = [:]
         testMode = 0
 
         
@@ -129,6 +138,7 @@ struct TestConfig: Config {
         testData = [:]
         startTimeStamp = [:]
         endTimeStamp = [:]
+        testSettings2 = [:]
         testMode = mode
 
             

@@ -24,6 +24,29 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                                                  3: ["Sample Count": ""],
                                                 ]
     
+    
+    /*
+    * 0: Ampero
+    * 1: Potentio
+    * 2: Square Wave
+    */
+    var tableMapping: [Int: [Int : [String: String]]] = [0: [0: ["Potential": " mV"],
+                                                             1: ["Initial Delay": " ms"],
+                                                             2: ["Sample Period": " ms"],
+                                                             3: ["Sample Count": ""]
+                                                            ],
+                                                         1: [0: ["Initial Delay": " ms"],
+                                                             1: ["Sample Period": " ms"],
+                                                             2: ["Sample Count": ""],
+                                                             3: ["Filter Level": ""]
+                                                            ],
+                                                         2: [0: ["Quiet Time": " ms"],
+                                                             1: ["Num Steps": ""],
+                                                             2: ["Initial Potential": " mV"],
+                                                             3: ["Final Potential": " mV"],
+                                                             4: ["Gain Level": " \u{2126}"]
+                                                            ]
+                                                        ]
     var isUpdate:Bool?
     var updateIndex:Int?
     
@@ -50,7 +73,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
             measurementTypeSegmentedControl.selectedSegmentIndex = Int(tempTestConfig!.testMode)
             measurementTypeChanged(measurementTypeSegmentedControl)
         }
-        calculateDuration(characteristicName: "", value: "")        
+//        calculateDuration(characteristicName: "", value: "")
     }
     
     // when touched anywhere on the screen
@@ -95,25 +118,30 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        print("\n\nTextfield end editing....\(textField.text ?? "nil")\n\n")
         for key in valueTextField.keys{
             let tf = valueTextField[key]
             if textField == tf {
-                var name = unitsMapping[key]![0].key
-                let isValid = checkValidity(value: textField.text, characteristicName: name, textField: textField)
+                let _key = tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]![key]![0].key
+                let isValid = checkValidity(value: textField.text, characteristicName: _key, textField: textField)
                 if isValid{
-                    if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
-                        name += " - Potentio"
+                    
+//                    tempTestConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex] = [_key: Int(textField.text!)!]
+                    var dict = tempTestConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]
+                    if dict != nil{
+                        dict!.updateValue(Int(textField.text!)!, forKey: _key)
                     }
-                    tempTestConfig?.testSettings[name] = Int(textField.text!)
-                    calculateDuration(characteristicName: name, value: textField.text!)
+                    else{
+                        dict = [_key: Int(textField.text!)!]
+                    }
+                    tempTestConfig?.testSettings2.updateValue(dict!, forKey: measurementTypeSegmentedControl.selectedSegmentIndex)
+//                    calculateDuration(characteristicName: _key, value: textField.text!)
                 }
             }
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return unitsMapping.count
+        return tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]!.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -140,14 +168,14 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "testConfigCell") as! TestConfigTableViewCell
-        cell.keyLabel.text = "\(unitsMapping[indexPath.section]![0].key)"
         
-        var key = unitsMapping[indexPath.section]![0].key
-        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
-            key += " - Potentio"
-        }
-        if let value = tempTestConfig?.testSettings[key]{
-            cell.valueLabel.text = String(value)
+        let _key = tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]![indexPath.section]![0].key
+        let _units = tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]![indexPath.section]![0].value
+        
+        cell.keyLabel.text = _key
+
+        if let value = tempTestConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]?[_key]{
+            cell.valueLabel.text = "\(value)"
         }
         else{
             cell.valueLabel.text = "xxxx xxxx"
@@ -155,42 +183,33 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         
         cell.valueLabel.delegate = self
         valueTextField[indexPath.section] = cell.valueLabel
-        cell.unitsLabel.text = " \(unitsMapping[indexPath.section]![0].value)"
+        cell.unitsLabel.text = _units
         cell.selectionStyle = .none
         
-//        print("Section = \(indexPath.section)\t \(unitsMapping[indexPath.section]![0].key)")
         return cell
     }
     
     @IBAction func measurementTypeChanged(_ sender: UISegmentedControl) {
+        testConfigTableView.reloadData()
+//        calculateDuration(characteristicName: "", value: "")
+        
         if sender.selectedSegmentIndex == 0{
             leadConfigSegmentedControl.selectedSegmentIndex = 1
-            unitsMapping.removeAll()
-            unitsMapping = [0: ["Potential": " mV"],
-                            1: ["Initial Delay": " ms"],
-                            2: ["Sample Period": " ms"],
-                            3: ["Sample Count": ""],
-                           ]
-            testConfigTableView.reloadData()
-            calculateDuration(characteristicName: "", value: "")
         }
         else if sender.selectedSegmentIndex == 1{
             leadConfigSegmentedControl.selectedSegmentIndex = 0
-            unitsMapping.removeAll()
-            unitsMapping = [0: ["Initial Delay": " ms"],
-                            1: ["Sample Period": " ms"],
-                            2: ["Sample Count": ""]
-                           ]
-            testConfigTableView.reloadData()
-            calculateDuration(characteristicName: "", value: "")
+        }
+        else if sender.selectedSegmentIndex == 2{
+            leadConfigSegmentedControl.selectedSegmentIndex = 1
         }
     }
     
     
     private func checkValidity(value: String?, characteristicName: String, textField: UITextField?) -> Bool {
-        let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[characteristicName]!
-        let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[characteristicName]!
-                        
+        let minVal = CHARACTERISTIC_VALUE_MIN_VALUE[measurementTypeSegmentedControl.selectedSegmentIndex]![characteristicName]!
+        let maxVal = CHARACTERISTIC_VALUE_MAX_VALUE[measurementTypeSegmentedControl.selectedSegmentIndex]![characteristicName]!
+
+        
         if let value = value{
             if value == ""{
                 let message = "Value field cannot be empty"
@@ -218,46 +237,46 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         }
     }
     
-    private func calculateDuration(characteristicName: String, value: String){
-        var delayString = "Initial Delay"
-        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
-            delayString += " - Potentio"
-        }
-        
-        if let initialDelay = tempTestConfig?.testSettings[delayString]{
-            tempTestConfig?.initialDelay = initialDelay
-        }
-        
-        var samplePeriodString = "Sample Period"
-        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
-            samplePeriodString += " - Potentio"
-        }
-        
-        var sampleCountString = "Sample Count"
-        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
-            sampleCountString += " - Potentio"
-        }
-        if let samplePeriod = tempTestConfig?.testSettings[samplePeriodString], let sampleCount = tempTestConfig?.testSettings[sampleCountString], let initialDelay = tempTestConfig?.initialDelay{
-            let delay = samplePeriod * sampleCount
-            tempTestConfig?.sec = 0
-            tempTestConfig?.min = 0
-            tempTestConfig?.hour = 0
-            
-            tempTestConfig?.milSec = delay + initialDelay
-            tempTestConfig?.sec += (delay + initialDelay) / 1000
-            tempTestConfig?.milSec = (delay + initialDelay) % 1000
-            
-            var temp = tempTestConfig!.sec
-            tempTestConfig?.min += temp / 60
-            tempTestConfig?.sec = temp % 60
-            
-            temp = tempTestConfig!.min
-            tempTestConfig?.hour += temp / 60
-            tempTestConfig?.min = temp % 60
-            
-            durationLabel.text = "Duration: " + constructDelayString(hour: tempTestConfig!.hour, min: tempTestConfig!.min, sec: tempTestConfig!.sec, milSec: tempTestConfig!.milSec)
-        }
-    }
+//    private func calculateDuration(characteristicName: String, value: String){
+//        var delayString = "Initial Delay"
+//        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
+//            delayString += " - Potentio"
+//        }
+//
+//        if let initialDelay = tempTestConfig?.testSettings[delayString]{
+//            tempTestConfig?.initialDelay = initialDelay
+//        }
+//
+//        var samplePeriodString = "Sample Period"
+//        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
+//            samplePeriodString += " - Potentio"
+//        }
+//
+//        var sampleCountString = "Sample Count"
+//        if measurementTypeSegmentedControl.selectedSegmentIndex == 1{
+//            sampleCountString += " - Potentio"
+//        }
+//        if let samplePeriod = tempTestConfig?.testSettings[samplePeriodString], let sampleCount = tempTestConfig?.testSettings[sampleCountString], let initialDelay = tempTestConfig?.initialDelay{
+//            let delay = samplePeriod * sampleCount
+//            tempTestConfig?.sec = 0
+//            tempTestConfig?.min = 0
+//            tempTestConfig?.hour = 0
+//
+//            tempTestConfig?.milSec = delay + initialDelay
+//            tempTestConfig?.sec += (delay + initialDelay) / 1000
+//            tempTestConfig?.milSec = (delay + initialDelay) % 1000
+//
+//            var temp = tempTestConfig!.sec
+//            tempTestConfig?.min += temp / 60
+//            tempTestConfig?.sec = temp % 60
+//
+//            temp = tempTestConfig!.min
+//            tempTestConfig?.hour += temp / 60
+//            tempTestConfig?.min = temp % 60
+//
+//            durationLabel.text = "Duration: " + constructDelayString(hour: tempTestConfig!.hour, min: tempTestConfig!.min, sec: tempTestConfig!.sec, milSec: tempTestConfig!.milSec)
+//        }
+//    }
     
     private func showErrorMessage(message: String, textField: UITextField?){
         let alert = UIAlertController(title: "Error!!", message: message, preferredStyle: .alert)
@@ -272,18 +291,16 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     @IBAction func nextButtonClicked(_ sender: Any) {
         var canSegue = true
-        for key in unitsMapping.keys{
-            let characteristics = unitsMapping[key]![0].key
-            if tempTestConfig?.testSettings[characteristics] == nil{
-                canSegue = false
-            }
+        if tempTestConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]?.count != tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]?.count{
+            canSegue = false
         }
+        
 //        canSegue = true
         if canSegue{
             performSegue(withIdentifier: "toLeadConfig", sender: self)
         }
         else{
-            showErrorMessage(message: "Must set all characteristics!", textField: nil)
+            showErrorMessage(message: "Must set all characteristics for the selected measurement type!", textField: nil)
         }
     }
     
@@ -293,7 +310,12 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         controller.updateIndex = updateIndex
         tempTestConfig?.leadConfigIndex = leadConfigSegmentedControl.selectedSegmentIndex
 //        tempTestConfig?.testSettings["Mode Select"] = measurementTypeSegmentedControl.selectedSegmentIndex
-        tempTestConfig?.testMode = Int8(measurementTypeSegmentedControl.selectedSegmentIndex)
+        if measurementTypeSegmentedControl.selectedSegmentIndex == 2{
+            tempTestConfig?.testMode = 3
+        }
+        else{
+            tempTestConfig?.testMode = Int8(measurementTypeSegmentedControl.selectedSegmentIndex)
+        }
     }
 
 }

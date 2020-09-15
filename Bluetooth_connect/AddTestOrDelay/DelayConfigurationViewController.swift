@@ -123,7 +123,6 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             configsList[index].sec = delayPickerView.selectedRow(inComponent: 1)
             configsList[index].milSec = delayPickerView.selectedRow(inComponent: 2)
             configsList[index].updateTotalDuration()
-            self.navigationController?.popViewController(animated: true)
         }
         else{
             var delayConfig = DelayConfig()
@@ -133,9 +132,10 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             delayConfig.sec = delayPickerView.selectedRow(inComponent: 1)
             delayConfig.milSec = delayPickerView.selectedRow(inComponent: 2)
             delayConfig.updateTotalDuration()
-            self.navigationController?.popViewController(animated: true)
+            configsList.append(delayConfig)
         }
-        
+        print("ConfiList = ", configsList)
+        self.navigationController?.popViewController(animated: true)
     }
 
 }

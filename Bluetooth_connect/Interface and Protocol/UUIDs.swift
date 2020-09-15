@@ -18,19 +18,27 @@ class ServiceUUID{
         UUIDtoServiceName.updateValue("Device Info Service", forKey: "180A")
         UUIDtoServiceName.updateValue("Battery Service", forKey: "180F")
         UUIDtoServiceName.updateValue("Ampero Configuration Service", forKey: "62C5963D-E0F9-4BFD-9599-739C56147CF7")
-        UUIDtoServiceName.updateValue("Ampero Output Data Service", forKey: "B8B6B745-A99E-4B29-975E-76347005B273")
+        UUIDtoServiceName.updateValue("Ampero Data Service", forKey: "B8B6B745-A99E-4B29-975E-76347005B273")
+        UUIDtoServiceName.updateValue("Potentio Configuration Service ", forKey: "5A0E4911-AEFC-4A82-AA80-FB8A178E6FE2")
         UUIDtoServiceName.updateValue("Sensing Configuration Service", forKey: "6760110a-956f-4a92-8744-64326cbee033".uppercased())
         UUIDtoServiceName.updateValue("Power Service", forKey: "139CDD4D-2F80-492C-ADE6-6D91F920C920")
+        UUIDtoServiceName.updateValue("Square Wave Voltemetry Data Service", forKey: "BBC3A661-95DD-47DD-A4D8-9D0DADB1E47D")
+        UUIDtoServiceName.updateValue("Square Wave Configuration Service", forKey: "20542BD7-A8D8-418B-96CA-244B815C5BE6")
+        UUIDtoServiceName.updateValue("Delay Configuration Service", forKey: "de1b05ee-9445-4b4c-9426-e38addd512cd".uppercased())
+        UUIDtoServiceName.updateValue("WICED Smart Update Service", forKey: "9E5D1E47-5C13-43A0-8635-82AD38A1386F")
         
         
         serviceNametoUUID.updateValue("180A", forKey: "Device Info Service")
         serviceNametoUUID.updateValue("180F", forKey: "Battery Service")
         serviceNametoUUID.updateValue("62C5963D-E0F9-4BFD-9599-739C56147CF7", forKey: "Ampero Configuration Service")
         serviceNametoUUID.updateValue("B8B6B745-A99E-4B29-975E-76347005B273", forKey: "Ampero Output Data Service")
+        serviceNametoUUID.updateValue("5A0E4911-AEFC-4A82-AA80-FB8A178E6FE2", forKey: "Potentio Configuration Service")
         serviceNametoUUID.updateValue("6760110a-956f-4a92-8744-64326cbee033".uppercased(), forKey: "Sensing Configuration Service")
         serviceNametoUUID.updateValue("139CDD4D-2F80-492C-ADE6-6D91F920C920", forKey: "Power Service")
-        
-        
+        serviceNametoUUID.updateValue("BBC3A661-95DD-47DD-A4D8-9D0DADB1E47D", forKey: "Square Wave Voltemetry Data Service")
+        serviceNametoUUID.updateValue("20542BD7-A8D8-418B-96CA-244B815C5BE6", forKey: "Square Wave Configuration Service")
+        serviceNametoUUID.updateValue("9E5D1E47-5C13-43A0-8635-82AD38A1386F", forKey: "WICED Smart Update Service")
+        serviceNametoUUID.updateValue("de1b05ee-9445-4b4c-9426-e38addd512cd".uppercased(), forKey: "Delay Configuration Service")
     }
     
     func getServiceUUID(serviceName: String) -> String?{
@@ -51,34 +59,49 @@ enum CHARACTERISTICS_PROPERTIES: UInt{
     case INDICATE = 0b100000;
 }
 
-var CHARACTERISTIC_VALUE: [String: String] = ["Battery Level": "xx",
-                                              "Firmware Revision": "x.x.x",
-                                              "Potential": "-1/+1",
-                                              "Initial Delay": "xxx",
-                                              "Sample Period": "xxxx",
-                                              "Sample Count": "xxx",
-                                              "Gain": "xxxx",
-                                              "Electrode Mask": "xxxxxxxx"
-                                            ]
-var CHARACTERISTIC_VALUE_MIN_VALUE: [String: Int] = ["Battery Level": 0,
-                                                 "Firmware Revision": -1,
-                                                 "Potential": -1000,
-                                                 "Initial Delay": 0,
-                                                 "Sample Period": 100,
-                                                 "Sample Count": 0,
-                                                 "Gain": 0,
-                                                 "Electrode Mask": 0
-                                            ]
+/*
+ * 0: Ampero
+ * 1: Potentio
+ * 2: Square Wave
+ */
+var CHARACTERISTIC_VALUE_MIN_VALUE: [Int: [String: Int]] = [0: ["Potential": -1000,
+                                                                 "Initial Delay": 0,
+                                                                 "Sample Period": 100,
+                                                                 "Sample Count": 0
+                                                                ],
+                                                             1: ["Initial Delay": 0,
+                                                                 "Sample Period": 100,
+                                                                 "Sample Count": 0,
+                                                                 "Filter Level": 0
+                                                                ],
+                                                             2: ["Quiet Time": 0,
+                                                                 "Num Steps": 0,
+                                                                 "Initial Potential": -1000,
+                                                                 "Final Potential": -1000,
+                                                                 "Gain Level": 0]
+                                                            ]
 
-var CHARACTERISTIC_VALUE_MAX_VALUE: [String: Int] = ["Battery Level": 100,
-                                                     "Firmware Revision": -1,
-                                                     "Potential": 1000,
-                                                     "Initial Delay": Int(UInt16.max),
-                                                     "Sample Period": Int(UInt16.max),
-                                                     "Sample Count": Int(UInt16.max),
-                                                     "Gain": 27,
-                                                     "Electrode Mask": Int(UInt8.max)
-                                                    ]
+/*
+* 0: Ampero
+* 1: Potentio
+* 2: Square Wave
+*/
+var CHARACTERISTIC_VALUE_MAX_VALUE: [Int: [String: Int]] = [0: ["Potential": 1000,
+                                                                 "Initial Delay": Int(UInt16.max),
+                                                                 "Sample Period": Int(UInt16.max),
+                                                                 "Sample Count": Int(UInt16.max)
+                                                                ],
+                                                             1: ["Initial Delay": Int(UInt16.max),
+                                                                 "Sample Period": Int(UInt16.max),
+                                                                 "Sample Count": Int(UInt16.max),
+                                                                 "Filter Level": 255
+                                                                ],
+                                                             2: ["Quiet Time": Int(UInt16.max),
+                                                                 "Num Steps": 255,
+                                                                 "Initial Potential": 1000,
+                                                                 "Final Potential": 1000,
+                                                                 "Gain Level": 255]
+                                                            ]
 
 class CharacteristicsUUID{
     static let instance = CharacteristicsUUID.init()
@@ -135,10 +158,29 @@ class CharacteristicsUUID{
         UUIDtoCharacteristicName.updateValue("Initial Delay - Potentio", forKey: "f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased())
         UUIDtoCharacteristicName.updateValue("Sample Count - Potentio", forKey: "9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased())
         UUIDtoCharacteristicName.updateValue("Sample Period - Potentio", forKey: "1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased())
+        UUIDtoCharacteristicName.updateValue("Filter Level - Potentio", forKey: "31EFBCE5-0036-4F83-8F34-F3FFFA31D30C")
         
         // Potentiometric Data Service
 //        UUIDtoCharacteristicName.updateValue("Start/Stop Potentiometry", forKey: "2e0b45c2-e649-4591-ae5e-840960863efa".uppercased())
         UUIDtoCharacteristicName.updateValue("Data Characteristic - Potential", forKey: "3e0152be-4183-4b6b-bd13-920322432016".uppercased())
+    
+        // Square Wave Configuration Service
+        UUIDtoCharacteristicName.updateValue("Electrode Mask - SW", forKey: "b34ef3c2-7915-4282-a18a-2e601a3ca9ee".uppercased())
+        UUIDtoCharacteristicName.updateValue("Quiet Time", forKey: "a6ab1ab5-cb0d-4817-97a4-ce625a2b9fa7".uppercased())
+        UUIDtoCharacteristicName.updateValue("Num Steps", forKey: "cd20384d-5dcf-4990-9828-ef9af6411e61".uppercased())
+        UUIDtoCharacteristicName.updateValue("Frequency", forKey: "4185caaa-7521-495b-95f6-93c69c28ec1a".uppercased())
+        UUIDtoCharacteristicName.updateValue("Amplitude", forKey: "02398c09-49ee-44a4-86b9-ad39319e2185".uppercased())
+        UUIDtoCharacteristicName.updateValue("Initial Potential", forKey: "7ae197df-c5cb-432d-a74d-9a8cd1b67e3a".uppercased())
+        UUIDtoCharacteristicName.updateValue("Final Potential", forKey: "d0b102f6-d279-4c49-ae98-7ecf326eccc3".uppercased())
+        UUIDtoCharacteristicName.updateValue("Gain Level", forKey: "1a00d2c0-b7b9-4a19-ba2b-f7e5168439f6".uppercased())
+        
+        // Square Wave Data Service
+        UUIDtoCharacteristicName.updateValue("Data Characteristic - SW Current", forKey: "08f720e0-318a-40bf-8769-6acf946e3b32".uppercased())
+        
+        
+        // Delay Configuration Service
+        UUIDtoCharacteristicName.updateValue("Delay Duration", forKey: "6f8a2760-fe81-43a5-b354-3dfa77f02e77".uppercased())
+        
     }
     
     private func setupCharacteristicNametoUUID(){
@@ -177,10 +219,28 @@ class CharacteristicsUUID{
         characteristicNametoUUID.updateValue("f73751bf-1cde-4872-b91a-4caa18fea39b".uppercased(), forKey: "Initial Delay - Potentio")
         characteristicNametoUUID.updateValue("9be83c18-a9f8-403d-a2eb-6066ddbaf247".uppercased(), forKey: "Sample Count - Potentio")
         characteristicNametoUUID.updateValue("1ac6cd7c-e449-42e6-8324-029e89fec5a7".uppercased(), forKey: "Sample Period - Potentio")
+        characteristicNametoUUID.updateValue("31EFBCE5-0036-4F83-8F34-F3FFFA31D30C", forKey: "Filter Level - Potentio")
         
         // Potentiometric Data Service
 //        characteristicNametoUUID.updateValue("2e0b45c2-e649-4591-ae5e-840960863efa".uppercased(), forKey:"Start/Stop Potentiometry")
         characteristicNametoUUID.updateValue("3e0152be-4183-4b6b-bd13-920322432016".uppercased(), forKey: "Data Characteristic - Potential")
+    
+        // Square Wave Configuration Service
+        characteristicNametoUUID.updateValue("b34ef3c2-7915-4282-a18a-2e601a3ca9ee".uppercased(), forKey: "Electrode Mask - SW")
+        characteristicNametoUUID.updateValue("a6ab1ab5-cb0d-4817-97a4-ce625a2b9fa7".uppercased(), forKey: "Quiet Time")
+        characteristicNametoUUID.updateValue("cd20384d-5dcf-4990-9828-ef9af6411e61".uppercased(), forKey: "Num Steps")
+        characteristicNametoUUID.updateValue("4185caaa-7521-495b-95f6-93c69c28ec1a".uppercased(), forKey: "Frequency")
+        characteristicNametoUUID.updateValue("02398c09-49ee-44a4-86b9-ad39319e2185".uppercased(), forKey: "Amplitude")
+        characteristicNametoUUID.updateValue("7ae197df-c5cb-432d-a74d-9a8cd1b67e3a".uppercased(), forKey: "Initial Potential")
+        characteristicNametoUUID.updateValue("d0b102f6-d279-4c49-ae98-7ecf326eccc3".uppercased(), forKey: "Final Potential")
+        characteristicNametoUUID.updateValue("1a00d2c0-b7b9-4a19-ba2b-f7e5168439f6".uppercased(), forKey: "Gain Level")
+        
+        // Square Wave Data Service
+        characteristicNametoUUID.updateValue("08f720e0-318a-40bf-8769-6acf946e3b32".uppercased(), forKey: "Data Characteristic - SW Current")
+        
+        
+        // Delay Configuration Service
+        characteristicNametoUUID.updateValue("6f8a2760-fe81-43a5-b354-3dfa77f02e77".uppercased(), forKey: "Delay Duration")
     }
     
     private func setCharacteristicPropery(){
@@ -219,10 +279,28 @@ class CharacteristicsUUID{
         characteristicProperty.updateValue("Read/Write", forKey: "Initial Delay - Potentio")
         characteristicProperty.updateValue("Read/Write", forKey: "Sample Count - Potentio")
         characteristicProperty.updateValue("Read/Write", forKey: "Sample Period - Potentio")
+        characteristicProperty.updateValue("Read/Write", forKey: "Filter Level - Potentio")
         
         // Potentiometric Data Service
 //        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
         characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - Potential")
+        
+        // Square Wave Configuration Service
+        characteristicProperty.updateValue("Read/Write", forKey: "Electrode Mask - SW")
+        characteristicProperty.updateValue("Read/Write", forKey: "Quiet Time")
+        characteristicProperty.updateValue("Read/Write", forKey: "Num Steps")
+        characteristicProperty.updateValue("Read/Write", forKey: "Frequency")
+        characteristicProperty.updateValue("Read/Write", forKey: "Amplitude")
+        characteristicProperty.updateValue("Read/Write", forKey: "Initial Potential")
+        characteristicProperty.updateValue("Read/Write", forKey: "Final Potential")
+        characteristicProperty.updateValue("Read/Write", forKey: "Gain Level")
+        
+        // Square Wave Data Service
+        characteristicProperty.updateValue("Read/Notify", forKey: "Data Characteristic - SW Current")
+        
+        
+        // Delay Configuration Service
+        characteristicProperty.updateValue("Read/Write", forKey: "Delay Duration")
     }
     
     private func setCharacteristicDataType(){
@@ -264,10 +342,29 @@ class CharacteristicsUUID{
         characteristicDataType.updateValue(UInt16(), forKey: "Initial Delay - Potentio")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Count - Potentio")
         characteristicDataType.updateValue(UInt16(), forKey: "Sample Period - Potentio")
+        characteristicDataType.updateValue(UInt8(), forKey: "Filter Level - Potentio")
+
         
         // Potentiometric Data Service
         //        characteristicProperty.updateValue("Read/Write", forKey:"Start/Stop Potentiometry")
         characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - Potential")
+        
+        // Square Wave Configuration Service
+        characteristicDataType.updateValue(UInt8(), forKey: "Electrode Mask - SW")
+        characteristicDataType.updateValue(UInt16(), forKey: "Quiet Time")
+        characteristicDataType.updateValue(UInt8(), forKey: "Num Steps")
+        characteristicDataType.updateValue(UInt8(), forKey: "Frequency")
+        characteristicDataType.updateValue(UInt16(), forKey: "Amplitude")
+        characteristicDataType.updateValue(Int16(), forKey: "Initial Potential")
+        characteristicDataType.updateValue(Int16(), forKey: "Final Potential")
+        characteristicDataType.updateValue(UInt8(), forKey: "Gain Level")
+        
+        // Square Wave Data Service
+        characteristicDataType.updateValue(Int32(), forKey: "Data Characteristic - SW Current")
+        
+        
+        // Delay Configuration Service
+        characteristicDataType.updateValue(UInt16(), forKey: "Delay Duration")
     }
     
     private func setCharacteristicValue(){

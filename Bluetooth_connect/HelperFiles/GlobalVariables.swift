@@ -81,34 +81,47 @@ func showErrorMessage(message: String, viewController: UIViewController){
     alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
     viewController.present(alert, animated: true)
 }
-    
-func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){    
+
+func sendModeSelection(config: Config, viewController: UIViewController){
+    // Sending Mode Selection
     let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: "Mode Select")
-    let value = testCofig.testMode
+    let value = config.testMode
     updateValue(name: "Mode Select", encodingType: encodingType, value: String(value), viewController: viewController)
+}
+
+func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
+    // Sending Mode Selection
+    sendModeSelection(config: testCofig, viewController: viewController)
     
-    for characteristics in testCofig.testSettings.keys{
-        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: characteristics)
-        let value = testCofig.testSettings[characteristics]!
-        updateValue(name: characteristics, encodingType: encodingType, value: String(value), viewController: viewController)
+    // Sending Test Configuration
+    for characteristics in testCofig.testSettings2[Int(testCofig.testMode)]!.keys{
+        var char = characteristics
+        if !characteristics.contains("Electrode Mask") && testCofig.testMode == 1{
+            char += " - Potentio"
+        }
+        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: char)
+        let value = testCofig.testSettings2[Int(testCofig.testMode)]![characteristics]!
+        updateValue(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
     }
 
+    // Sending Start Signal
     DispatchQueue.global().async {
-        // Sending Start Signal
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d = withUnsafeBytes(of: data) { Data($0) }
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
         
-        while !BluetoothInterface.instance.isConnected && testCofig.numSettingSend < (testCofig.testSettings.count + 1){
+        while !BluetoothInterface.instance.isConnected {
             // do nothing....Wait for connection to come back
         }
-        
+
+        print("Sending Start Signal.....")
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
 }
     
 func updateValue(name: String, encodingType: Any?, value: String?, viewController: UIViewController){
+    print("Writing to: \(name)")
     if let value = value{
         if value == ""{
             showErrorMessage(message: "Value Field Cannot be empty", viewController: viewController)

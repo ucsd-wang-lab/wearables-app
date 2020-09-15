@@ -438,6 +438,7 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
         }
     }
     
+    // New Data Arrived from Microneedle Device
     func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
         if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
             if let test = configsList[queuePosition] as? TestConfig{

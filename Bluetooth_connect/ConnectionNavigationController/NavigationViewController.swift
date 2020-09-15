@@ -105,6 +105,8 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
                 sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
             }
             else if test is DelayConfig{
+                // Delay
+                sendModeSelection(config: test, viewController: self)
                 startTime = DispatchTime.now()
                 timeElapsed = 0
                 timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)

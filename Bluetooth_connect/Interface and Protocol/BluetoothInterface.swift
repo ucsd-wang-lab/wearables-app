@@ -112,7 +112,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         if let services = peripheral.services {
 
             for service in services{
-//                print("service = ", ServiceUUID.instance.getServiceName(serviceUUID: service.uuid.uuidString))
+//                if let uuid = ServiceUUID.instance.getServiceName(serviceUUID: service.uuid.uuidString){
+//                    print("service = ", uuid)
+//                }
+//                else{
+//                    print("service = ", service.uuid.uuidString)
+//                }
                 self.connectedPeripheral.discoverCharacteristics(nil, for: service)
             }
         }
