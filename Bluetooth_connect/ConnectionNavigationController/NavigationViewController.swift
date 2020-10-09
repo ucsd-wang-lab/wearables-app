@@ -89,41 +89,81 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         }
     }
     
-    private func sendNextTest(){
-        queuePosition += 1
-        if queuePosition == configsList.count{
-            currentLoopCount += 1
-            queuePosition = 0
-            
-            for i in 0..<configsList.count{
-                configsList[i].numSettingSend = 0
-            }
+    private func startDelay(delayAmount: CGFloat){
+        // Time Interval is in number of seconds
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount / 0.001), repeats: false) { (timer) in
+            self.sendNextTest()
         }
-        if currentLoopCount <= loopCount!{
-            let test = configsList[queuePosition]
+    }
+
+    private func sendNextTest(){
+        if testQueue.hasNext(){
+            let test = testQueue.next()!
             if test is TestConfig{
+                // Run the corresponding test
                 sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
             }
             else if test is DelayConfig{
-                // Delay
+                // Delay for the corresponding time
                 sendModeSelection(config: test, viewController: self)
-                startTime = DispatchTime.now()
-                timeElapsed = 0
-                timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
-                timeElapsed = 0
-                timer.fire()
+                startDelay(delayAmount: CGFloat(test.totalDuration))
             }
+            
         }
         else{
-            queuePosition = 0
-            currentLoopCount = -1
-            testTimeElapsed = scaledTotalRunTime
-            BluetoothInterface.instance.notifyQueueComplete()
-            print("Finished Testing!!!")
-            let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-            self.present(alert, animated: true)
+            // Finished looping through the queue
+            currentLoopCount += 1
+            
+            if currentLoopCount <= loopCount!{
+                // Restart the Queue
+                testQueue.rebase()
+                sendNextTest()
+            }
+            else{
+                // Finished testing
+                currentLoopCount = 1
+                BluetoothInterface.instance.notifyQueueComplete()
+                print("Finished Testing!!!")
+                let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         }
+        
+//        queuePosition += 1
+//        if queuePosition == configsList.count{
+//            currentLoopCount += 1
+//            queuePosition = 0
+//
+//            for i in 0..<configsList.count{
+//                configsList[i].numSettingSend = 0
+//            }
+//        }
+//        if currentLoopCount <= loopCount!{
+//            let test = configsList[queuePosition]
+//            if test is TestConfig{
+//                sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+//            }
+//            else if test is DelayConfig{
+//                // Delay
+//                sendModeSelection(config: test, viewController: self)
+//                startTime = DispatchTime.now()
+//                timeElapsed = 0
+//                timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
+//                timeElapsed = 0
+//                timer.fire()
+//            }
+//        }
+//        else{
+//            queuePosition = 0
+//            currentLoopCount = -1
+//            testTimeElapsed = scaledTotalRunTime
+//            BluetoothInterface.instance.notifyQueueComplete()
+//            print("Finished Testing!!!")
+//            let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+//            self.present(alert, animated: true)
+//        }
     }
     
     @objc func timerFired(sender: Timer){

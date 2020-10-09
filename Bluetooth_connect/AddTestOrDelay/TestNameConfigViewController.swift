@@ -15,6 +15,7 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     
     var isUpdate:Bool?
     var updateIndex:Int?
+    var testConfig:TestConfig?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,7 +33,11 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        testNameTextField.text = tempTestConfig?.name
+        testNameTextField.text = testConfig?.name
+        if isUpdate == true{
+            addTestButton.setTitle("Update Test", for: .normal)
+        }
+        calculateTestDuration()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -53,8 +58,8 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
 //        print("\n\nTextfield end editing....\(textField.text ?? "nil")\n\n")
-        tempTestConfig?.name = textField.text
-        
+        testConfig?.name = textField.text
+
     }
     
     private func showErrorMessage(message: String, textField: UITextField?){
@@ -68,34 +73,64 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func addTestButtonPressed(_ sender: Any) {
-        if let viewController = self.navigationController?.viewControllers[3]{
-            tempTestConfig?.name = testNameTextField.text
-            if let _ = isUpdate, let index = updateIndex{
-                configsList[index] = tempTestConfig!
-            }
-            else{
-                configsList.append(tempTestConfig!)
-            }
-            tempTestConfig = nil
-            self.navigationController?.popToViewController(viewController, animated: true)
+    private func calculateTestDuration(){
+        print("Test Config = \(testConfig)")
+        
+        if testConfig?.testMode == 0 || testConfig?.testMode == 1{
+            // Amperometric and Potentiometric Test
+            
+            // Runtime of test in ms
+            var testRunTime = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Initial Delay"]!)! +
+                                ((testConfig?.testSettings2[Int(testConfig!.testMode)]!["Sample Period"]!)! * (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Sample Count"]!)!)
+            
+            testConfig?.hour = testRunTime / 3600000
+            testRunTime = testRunTime % 3600000
+            
+            testConfig?.min = testRunTime / 60000
+            testRunTime = testRunTime % 60000
+            
+            testConfig?.sec = testRunTime / 1000
+            testRunTime = testRunTime % 1000
+            
+            testConfig?.milSec = testRunTime
+        }
+        else if testConfig?.testMode == 2{
+            // Square Wave Test
+            let quietTime = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Quiet Time"]!)!
+            let numSteps = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Num Steps"]!)!
+            let frequency = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Frequency"]!)!
+            
+            print("QuietTime: \(quietTime)\t numSteps: \(numSteps)\t frequency: \(frequency)")
+            // Runtime of test in ms
+            var testRunTime = Int(CGFloat(quietTime) + (CGFloat(numSteps) * CGFloat((1000 / (CGFloat(frequency))))))
+        
+            print("TestRunTime: \(testRunTime)")
+            
+            testConfig?.hour = testRunTime / 3600000
+            testRunTime = testRunTime % 3600000
+            
+            testConfig?.min = testRunTime / 60000
+            testRunTime = testRunTime % 60000
+            
+            testConfig?.sec = testRunTime / 1000
+            testRunTime = testRunTime % 1000
+            
+            testConfig?.milSec = testRunTime
         }
         
-//        if self.testNameTextField.text != ""{
-//            if let viewController = self.navigationController?.viewControllers[3]{
-//                tempTestConfig?.name = testNameTextField.text
-//                if let _ = isUpdate, let index = updateIndex{
-//                    configsList[index] = tempTestConfig!
-//                }
-//                else{
-//                    configsList.append(tempTestConfig!)
-//                    tempTestConfig = nil
-//                }
-//                self.navigationController?.popToViewController(viewController, animated: true)
-//            }
-//        }
-//        else{
-//            showErrorMessage(message: "Test name must not be empty!", textField: testNameTextField)
-//        }
+    }
+    
+    @IBAction func addTestButtonPressed(_ sender: Any) {
+        if let viewController = self.navigationController?.viewControllers[3]{
+            testConfig?.name = testNameTextField.text
+            testConfig?.updateTotalDuration()
+            if let _ = isUpdate, let index = updateIndex{
+                testQueue[index] = testConfig!
+            }
+            else{
+                testQueue.enqueue(newTest: testConfig!)
+            }
+            self.navigationController?.popToViewController(viewController, animated: true)
+        }
     }
 }

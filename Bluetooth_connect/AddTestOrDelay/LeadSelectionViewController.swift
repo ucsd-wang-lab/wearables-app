@@ -18,9 +18,12 @@ class LeadSelectionViewController: UIViewController {
     @IBOutlet weak var E2Button: UIButton!
     @IBOutlet weak var reButton: UIButton!
     
+    let notSelectedAlpha:CGFloat = 0.7
+    let selectedAlpha:CGFloat = 1
     var isUpdate:Bool?
     var updateIndex:Int?
     var maskString: String!
+    var testConfig: TestConfig?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,14 +50,14 @@ class LeadSelectionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if tempTestConfig?.testMode == 1{
+        if testConfig?.testMode == 1{
             leadSelectionSegmentedControl.isHidden = true
         }
         
-        if tempTestConfig?.testMode == 0{
+        if testConfig?.testMode == 0{
             maskString = "Electrode Mask"
         }
-        else if tempTestConfig?.testMode == 1{
+        else if testConfig?.testMode == 1{
             maskString = "Electrode Mask - Potentio"
         }
         else{
@@ -93,24 +96,31 @@ class LeadSelectionViewController: UIViewController {
     }
     
     @objc func leadSelectionButtonClicked(sender: UIButton){
-        let index = Int(tempTestConfig!.testMode)
+        let index = Int(testConfig!.testMode)
         if sender.backgroundColor?.isEqual(UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)) ?? false{
             // Button selected
             sender.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
-            if let mask = tempTestConfig?.testSettings2[index]?[maskString]{
+//        if sender.alpha == notSelectedAlpha{
+//            sender.alpha = selectedAlpha
+            if let mask = testConfig?.testSettings2[index]?[maskString]{
                 let electrodeMask = mask | sender.tag
-                tempTestConfig?.testSettings2[index]?[maskString] = electrodeMask
+                testConfig?.testSettings2[index]?[maskString] = electrodeMask
+
             }
             else{
-                tempTestConfig?.testSettings2[index]?[maskString] = sender.tag
+                testConfig?.testSettings2[index]?[maskString] = sender.tag
+
             }
         }
         else{
             // Button unselected
             sender.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
-            if let mask = tempTestConfig?.testSettings2[index]?[maskString]{
+//            sender.alpha = notSelectedAlpha
+            if let mask = testConfig?.testSettings2[index]?[maskString]{
+
                 let electrodeMask = mask - sender.tag
-                tempTestConfig?.testSettings2[index]?[maskString] = electrodeMask
+                testConfig?.testSettings2[index]?[maskString] = electrodeMask
+
             }
         }
     }
@@ -120,35 +130,51 @@ class LeadSelectionViewController: UIViewController {
     }
     
     private func resetButtonColor(){
-        if let electrodeMask = tempTestConfig?.testSettings2[Int(tempTestConfig!.testMode)]?[maskString]{
+        if let electrodeMask = testConfig?.testSettings2[Int(testConfig!.testMode)]?[maskString]{
             if electrodeMask & E1Button.tag != 0{
-                E1Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+                // Selected
+                E1Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)   // Yellow
+//                E1Button.alpha = selectedAlpha
             }
             else{
-                E1Button.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
+                // Not Selected
+                E1Button.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)     // Orange
+//                E1Button.alpha = notSelectedAlpha
             }
             
             if electrodeMask & E4Button.tag != 0{
                 E4Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+//                E4Button.alpha = selectedAlpha
             }
             else{
                 E4Button.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
+//                E4Button.alpha = notSelectedAlpha
             }
             
             if electrodeMask & E3Button.tag != 0{
                 E3Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+//                E3Button.alpha = selectedAlpha
             }
             else{
                 E3Button.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
+//                E3Button.alpha = notSelectedAlpha
             }
             
             if electrodeMask & E2Button.tag != 0{
                 E2Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
+//                E2Button.alpha = selectedAlpha
             }
             else{
                 E2Button.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
+//                E2Button.alpha = notSelectedAlpha
             }
         }
+//        else{
+//            E1Button.alpha = notSelectedAlpha
+//            E2Button.alpha = notSelectedAlpha
+//            E3Button.alpha = notSelectedAlpha
+//            E4Button.alpha = notSelectedAlpha
+//        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -156,9 +182,10 @@ class LeadSelectionViewController: UIViewController {
         controller.isUpdate = isUpdate
         controller.updateIndex = updateIndex
         
-        if tempTestConfig?.testSettings2[Int(tempTestConfig!.testMode)]?[maskString] == nil{
-            let index = Int(tempTestConfig!.testMode)
-            tempTestConfig?.testSettings2[index]?[maskString] = 0
+        if testConfig?.testSettings2[Int(testConfig!.testMode)]?[maskString] == nil{
+            let index = Int(testConfig!.testMode)
+            testConfig?.testSettings2[index]?[maskString] = 0
         }
+        controller.testConfig = testConfig
     }
 }

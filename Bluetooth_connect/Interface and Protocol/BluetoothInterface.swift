@@ -144,6 +144,9 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
                         self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
                 }
+//                else{
+//                    print("characteristics = \(characteristic.uuid.uuidString)")
+//                }
             }
         }
     }
@@ -160,7 +163,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
         
         notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)
     }
-    
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 //        print("didUpdateValueFor: ", characteristic)

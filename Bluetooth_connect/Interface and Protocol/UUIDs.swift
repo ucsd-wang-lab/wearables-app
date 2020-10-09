@@ -76,6 +76,8 @@ var CHARACTERISTIC_VALUE_MIN_VALUE: [Int: [String: Int]] = [0: ["Potential": -10
                                                                 ],
                                                              2: ["Quiet Time": 0,
                                                                  "Num Steps": 0,
+                                                                 "Frequency": 1,
+                                                                 "Amplitude": 0,
                                                                  "Initial Potential": -1000,
                                                                  "Final Potential": -1000,
                                                                  "Gain Level": 0]
@@ -98,6 +100,8 @@ var CHARACTERISTIC_VALUE_MAX_VALUE: [Int: [String: Int]] = [0: ["Potential": 100
                                                                 ],
                                                              2: ["Quiet Time": Int(UInt16.max),
                                                                  "Num Steps": 255,
+                                                                 "Frequency": 100,
+                                                                 "Amplitude": 1000,
                                                                  "Initial Potential": 1000,
                                                                  "Final Potential": 1000,
                                                                  "Gain Level": 255]

@@ -117,8 +117,9 @@ extension UITextField{
 
 extension Array{
     mutating func rearrange(fromIndex: Int, toIndex: Int){
-        let element = self.remove(at: fromIndex)
-        self.insert(element, at: toIndex)
+        self.swapAt(fromIndex, toIndex)
+//        let element = self.remove(at: fromIndex)
+//        self.insert(element, at: toIndex)
     }
 }
 
@@ -177,7 +178,6 @@ extension UIColor {
     static var colorArray: [UIColor] = [
         UIColor.orange,
         UIColor.red,
-        UIColor.black,
         UIColor.blue,
         UIColor.green,
         UIColor.gray,

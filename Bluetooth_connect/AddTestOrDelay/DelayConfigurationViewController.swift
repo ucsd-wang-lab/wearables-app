@@ -117,12 +117,17 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     @IBAction func addDelayButtonClicked(_ sender: Any) {
         if let _ = isUpdate, let index = updateIndex{
             // do nothing....
-            configsList[index].name = delayNameTextfield.text
-            configsList[index].hour = 0
-            configsList[index].min = delayPickerView.selectedRow(inComponent: 0)
-            configsList[index].sec = delayPickerView.selectedRow(inComponent: 1)
-            configsList[index].milSec = delayPickerView.selectedRow(inComponent: 2)
-            configsList[index].updateTotalDuration()
+            var delayConfig = testQueue[index] as? DelayConfig
+            if delayConfig != nil{
+                delayConfig!.name = delayNameTextfield.text
+                delayConfig!.hour = 0
+                delayConfig!.min = delayPickerView.selectedRow(inComponent: 0)
+                delayConfig!.sec = delayPickerView.selectedRow(inComponent: 1)
+                delayConfig!.milSec = delayPickerView.selectedRow(inComponent: 2)
+                delayConfig!.testMode = 4
+                delayConfig!.updateTotalDuration()
+                testQueue[index] = delayConfig!
+            }
         }
         else{
             var delayConfig = DelayConfig()
@@ -131,10 +136,11 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             delayConfig.min = delayPickerView.selectedRow(inComponent: 0)
             delayConfig.sec = delayPickerView.selectedRow(inComponent: 1)
             delayConfig.milSec = delayPickerView.selectedRow(inComponent: 2)
+            delayConfig.testMode = 4
             delayConfig.updateTotalDuration()
-            configsList.append(delayConfig)
+            testQueue.enqueue(newTest: delayConfig)
         }
-        print("ConfiList = ", configsList)
+        print("TestQueue after adding Delay = \(testQueue)")
         self.navigationController?.popViewController(animated: true)
     }
 

@@ -22,8 +22,6 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var timeElapsedLabel: UILabel!
     
-    var testOrderList: [TestConfig] = []
-    var testIndexMapping: [Int: Int] = [:]     // Mapping from testOrderList --> configList
     var chartTitle: String?
     var selectdTest: TestConfig?
     var selectedRow: Int!
@@ -69,8 +67,6 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         }
         
         timeRemainingLabel.text = constructDelayString(hour: Int(totalHr), min: Int(totalMin), sec: Int(totalSec), milSec: Int(totalMilSec))
-        testOrderList = []
-        constructTestOrder()
         listOfTestTableView.reloadData()
         timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime)
     }
@@ -84,11 +80,14 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return testOrderList.count
+        return testQueue.size()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-           return 3
+        if testQueue[section] is DelayConfig{
+            return 0
+        }
+        return 3
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -100,17 +99,22 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         view.backgroundColor = UIColor(red: 0xef/255, green: 0xef/255, blue: 0xf4/255, alpha: 1)
         
         let titleLabel = UILabel(frame: CGRect(x: deviceNameLabel.frame.minX, y: 0, width: self.view.frame.width, height: 40))
-        titleLabel.text = "Test - " + (testOrderList[section].name ?? "")
+        if testQueue[section] is DelayConfig{
+            titleLabel.text = "Delay - " + (testQueue[section].name ?? "")
+        }
+        else{
+            titleLabel.text = "Test - " + (testQueue[section].name ?? "")
+        }
         view.addSubview(titleLabel)
         return view
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return testOrderList[section].name
+        return testQueue[section].name
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectdTest = configsList[testIndexMapping[indexPath.section]!] as? TestConfig
+        selectdTest = testQueue[indexPath.section] as? TestConfig
         selectedRow = indexPath.row
         
         if indexPath.row == 0{
@@ -139,16 +143,6 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         return cell
     }
     
-    private func constructTestOrder(){
-        var count = 0
-        for test in configsList{
-            if test is TestConfig{
-                testOrderList.append(test as! TestConfig)
-                testIndexMapping.updateValue(count, forKey: testOrderList.count - 1)
-            }
-            count += 1
-        }
-    }
     @IBAction func startStopQueueButtonClicked(_ sender: Any) {
         let button = sender as! UIButton
         if button.tag == 0{
@@ -175,20 +169,34 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 // TODO: undo this duiring production
 //                resetData()
                 
-                print("configList: \(configsList)")
-                // Skip all the initial delay and start with the first test
-                while queuePosition < configsList.count{
-                    let test = configsList[queuePosition]
+                print("TestQueue before starting recording: \(testQueue)")
+                if testQueue.hasNext(){
+                    let test = testQueue.next()!
                     if test is TestConfig{
+                        // Run the corresponding test
                         sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-                        return
                     }
-                    else{
-                        testTimeElapsed += UInt64(test.totalDuration)
-                        updateProgressBar()
-                        queuePosition += 1
+                    else if test is DelayConfig{
+                        // Delay for the corresponding time
+                        sendModeSelection(config: test, viewController: self)
+                        startDelay(delayAmount: CGFloat(test.totalDuration))
                     }
                 }
+                
+//                print("configList: \(configsList)")
+//                // Skip all the initial delay and start with the first test
+//                while queuePosition < configsList.count{
+//                    let test = configsList[queuePosition]
+//                    if test is TestConfig{
+//                        sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+//                        return
+//                    }
+//                    else{
+//                        testTimeElapsed += UInt64(test.totalDuration)
+//                        updateProgressBar()
+//                        queuePosition += 1
+//                    }
+//                }
             }
         }
         else if button.tag == 1{

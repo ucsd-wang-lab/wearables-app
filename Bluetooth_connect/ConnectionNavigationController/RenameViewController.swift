@@ -67,7 +67,7 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
             nextButton.alpha = 1.0
         }
         else{
-            nextButton.alpha = 0.7
+            nextButton.alpha = 0.6
         }
         nextButtonClicked(textField)
         self.view.endEditing(true)

@@ -8,6 +8,8 @@
 
 import UIKit
 
+var testQueue: TestQueue = TestQueue()
+
 var configsList2:[Config] = [
     TestConfig(name: "Test 1", mode: 0),
     DelayConfig(name: "Delay 1")
@@ -29,7 +31,6 @@ var totalMilSec: UInt64 = 0
 var totalRunTime: UInt64 = 0             // Total run time for all the test, in ms
 var scaledTotalRunTime: UInt64 = 0             // Total run time for all the test, in ms
 var testTimeElapsed: UInt64 = 0         // Time elapsed since the start of the queue, in ms
-var tempTestConfig:TestConfig?
 
 
 
@@ -85,7 +86,12 @@ func showErrorMessage(message: String, viewController: UIViewController){
 func sendModeSelection(config: Config, viewController: UIViewController){
     // Sending Mode Selection
     let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: "Mode Select")
-    let value = config.testMode
+    var value = config.testMode
+    
+    // 3 for SW Testing
+    if value == 2{
+        value = 3
+    }
     updateValue(name: "Mode Select", encodingType: encodingType, value: String(value), viewController: viewController)
 }
 
@@ -117,6 +123,45 @@ func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewControll
 
         print("Sending Start Signal.....")
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+    }
+}
+
+func startDelay(delayAmount: CGFloat){
+    // Time Interval is in number of seconds
+    Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount / 0.001), repeats: false) { (timer) in
+        sendNextTest()
+    }
+}
+
+func sendNextTest(){
+    if testQueue.hasNext(){
+        let test = testQueue.next()!
+        if test is TestConfig{
+            // Run the corresponding test
+//            sendTestConfiguration(testCofig: test as! TestConfig, viewController: nil)
+        }
+        else if test is DelayConfig{
+            // Delay for the corresponding time
+//            sendModeSelection(config: test, viewController: nil)
+//            startDelay(delayAmount: CGFloat(test.totalDuration))
+        }
+        
+    }
+    else{
+        // Finished looping through the queue
+        currentLoopCount += 1
+        
+        if currentLoopCount <= loopCount!{
+            // Restart the Queue
+            testQueue.rebase()
+            sendNextTest()
+        }
+        else{
+            // Finished testing
+            currentLoopCount = 1
+            BluetoothInterface.instance.notifyQueueComplete()
+            print("Finished Testing!!!")
+        }
     }
 }
     

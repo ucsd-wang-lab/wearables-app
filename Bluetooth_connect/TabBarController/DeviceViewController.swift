@@ -77,7 +77,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalHr = 0
         totalMin = 0
         totalSec = 0
-        totalMilSec = 0
+        totalMilSec = 0        
     }
        
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -112,14 +112,14 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if configsList.count > 0{
+        if testQueue.size() > 0{
             messageLabel.alpha = 0
         }
         else{
-            messageLabel.alpha = 1
+            messageLabel.alpha = 0
         }
         
-        return configsList.count
+        return testQueue.size()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -131,7 +131,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let config = configsList[indexPath.row]
+        let config = testQueue[indexPath.row]
         
         if config is DelayConfig {
             let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
@@ -156,7 +156,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
                 let controller = storyboard.instantiateViewController(identifier: "testController") as! TestConfigurationViewController
                 controller.isUpdate = true
                 controller.updateIndex = indexPath.row
-                tempTestConfig = configsList[indexPath.row] as? TestConfig
+                controller.testConfig = testQueue[indexPath.row] as? TestConfig
                 self.navigationController?.pushViewController(controller, animated: true)
             } else {
                 print("\n\nVersion is not 13.0....cannot set default values\n\n")
@@ -180,7 +180,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         if editingStyle == .delete {
             tableView.beginUpdates()
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            configsList.remove(at: indexPath.row)
+            testQueue.remove(at: indexPath.row)
             tableView.endUpdates()
             
         }
@@ -207,14 +207,13 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        configsList.rearrange(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
+        _ = testQueue.swap(fromIndex: sourceIndexPath.row, toIndex: destinationIndexPath.row)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "testTableViewCell") as! TestTableViewCell
         
-        let config = configsList[indexPath.row]
-//        print("\n\nconfig = \(config)\n\n")
+        let config = testQueue[indexPath.row]
         let hour = config.hour
         let min = config.min
         let sec = config.sec
@@ -258,7 +257,6 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     @IBAction func addTestButtonClicked(_ sender: Any) {
-        tempTestConfig = nil
         performSegue(withIdentifier: "toTestConfiguration", sender: self)
     }
     

@@ -16,6 +16,9 @@ protocol Config {
     var numSettingSend:Int {get set}
     var testMode: Int8 { get set }
     
+    /**
+            Total duration in ms
+     */
     mutating func updateTotalDuration()
 }
 
