@@ -14,9 +14,11 @@ class LiveChartsViewController: UIViewController {
     @IBOutlet weak var floatingLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
     @IBOutlet weak var chartsLabel: UILabel!
+    @IBOutlet weak var xAxisLabel: UILabel!
     
     
     var testConfig: TestConfig?
+    var currentLoopCount: Int?
     var canUpdate: Bool?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,21 +26,35 @@ class LiveChartsViewController: UIViewController {
         // Do any additional setup after loading the view.
         lineChartView.delegate = self
         BluetoothInterface.instance.attachBLEValueRecordedObserver(id: id, observer: self)
+        if self.traitCollection.userInterfaceStyle == .dark{
+            floatingLabel.textColor = .white
+            detailLabel.textColor = .white
+            chartsLabel.textColor = .white
+            xAxisLabel.textColor = .white
+        }
+        else{
+            floatingLabel.textColor = .black
+            detailLabel.textColor = .black
+            chartsLabel.textColor = .black
+            xAxisLabel.textColor = .black
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         navigationItem.title = testConfig?.name
-        detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount] ?? "")s"
+        detailLabel.text = "Measurement: \(testQueue.getQueuetIterationCounter())\n Start Time: \(testConfig?.startTimeStamp[testQueue.getQueuetIterationCounter()] ?? "")s"
         
-        if testConfig?.testMode == 0{
+        if testConfig?.testMode == 0 || testConfig?.testMode == 2{
             chartsLabel.text = "Current (uA)"
         }
         else if testConfig?.testMode == 1{
             chartsLabel.text = "Potential (mV)"
         }
+        currentLoopCount = testQueue.getQueuetIterationCounter()
         customizeChart()
+        plotCurrentData()
         canUpdate = true
     }
     
@@ -80,6 +96,27 @@ class LiveChartsViewController: UIViewController {
         lineChartView.legend.enabled = false
     }
     
+    private func plotCurrentData(){
+        let testData = testConfig?.testData[currentLoopCount ?? 0]
+        let testMode = testConfig?.testMode
+        var samplePeriod = 0
+        
+        if testMode == 0 || testMode == 1{
+            samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"] ?? 0
+        }
+        else if testMode == 2{
+            samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Frequency"] ?? 0
+        }
+        if let data = testData{
+            for point in data{
+                let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
+                let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: point / 1e6)
+                lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+                lineChartView.notifyDataSetChanged()
+            }
+        }
+    }
+    
     private func notifyLiveDataChange(value: Double, samplePeriod: Double){
         let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
         let newDataPoint = ChartDataEntry(x: Double(numOfPoints) * Double(samplePeriod) / 1000, y: value / 1e6)
@@ -95,18 +132,31 @@ extension LiveChartsViewController: ChartViewDelegate, BLEValueRecordedObserver{
     
     func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
         // incoming data....update chart
-        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential" || characteristicUUIDString == "Data Characteristic - SW Current"{
             
-//            guard let samplePeriod = (testConfig?.testMode == 0) ? testConfig?.testSettings["Sample Period"]  : testConfig?.testSettings["Sample Period - Potentio"] else { return }
-            
-            guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"]  else { return }
-            
-            let data = value!.int32
-            detailLabel.text = "Repeat Number: \(currentLoopCount)\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount] ?? "")s"
-            
-            if canUpdate == true{
-                notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
+            if let testMode = testConfig?.testMode{
+                if testMode == 0 || testMode == 1{
+                    guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"]  else { return }
+                    
+                    let data = value!.int32
+                    detailLabel.text = "Measurement: \(testQueue.getQueuetIterationCounter())\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount ?? 0] ?? "")s"
+                    
+                    if canUpdate == true{
+                        notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
+                    }
+                }
+                else if testMode == 2{
+                    guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Frequency"]  else { return }
+                    
+                    let data = value!.int32
+                    detailLabel.text = "Measurement: \(testQueue.getQueuetIterationCounter())\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount ?? 0] ?? "")s"
+                    
+                    if canUpdate == true{
+                        notifyLiveDataChange(value: Double(data), samplePeriod: Double(samplePeriod))
+                    }
+                }
             }
+            
         }
         else if characteristicUUIDString == "Queue Complete"{
             canUpdate = false

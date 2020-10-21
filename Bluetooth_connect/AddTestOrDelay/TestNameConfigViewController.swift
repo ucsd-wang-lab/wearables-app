@@ -10,6 +10,7 @@ import UIKit
 
 class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var testNameTextField: UITextField!
     @IBOutlet weak var addTestButton: UIButton!
     
@@ -28,6 +29,15 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         testNameTextField.returnKeyType = .done
         
         addTestButton.layer.cornerRadius = addTestButton.layer.bounds.height / 3
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            testNameTextField.textColor = .white
+            questionLabel.textColor = .white
+        }
+        else{
+            testNameTextField.textColor = .black
+            questionLabel.textColor = .black
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -57,7 +67,6 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        print("\n\nTextfield end editing....\(textField.text ?? "nil")\n\n")
         testConfig?.name = textField.text
 
     }
@@ -74,8 +83,6 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func calculateTestDuration(){
-        print("Test Config = \(testConfig)")
-        
         if testConfig?.testMode == 0 || testConfig?.testMode == 1{
             // Amperometric and Potentiometric Test
             
@@ -100,11 +107,9 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
             let numSteps = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Num Steps"]!)!
             let frequency = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Frequency"]!)!
             
-            print("QuietTime: \(quietTime)\t numSteps: \(numSteps)\t frequency: \(frequency)")
             // Runtime of test in ms
             var testRunTime = Int(CGFloat(quietTime) + (CGFloat(numSteps) * CGFloat((1000 / (CGFloat(frequency))))))
         
-            print("TestRunTime: \(testRunTime)")
             
             testConfig?.hour = testRunTime / 3600000
             testRunTime = testRunTime % 3600000

@@ -29,5 +29,14 @@ class BluetoothCell: UITableViewCell, UITableViewDelegate{
         
 //        deviceNameLabel.backgroundColor = .red
 //        arrow_label.backgroundColor = .orange
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            deviceNameLabel.textColor = .white
+            arrow_label.textColor = .white
+        }
+        else{
+            deviceNameLabel.textColor = .black
+            arrow_label.textColor = .black
+        }
     }
 }

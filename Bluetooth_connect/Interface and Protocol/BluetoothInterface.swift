@@ -139,7 +139,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
                     characteristicDictionary.updateValue(characteristic, forKey: characteristic.uuid.uuidString)
                     notifyBLECharacteristicObserver(characteristicUUIDString: characteristic.uuid.uuidString)
                     
-                    if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.NOTIFY.rawValue) != 0{
+                    if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.NOTIFY.rawValue) != 0 || (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.INDICATE.rawValue) != 0{
 //                        print("characteristics notify = ", name)
                         self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
@@ -153,12 +153,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("write update received...\(characteristic.uuid.uuidString)")
+//        print("write update received...\(characteristic.uuid.uuidString)")
         
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) ?? "nil"
         
         if name.contains("Mode Select") || name.contains("Potential") || name.contains("Sample Count") || name.contains("Sample Period") || name.contains("Initial Delay") || name.contains("Electrode Mask"){
-            configsList[queuePosition].numSettingSend += 1
+            testQueue[queuePosition].numSettingSend += 1
         }
         
         notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)

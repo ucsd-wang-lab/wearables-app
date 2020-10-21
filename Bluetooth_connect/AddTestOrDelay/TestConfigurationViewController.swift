@@ -10,7 +10,8 @@ import UIKit
 
 class TestConfigurationViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
-    @IBOutlet weak var durationLabel: UILabel!
+    
+    @IBOutlet weak var measurementTypeLabel: UILabel!
     @IBOutlet weak var testConfigTableView: UITableView!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var measurementTypeSegmentedControl: UISegmentedControl!
@@ -64,6 +65,13 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
 
         testConfigTableView.delegate = self
         testConfigTableView.dataSource = self
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            measurementTypeLabel.textColor = .white
+        }
+        else{
+            measurementTypeLabel.textColor = .black
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,7 +89,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     // when touched anywhere on the screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touched somewhere on the screen...")
         self.view.endEditing(true)
     }
     
@@ -91,12 +98,13 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     // objective-c function for when keyboard appears
     @objc func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y = -(self.view.frame.width * 0.48)
+//        self.view.frame.origin.y = -(self.view.frame.width * 0.48)
+//        self.view.frame.origin.y = -(self.view.frame.width * 0.2)
     }
     
     // objective-c function for when keyboard disappear
     @objc func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y = 0 // Move view to original position
+//        self.view.frame.origin.y = 0 // Move view to original position
     }
     
     // when hitting enter on the textfield
@@ -122,10 +130,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         for key in valueTextFieldMapping.keys{
-            print("Keys = \(key)")
             let tf = valueTextFieldMapping[key]
             if textField == tf {
-                print("TF with Key: \(key)")
 //                let _key = tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]![key]![0].key
 //                let _key = key
                 let isValid = checkValidity(value: textField.text, characteristicName: key, textField: textField)
@@ -137,7 +143,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
                     else{
                         dict = [key: Int(textField.text!)!]
                     }
-                    print("Updating Dictionary: \(dict)")
                     testConfig?.testSettings2.updateValue(dict!, forKey: measurementTypeSegmentedControl.selectedSegmentIndex)
                 }
             }
@@ -187,7 +192,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
 
         cell.valueLabel.delegate = self
         valueTextField[indexPath.section] = cell.valueLabel
-//        valueTextFieldMapping[_key] = cell.valueLabel
         valueTextFieldMapping.updateValue(cell.valueLabel, forKey: _key)
         cell.unitsLabel.text = _units
         cell.selectionStyle = .none
@@ -198,16 +202,6 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     @IBAction func measurementTypeChanged(_ sender: UISegmentedControl) {
         valueTextFieldMapping.removeAll()
         testConfigTableView.reloadData()
-
-//        if sender.selectedSegmentIndex == 0{
-//            leadConfigSegmentedControl.selectedSegmentIndex = 1
-//        }
-//        else if sender.selectedSegmentIndex == 1{
-//            leadConfigSegmentedControl.selectedSegmentIndex = 0
-//        }
-//        else if sender.selectedSegmentIndex == 2{
-//            leadConfigSegmentedControl.selectedSegmentIndex = 1
-//        }
     }
     
     

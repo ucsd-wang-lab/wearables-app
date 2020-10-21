@@ -10,6 +10,8 @@ import UIKit
 
 class LeadSelectionViewController: UIViewController {
 
+    
+    @IBOutlet weak var electrodeSelectionLabel: UILabel!
     @IBOutlet weak var leadSelectionSegmentedControl: UISegmentedControl!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var E1Button: UIButton!
@@ -46,6 +48,13 @@ class LeadSelectionViewController: UIViewController {
         
         let frame = leadSelectionSegmentedControl.frame
         leadSelectionSegmentedControl.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width, height: frame.size.height + 50)
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            electrodeSelectionLabel.textColor = .white
+        }
+        else{
+            electrodeSelectionLabel.textColor = .black
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

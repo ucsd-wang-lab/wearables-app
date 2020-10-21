@@ -14,20 +14,32 @@ class SummaryChartsViewController: UIViewController {
     @IBOutlet weak var lineChartView: LineChartView!
     @IBOutlet weak var floatingLabel: UILabel!
     @IBOutlet weak var chartsLabel: UILabel!
+    @IBOutlet weak var xAxisLabel: UILabel!
     
     var testConfig: TestConfig?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         lineChartView.delegate = self
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            floatingLabel.textColor = .white
+            chartsLabel.textColor = .white
+            xAxisLabel.textColor = .white
+        }
+        else{
+            floatingLabel.textColor = .black
+            chartsLabel.textColor = .black
+            xAxisLabel.textColor = .black
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        print("TestConfig: \(testConfig)")
+        navigationItem.title = testConfig?.name
         
-        if testConfig?.testMode == 0{
+        if testConfig?.testMode == 0 || testConfig?.testMode == 2{
             chartsLabel.text = "Current (uA)"
         }
         else if testConfig?.testMode == 1{
@@ -74,12 +86,12 @@ class SummaryChartsViewController: UIViewController {
     
     private func drawChart(){
         if let testData = testConfig?.testData{
-            let newDataPoint = ChartDataEntry(x: 0, y: 0)
-            lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
+//            let newDataPoint = ChartDataEntry(x: 0, y: 0)
+//            lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
             for loopNumber in Array(testData.keys).sorted(){
                 if let lastElement = testData[loopNumber]?.last{
-                    let numOfPoints = lineChartView.data?.dataSets[0].entryCount ?? 0
-                    let newDataPoint = ChartDataEntry(x: Double(numOfPoints), y: lastElement)
+                    let numOfPoints = (lineChartView.data?.dataSets[0].entryCount ?? 0) + 1
+                    let newDataPoint = ChartDataEntry(x: Double(numOfPoints), y: lastElement / 1e6)
                     lineChartView.data?.addEntry(newDataPoint, dataSetIndex: 0)
                 }
             }

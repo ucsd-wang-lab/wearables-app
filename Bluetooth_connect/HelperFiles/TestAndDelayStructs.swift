@@ -33,8 +33,6 @@ struct DelayConfig: Config {
     var totalDuration: Int64                 // Total delay in ms
     var numSettingSend: Int
     var testMode: Int8
-
-
     
     init() {
         hour = -1
@@ -47,19 +45,34 @@ struct DelayConfig: Config {
     }
     
     init(name: String) {
+        self.init()
         self.name = name
-        hour = 0
-        min = 0
-        sec = 1
-        milSec = 0
-        totalDuration = 1000
-        numSettingSend = 0
-        testMode = 4
+        
+        if(name.contains("Delay 1")){
+            hour = 0
+            min = 0
+            sec = 3
+            milSec = 100
+            updateTotalDuration()
+        }
+        else if name.contains("Delay 2"){
+            hour = 0
+            min = 0
+            sec = 5
+            milSec = 100
+            updateTotalDuration()
+        }
+        else if name.contains("Delay 3"){
+            hour = 0
+            min = 0
+            sec = 7
+            milSec = 100
+            updateTotalDuration()
+        }
     }
     
     mutating func updateTotalDuration(){
         totalDuration = Int64(hour * 3600000) + Int64(min * 60000) + Int64(sec * 1000) + Int64(milSec)
-        print("Update delay total duration: \(totalDuration)")
     }
 }
 
@@ -79,6 +92,7 @@ struct TestConfig: Config {
     var startTimeStamp: [Int: String]   // loopNumber: StartTime
     var endTimeStamp: [Int: String]     // loopNumber: EndTime
     var testSettings2: [Int: [String: Int]]  // Measurement Type: [Key: Value]
+    var loopIteration: Int
     
     var leadConfigIndex: Int
     
@@ -98,68 +112,43 @@ struct TestConfig: Config {
         endTimeStamp = [:]
         leadConfigIndex = -1
         testSettings2 = [:]
+        loopIteration = 0
     }
     
-    init(name: String){
+    init(name: String) {
+        self.init()
         self.name = name
-        hour = 0
-        min = 0
-        sec = 0
-        milSec = 900
-        totalDuration = 0
-        initialDelay = 0
-        numSettingSend = 0
-        testData = [:]
-        startTimeStamp = [:]
-        endTimeStamp = [:]
-        testSettings2 = [:]
-        testMode = 0
-
         
-//        [0: ["Potential": " mV"],
-//         1: ["Initial Delay": " ms"],
-//         2: ["Sample Period": " ms"],
-//         3: ["Sample Count": ""],
-//         4: ["Gain": " k\u{2126}"]
-//        ]
+        if name.contains("Test 1"){
+            // Ampero
+            testMode = 0
+            testSettings2.updateValue(["Potential": 100, "Initial Delay": 300, "Sample Period": 200, "Sample Count": 100], forKey: 0)
+            sec = 20
+            milSec = 300
+        }
+        else if name.contains("Test 2"){
+            // Potentio
+            testMode = 1
+            testSettings2.updateValue(["Initial Delay": 200, "Sample Period": 200, "Sample Count": 5, "Filter Level": 3], forKey: 1)
+            sec = 1
+            milSec = 200
+            
+        }
+        else if name.contains("Test 3"){
+            // Square Wave
+            testMode = 2
+            testSettings2.updateValue(["Quiet Time": 200, "Num Steps": 10, "Frequency": 100,
+                                       "Amplitude": 100, "Initial Potential": 100, "Final Potential": 200, "Gain Level": 4], forKey: 2)
+            
+            testSettings2.updateValue(["Quiet Time": 200, "Num Steps": 200, "Frequency": 10,
+                                       "Amplitude": 100, "Initial Potential": 100, "Final Potential": 200, "Gain Level": 4], forKey: 2)
+            
+            milSec = 300
+            
+        }
         
-        testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
-        leadConfigIndex = -1
         updateTotalDuration()
 //        generateTestData()
-    }
-    
-    init(name: String, mode: Int8){
-        self.name = name
-        hour = 0
-        min = 0
-        sec = 0
-        milSec = 900
-        totalDuration = 0
-        initialDelay = 0
-        numSettingSend = 0
-        testData = [:]
-        startTimeStamp = [:]
-        endTimeStamp = [:]
-        testSettings2 = [:]
-        testMode = mode
-
-            
-    //        [0: ["Potential": " mV"],
-    //         1: ["Initial Delay": " ms"],
-    //         2: ["Sample Period": " ms"],
-    //         3: ["Sample Count": ""],
-    //         4: ["Gain": " k\u{2126}"]
-    //        ]
-        if mode == 0{
-            testSettings = ["Potential": 500, "Initial Delay": 400, "Sample Period": 100, "Sample Count": 5]
-        }
-        else{
-            testSettings = ["Initial Delay - Potentio": 400, "Sample Period - Potentio": 100, "Sample Count - Potentio": 5]
-        }
-        leadConfigIndex = -1
-        updateTotalDuration()
-        generateTestData()
     }
     
     mutating func updateTotalDuration() {
@@ -181,5 +170,8 @@ struct TestConfig: Config {
         }
         testData.updateValue(data, forKey: 3)
         
+        startTimeStamp.updateValue("1", forKey: 1)
+        startTimeStamp.updateValue("2", forKey: 2)
+        startTimeStamp.updateValue("3", forKey: 3)
     }
 }

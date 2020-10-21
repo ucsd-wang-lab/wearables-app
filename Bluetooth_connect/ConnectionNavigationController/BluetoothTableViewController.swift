@@ -57,6 +57,9 @@ class BluetoothTableViewController: UITableViewController {
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "firstCell", for: indexPath)
             cell.backgroundColor = UIColor(red: 0xef/255, green: 0xef/255, blue: 0xf4/255, alpha: 1)
+            if self.traitCollection.userInterfaceStyle == .dark{
+                cell.backgroundColor = UIColor.MICRONEEDLE_PURPLE
+            }
             return cell
         }
         

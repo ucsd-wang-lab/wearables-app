@@ -14,6 +14,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     @IBOutlet weak var addDelayButton: UIButton!
     @IBOutlet weak var delayPickerView: UIPickerView!
     @IBOutlet weak var nameQuestionLabel: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
     
     var delayName:String?
     var delayHour:Int?
@@ -37,6 +38,17 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
         delayNameTextfield.layer.addSublayer(bottomLine)
         
         addDelayButton.layer.cornerRadius = addDelayButton.layer.bounds.height / 3
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            nameQuestionLabel.textColor = .white
+            infoLabel.textColor = .white
+            delayNameTextfield.textColor = .white
+        }
+        else{
+            nameQuestionLabel.textColor = .black
+            infoLabel.textColor = .black
+            delayNameTextfield.textColor = .black
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -93,7 +105,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             return 60
         }
         else if  component == 2{
-            return 1000
+            return 20
         }
         else{
             return 1000
@@ -108,7 +120,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             return "\(row) sec"
         }
         else if component == 2{
-            return "\(row) ms"
+            return "\(row * 50) ms"
         }
         return nil
     }
@@ -140,7 +152,6 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             delayConfig.updateTotalDuration()
             testQueue.enqueue(newTest: delayConfig)
         }
-        print("TestQueue after adding Delay = \(testQueue)")
         self.navigationController?.popViewController(animated: true)
     }
 

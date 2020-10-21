@@ -10,20 +10,13 @@ import UIKit
 
 var testQueue: TestQueue = TestQueue()
 
-var configsList2:[Config] = [
-    TestConfig(name: "Test 1", mode: 0),
-    DelayConfig(name: "Delay 1")
-//    TestConfig(name: "Test 2", mode: 1)
-//    DelayConfig(name: "Delay 2"),
-//    TestConfig(name: "Test 3")
-]
-
-var configsList:[Config] = []
 var connectedDeiviceName:String?        // Name of the connected BLE device
 var loopCount:Int?                  // The number of times to loop through the queue
-//var loopCount:Int? = 2                  // The number of times to loop through the queue
+var numQueueIteration:Int = 0           // The number of times queue has been looped through
 var queuePosition: Int = 0              // The current test that is being run
-var currentLoopCount = 1                // The current loop counter for testing
+var currentLoopCount = 0                // The current loop counter for testing
+var globalTimer: Timer?                 // Global timer to keep track of delays
+var globalTimerDuration: UInt64 = 0           // Duration of how long timer has been active
 var totalHr: UInt64 = 0
 var totalMin: UInt64 = 0
 var totalSec: UInt64 = 0
@@ -127,10 +120,17 @@ func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewControll
 }
 
 func startDelay(delayAmount: CGFloat){
-    // Time Interval is in number of seconds
-    Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount / 0.001), repeats: false) { (timer) in
-        sendNextTest()
-    }
+    // Time Interval is in number of seconds. delayAmount is in milSec
+//    Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount * 0.001), repeats: false) { (timer) in
+//        sendNextTest()
+//    }
+    
+    // Check timer every 50 ms
+    guard globalTimer == nil else { return }
+    globalTimer = Timer.scheduledTimer(timeInterval: TimeInterval(0.05), target: NavigationViewController.instance, selector: #selector(NavigationViewController.instance.delayUpdated), userInfo: nil, repeats: true)
+//    Timer.scheduledTimer(withTimeInterval: TimeInterval(0.05), repeats: true) { (timer) in
+//        NavigationViewController.instance.delayUpdated(timeInMS: 100)
+//    }
 }
 
 func sendNextTest(){
@@ -138,29 +138,35 @@ func sendNextTest(){
         let test = testQueue.next()!
         if test is TestConfig{
             // Run the corresponding test
-//            sendTestConfiguration(testCofig: test as! TestConfig, viewController: nil)
+            sendTestConfiguration(testCofig: test as! TestConfig, viewController: NavigationViewController.instance)
         }
         else if test is DelayConfig{
             // Delay for the corresponding time
-//            sendModeSelection(config: test, viewController: nil)
-//            startDelay(delayAmount: CGFloat(test.totalDuration))
+            sendModeSelection(config: test, viewController: NavigationViewController.instance)
+            startDelay(delayAmount: CGFloat(test.totalDuration))
         }
         
     }
     else{
         // Finished looping through the queue
         currentLoopCount += 1
+        testQueue.incrementQueueIterationCounter()
+        testQueue.rebase()
         
         if currentLoopCount <= loopCount!{
             // Restart the Queue
-            testQueue.rebase()
             sendNextTest()
         }
         else{
             // Finished testing
-            currentLoopCount = 1
+            currentLoopCount = 0
+            testTimeElapsed = 0
             BluetoothInterface.instance.notifyQueueComplete()
             print("Finished Testing!!!")
+            print("Test Queue = \(testQueue)")
+            let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+            NavigationViewController.instance.present(alert, animated: true)
         }
     }
 }

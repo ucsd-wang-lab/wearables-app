@@ -10,6 +10,8 @@ import UIKit
 
 class NavigationViewController: UINavigationController {
     
+    public static var instance: NavigationViewController = NavigationViewController()
+    
     var timer:Timer!
     var timeElapsed: UInt64!
     var startTime: DispatchTime!
@@ -23,12 +25,19 @@ class NavigationViewController: UINavigationController {
         let textAttributes = [NSAttributedString.Key.font: UIFont(name: "Avenir-Heavy", size: 20), NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationBar.titleTextAttributes = textAttributes as [NSAttributedString.Key : Any]
         
+        NavigationViewController.instance = self
+        
         BluetoothInterface.instance.attachBLEStatusObserver(id: id, observer: self)
         BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
-    }
-    
-    public func attachDelayObserver(){
-        print("Delay observer attached.....")
+        
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 1"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 2"))
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
     }
 
     /*
@@ -60,26 +69,30 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     }
     
     func update(with characteristicUUIDString: String, with value: Data) {
-        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential" ||
+            characteristicUUIDString == "Data Characteristic - SW Current"{
             let data = value.int32
             print("data = \(data)")
             
-            if var test = configsList[queuePosition] as? TestConfig{
-                var existingData = test.testData[currentLoopCount] ?? [Double]()
+            if var test = testQueue.peek() as? TestConfig{
+                var existingData = test.testData[testQueue.getQueuetIterationCounter()] ?? [Double]()
                 if existingData.count == 0{
-                    test.startTimeStamp.updateValue(updateTimeElapsedLabel(timeInMS: testTimeElapsed), forKey: currentLoopCount)
+                    testQueue.updateStartTime(value: updateTimeElapsedLabel(timeInMS: testTimeElapsed), loopCount: testQueue.getQueuetIterationCounter())
                 }
+                
                 existingData.append(Double(data))
-                test.testData.updateValue(existingData, forKey: currentLoopCount)
-                configsList[queuePosition] = test
+                test.testData.updateValue(existingData, forKey: testQueue.getQueuetIterationCounter())
+                
+                testQueue.updateData(newData: test.testData)
             }
             BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: value)
         }
         else if characteristicUUIDString == "Queue Complete"{
             // move to next test in the queue
-            print("\n\nQueue Complete....\(currentLoopCount)")
-            if var test = configsList[queuePosition] as? TestConfig{
-                test.endTimeStamp.updateValue(updateTimeElapsedLabel(timeInMS: testTimeElapsed), forKey: currentLoopCount)
+            print("\n\nQueue Complete....\(testQueue.queueIterator)")
+            if (testQueue.peek() as? TestConfig) != nil{
+                testQueue.updateEndTime(value: updateTimeElapsedLabel(timeInMS: testTimeElapsed), loopCount: testQueue.getQueuetIterationCounter())
+
             }
             BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: nil)
             sendNextTest()
@@ -89,93 +102,19 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         }
     }
     
-    private func startDelay(delayAmount: CGFloat){
-        // Time Interval is in number of seconds
-        Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount / 0.001), repeats: false) { (timer) in
-            self.sendNextTest()
-        }
-    }
-
-    private func sendNextTest(){
-        if testQueue.hasNext(){
-            let test = testQueue.next()!
-            if test is TestConfig{
-                // Run the corresponding test
-                sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-            }
-            else if test is DelayConfig{
-                // Delay for the corresponding time
-                sendModeSelection(config: test, viewController: self)
-                startDelay(delayAmount: CGFloat(test.totalDuration))
-            }
-            
-        }
-        else{
-            // Finished looping through the queue
-            currentLoopCount += 1
-            
-            if currentLoopCount <= loopCount!{
-                // Restart the Queue
-                testQueue.rebase()
-                sendNextTest()
-            }
-            else{
-                // Finished testing
-                currentLoopCount = 1
-                BluetoothInterface.instance.notifyQueueComplete()
-                print("Finished Testing!!!")
-                let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-                self.present(alert, animated: true)
-            }
-        }
+    // Get called every 50 ms when Microneedle in Delay Mode
+    @objc func delayUpdated(){
+        let timeInMS = 50
         
-//        queuePosition += 1
-//        if queuePosition == configsList.count{
-//            currentLoopCount += 1
-//            queuePosition = 0
-//
-//            for i in 0..<configsList.count{
-//                configsList[i].numSettingSend = 0
-//            }
-//        }
-//        if currentLoopCount <= loopCount!{
-//            let test = configsList[queuePosition]
-//            if test is TestConfig{
-//                sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-//            }
-//            else if test is DelayConfig{
-//                // Delay
-//                sendModeSelection(config: test, viewController: self)
-//                startTime = DispatchTime.now()
-//                timeElapsed = 0
-//                timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerFired(sender:)), userInfo: nil, repeats: true)
-//                timeElapsed = 0
-//                timer.fire()
-//            }
-//        }
-//        else{
-//            queuePosition = 0
-//            currentLoopCount = -1
-//            testTimeElapsed = scaledTotalRunTime
-//            BluetoothInterface.instance.notifyQueueComplete()
-//            print("Finished Testing!!!")
-//            let alert = UIAlertController(title: "Done!", message: "Finished Testing", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
-//            self.present(alert, animated: true)
-//        }
-    }
-    
-    @objc func timerFired(sender: Timer){
-        endTime = DispatchTime.now()
-        timeElapsed += (endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / UInt64(1e6)
-        startTime = endTime
+        // Check if delay time met
+        globalTimerDuration += UInt64(timeInMS)
+        BluetoothInterface.instance.notifyDelayUpdate(by: UInt64(timeInMS))
         
-        BluetoothInterface.instance.notifyDelayUpdate(by: 50)
-        
-        print("Queue Position: \(queuePosition)")
-        if timeElapsed >= (configsList[queuePosition] as! DelayConfig).totalDuration{
-            timer.invalidate()
+        // Delay finished.....reset timer
+        if globalTimerDuration >= testQueue.peek()!.totalDuration{
+            globalTimerDuration = 0
+            globalTimer?.invalidate()
+            globalTimer = nil
             sendNextTest()
         }
     }

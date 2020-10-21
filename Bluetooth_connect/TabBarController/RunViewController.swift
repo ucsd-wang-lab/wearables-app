@@ -24,6 +24,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     var chartTitle: String?
     var selectdTest: TestConfig?
+    var queueIndex: Int?
     var selectedRow: Int!
     
     override func viewDidLoad() {
@@ -56,11 +57,12 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         
         BluetoothInterface.instance.attachBLEValueRecordedObserver(id: id, observer: self)
         BluetoothInterface.instance.attachDelayObserver(id: id, observer: self)
+        
+        checkTextColor()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
+        super.viewDidAppear(animated)        
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
             scaledTotalRunTime = totalRunTime * UInt64(lCount)
@@ -68,7 +70,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         
         timeRemainingLabel.text = constructDelayString(hour: Int(totalHr), min: Int(totalMin), sec: Int(totalSec), milSec: Int(totalMilSec))
         listOfTestTableView.reloadData()
-        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime)
+        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime) + "    " + "Loop: \(currentLoopCount) of \(loopCount ?? 0)" + "    " + "Running: \(testQueue.peek()?.name ?? "")"
     }
     
     @objc func doneButtonPressed(){
@@ -105,6 +107,12 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         else{
             titleLabel.text = "Test - " + (testQueue[section].name ?? "")
         }
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            view.backgroundColor = UIColor.MICRONEEDLE_PURPLE
+            titleLabel.textColor = .black
+        }
+        
         view.addSubview(titleLabel)
         return view
     }
@@ -115,8 +123,9 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectdTest = testQueue[indexPath.section] as? TestConfig
+        queueIndex = indexPath.section
         selectedRow = indexPath.row
-        
+                
         if indexPath.row == 0{
             performSegue(withIdentifier: "toLiveView", sender: self)
         }
@@ -166,37 +175,19 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 saveDataButton.setTitle("Stop Queue", for: .normal)
                 saveDataButton.tag = 1
                 
-                // TODO: undo this duiring production
-//                resetData()
-                
-                print("TestQueue before starting recording: \(testQueue)")
                 if testQueue.hasNext(){
+                    currentLoopCount = 1
                     let test = testQueue.next()!
                     if test is TestConfig{
                         // Run the corresponding test
-                        sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
+                        sendTestConfiguration(testCofig: test as! TestConfig, viewController: NavigationViewController.instance)
                     }
                     else if test is DelayConfig{
                         // Delay for the corresponding time
-                        sendModeSelection(config: test, viewController: self)
+                        sendModeSelection(config: test, viewController: NavigationViewController.instance)
                         startDelay(delayAmount: CGFloat(test.totalDuration))
                     }
                 }
-                
-//                print("configList: \(configsList)")
-//                // Skip all the initial delay and start with the first test
-//                while queuePosition < configsList.count{
-//                    let test = configsList[queuePosition]
-//                    if test is TestConfig{
-//                        sendTestConfiguration(testCofig: test as! TestConfig, viewController: self)
-//                        return
-//                    }
-//                    else{
-//                        testTimeElapsed += UInt64(test.totalDuration)
-//                        updateProgressBar()
-//                        queuePosition += 1
-//                    }
-//                }
             }
         }
         else if button.tag == 1{
@@ -256,7 +247,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         let csvStrings = generateCSVString()
         
         var index = 0
-        for test in configsList{
+        for i in 0..<testQueue.size(){
+            let test = testQueue[i]
             if test is TestConfig{
                 let csvString = csvStrings[index]
                 let fileName = "\(test.name ?? "NULL")"
@@ -302,7 +294,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         composer.setMessageBody("Attached is the data collected on: \(currentTime)", isHTML: true)
         
         index = 0
-        for test in configsList{
+        for i in 0..<testQueue.size(){
+            let test = testQueue[i]
             if test is TestConfig{
                 let csvString = csvStrings[index]
                 let fileName = "\(test.name ?? "NULL")"
@@ -315,7 +308,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     private func generateCSVString() -> [String]{
         var csvStringArray: [String] = []
-        for test in configsList{
+        for i in 0..<testQueue.size(){
+            let test = testQueue[i]
             if test is TestConfig{
                 let t = test as! TestConfig
                 var csvString = ""
@@ -370,22 +364,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     
     private func updateProgressBar(){
         progressView.progress = Float(testTimeElapsed) / Float(scaledTotalRunTime)
-        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime)
-//        print("Percentage Finished: \(Float(testTimeElapsed) / Float(totalRunTime))")
-    }
-    
-    private func resetData(){
-        testTimeElapsed = 0
-        queuePosition = 0
-        currentLoopCount = 1
-        for test in configsList{
-            if test is TestConfig{
-                var t = test as! TestConfig
-                t.testData.removeAll()
-                t.startTimeStamp.removeAll()
-                t.endTimeStamp.removeAll()
-            }
-        }
+        timeElapsedLabel.text = updateTimeElapsedLabel(timeInMS: testTimeElapsed) + " of " + updateTimeElapsedLabel(timeInMS: scaledTotalRunTime) + "    " + "Loop: \(currentLoopCount) of \(loopCount ?? 0)" + "    " + "Running: \(testQueue.peek()?.name ?? "")"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -399,6 +378,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             // To Composite View
             let destination = segue.destination as! CompositeChartsViewController
             destination.testConfig = selectdTest
+            destination.queueIndex = queueIndex
         }
         else{
             let destination = segue.destination as! SummaryChartsViewController
@@ -453,15 +433,25 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
     
     // New Data Arrived from Microneedle Device
     func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
-        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential"{
-            if let test = configsList[queuePosition] as? TestConfig{
+        if characteristicUUIDString == "Data Characteristic - current" || characteristicUUIDString == "Data Characteristic - Potential" ||
+            characteristicUUIDString == "Data Characteristic - SW Current"{
+            if let test = testQueue[queuePosition] as? TestConfig{
                 if test.testMode == 0 || test.testMode == 1{
                         if let samplePeriod = test.testSettings2[Int(test.testMode)]!["Sample Period"]{
                             testTimeElapsed += UInt64(samplePeriod)
                         }
                 }
+                else if test.testMode == 2{
+                    if let samplePeriod = test.testSettings2[Int(test.testMode)]!["Frequency"]{
+                        testTimeElapsed += UInt64(samplePeriod)
+                    }
+                }
                 updateProgressBar()
             }
+        }
+        else if characteristicUUIDString == "Queue Complete"{
+            // Update Progress Bar to reflect next test running
+            
         }
         else if characteristicUUIDString == "Battery Level" {
             let data = value!.uint8
@@ -484,5 +474,18 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
         saveDataButton.setTitle("Save Data", for: .normal)
         saveDataButton.tag = 0
         updateProgressBar()
+    }
+    
+    private func checkTextColor(){
+        if self.traitCollection.userInterfaceStyle == .dark{
+            deviceNameLabel.textColor = .white
+            loopCountTextField.textColor = .white
+            timeRemainingLabel.textColor = .white
+        }
+        else{
+            deviceNameLabel.textColor = .black
+            loopCountTextField.textColor = .black
+            timeRemainingLabel.textColor = .black
+        }
     }
 }

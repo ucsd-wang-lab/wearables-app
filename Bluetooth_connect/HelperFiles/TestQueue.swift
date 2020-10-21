@@ -11,11 +11,13 @@ import Foundation
 class TestQueue{
     
     var testList: [Config]
-    var currentIndex: Int
+    var queueIterator: Int
+    var numQueueIteration: Int
     
     init() {
         testList = []
-        currentIndex = 0
+        queueIterator = -1
+        numQueueIteration = 1
     }
     
     /**
@@ -39,17 +41,28 @@ class TestQueue{
             Rebase the iterator to the start of the queue
      */
     func rebase(){
-        currentIndex = 0
+        queueIterator = -1
     }
     
     /**
-            Get the next item in the queue iterator
+            Retrieve, but does not remove, the head of
+            the queue, or returns nil if queue is empty
+     */
+    func peek() -> Config? {
+        if queueIterator >= 0 && queueIterator < testList.count{
+            return testList[queueIterator]
+        }
+        return nil
+    }
+    
+    /**
+            Get the next item in the queue iterator and
+            advance the cursor position
      */
     func next() -> Config?{
-        if currentIndex < testList.count{
-            let test = testList[currentIndex]
-            currentIndex += 1
-            return test
+        if queueIterator < testList.count - 1{
+            queueIterator += 1
+            return testList[queueIterator]
         }
         return nil
     }
@@ -58,7 +71,7 @@ class TestQueue{
             Returns true if queue iterator has more elements
      */
     func hasNext() -> Bool{
-        return currentIndex + 1 < testList.count
+        return queueIterator < testList.count - 1
     }
     
     /**
@@ -129,6 +142,69 @@ class TestQueue{
         }
     }
 
+    /**
+            Update the data of the test at the top of the queue
+     */
+    func updateData(newData: [Int: [Double]]){
+        if queueIterator >= 0 && queueIterator < testList.count{
+            if var test = testList[queueIterator] as? TestConfig{
+                test.testData = newData
+                testList[queueIterator] = test
+            }
+        }
+    }
+    
+    /**
+            Update the start timestamp  of the test at the top of the queue
+     */
+    func updateStartTime(value: String, loopCount: Int){
+        if queueIterator >= 0 && queueIterator < testList.count{
+            if var test = testList[queueIterator] as? TestConfig{
+                test.startTimeStamp.updateValue(value, forKey: loopCount)
+                testList[queueIterator] = test
+            }
+        }
+    }
+    
+    /**
+            Update the end timestamp  of the test at the top of the queue
+     */
+    func updateEndTime(value: String, loopCount: Int){
+        if queueIterator >= 0 && queueIterator < testList.count{
+            if var test = testList[queueIterator] as? TestConfig{
+                test.endTimeStamp.updateValue(value, forKey: loopCount)
+                testList[queueIterator] = test
+            }
+        }
+    }
+    
+    /**
+            Increment the number of times queue has been thoroughly iterated
+     */
+    func incrementQueueIterationCounter(){
+        self.numQueueIteration += 1
+    }
+    
+    /**
+            Get the number of times queue has been thoroughly iterated
+     */
+    func getQueuetIterationCounter() -> Int{
+        return numQueueIteration
+    }
+    
+    /**
+            Delete test data from the test
+     */
+    func deleteData(fromTestAtIndex: Int, measurementNumber: Int){
+        if fromTestAtIndex >= 0 && fromTestAtIndex < testList.count{
+            let test = testList[fromTestAtIndex]
+            if test is TestConfig{
+                var testConfig = test as! TestConfig
+                testConfig.testData.removeValue(forKey: measurementNumber)
+                testList[fromTestAtIndex] = testConfig
+            }
+        }
+    }
 }
 
 extension TestQueue: CustomStringConvertible{

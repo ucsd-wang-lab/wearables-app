@@ -53,6 +53,17 @@ class TestConfigTableViewCell: UITableViewCell {
         let suffix_label_frame = CGRect(x: valueLabel.frame.maxX, y: 0, width: width * 0.2, height: height)
         unitsLabel.frame = suffix_label_frame
         
+        if self.traitCollection.userInterfaceStyle == .dark{
+            keyLabel.textColor = .white
+            valueLabel.textColor = .white
+            unitsLabel.textColor = .white
+        }
+        else{
+            keyLabel.textColor = .black
+            valueLabel.textColor = .black
+            unitsLabel.textColor = .black
+        }
+        
         displayView.addSubview(keyLabel)
         displayView.addSubview(valueLabel)
         displayView.addSubview(unitsLabel)

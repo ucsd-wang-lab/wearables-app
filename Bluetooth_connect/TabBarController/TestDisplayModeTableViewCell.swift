@@ -26,6 +26,15 @@ class TestDisplayModeTableViewCell: UITableViewCell, UITableViewDelegate {
 //        let arrow_label_rect = CGRect(x: deviceNameLabel.frame.maxX, y: deviceNameLabel.frame.minY,
 //                                      width: width * 0.2, height: height)
 //        arrow_label.frame = arrow_label_rect
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            deviceNameLabel.textColor = .white
+            arrow_label.textColor = .white
+        }
+        else{
+            deviceNameLabel.textColor = .black
+            arrow_label.textColor = .black
+        }
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

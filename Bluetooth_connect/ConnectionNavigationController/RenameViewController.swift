@@ -34,6 +34,13 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
         
         let backBarButtton = UIBarButtonItem(title: "Disconnect", style: .plain, target: self, action: nil)
         navigationItem.backBarButtonItem = backBarButtton
+        
+        if self.traitCollection.userInterfaceStyle == .dark {
+            nameTextField.textColor = .white
+        }
+        else{
+            nameTextField.textColor = .black
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -76,13 +83,13 @@ class RenameViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func nextButtonClicked(_ sender: Any) {
-        performSegue(withIdentifier: "toTesting", sender: self)
-//        if self.nameTextField.text != ""{
-//            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-//            let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
-//            connectedDeiviceName = self.nameTextField.text
-//            self.navigationController?.pushViewController(controller, animated: true)
-//        }
+//        performSegue(withIdentifier: "toTesting", sender: self)
+        if self.nameTextField.text != ""{
+            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+            let controller = storyboard.instantiateInitialViewController() as! TabBarViewController
+            connectedDeiviceName = self.nameTextField.text
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     

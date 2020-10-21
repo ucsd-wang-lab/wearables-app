@@ -59,11 +59,13 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         messageLabel.textAlignment = .center
         messageLabel.alpha = 0
         self.view.addSubview(messageLabel)
+        
+        checkTextColor()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+                
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
             scaledTotalRunTime = totalRunTime * UInt64(lCount)
@@ -77,7 +79,11 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalHr = 0
         totalMin = 0
         totalSec = 0
-        totalMilSec = 0        
+        totalMilSec = 0
+        
+        for test in testQueue.testList{
+            updateTotalDuration(hour: test.hour, min: test.min, sec: test.sec, milSec: test.milSec)
+        }
     }
        
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -225,7 +231,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
-        updateTotalDuration(hour: hour, min: min, sec: sec, milSec: milSec)
+//        updateTotalDuration(hour: hour, min: min, sec: sec, milSec: milSec)
         return cell
     }
     
@@ -277,5 +283,19 @@ extension DeviceViewController: BLEValueRecordedObserver{
         }
     }
     
+    private func checkTextColor(){
+        if self.traitCollection.userInterfaceStyle == .dark {
+            // User Interface is Dark
+            delayLabel.textColor = .white
+            loopCountTextField.textColor = .white
+            deviceNameLabel.textColor = .white
+        }
+        else {
+            // User Interface is Light
+            delayLabel.textColor = .black
+            loopCountTextField.textColor = .black
+            deviceNameLabel.textColor = .black
+        }
+    }
     
 }

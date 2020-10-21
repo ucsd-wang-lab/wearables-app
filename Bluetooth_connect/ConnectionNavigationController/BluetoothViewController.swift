@@ -30,6 +30,13 @@ class BluetoothViewController: UIViewController {
         
         self.messageText.text = "Click to find nearby devices"
         isPulsing = false
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            messageText.textColor = .white
+        }
+        else{
+            messageText.textColor = .black
+        }
     }
     
     @IBAction func bluetoothButtonClicked(_ sender: UIButton) {
