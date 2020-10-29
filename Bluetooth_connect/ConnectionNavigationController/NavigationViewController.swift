@@ -31,25 +31,21 @@ class NavigationViewController: UINavigationController {
         BluetoothInterface.instance.attachBLEValueObserver(id: id, observer: self)
         
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
-//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 1"))
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
-//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
-//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 2"))
+        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+        
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 2"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 2"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
@@ -66,6 +62,18 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     
     func deviceConnected(with device: String) {
         BluetoothInterface.instance.autoConnect = true
+    }
+    
+    func writeResponseReceived(with characteristicUUIDString: String) {
+        let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) ?? "nil"
+
+        if var test = testQueue.peek() as? TestConfig{
+            if let didReceive = test.testSettingUpdateReceived[Int(test.testMode)]![name]{
+                if !didReceive{
+                    test.testSettingUpdateReceived[Int(test.testMode)]!.updateValue(true, forKey: name)
+                }
+            }
+        }
     }
     
     func update(with characteristicUUIDString: String, with value: Data) {
@@ -89,7 +97,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
         }
         else if characteristicUUIDString == "Queue Complete"{
             // move to next test in the queue
-            print("\n\nQueue Complete....\(testQueue.queueIterator)")
+            print("\n\nQueue Complete....\(testQueue.getIterator())")
             if (testQueue.peek() as? TestConfig) != nil{
                 testQueue.updateEndTime(value: updateTimeElapsedLabel(timeInMS: testTimeElapsed), loopCount: testQueue.getQueuetIterationCounter())
 
@@ -97,7 +105,12 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: nil)
             sendNextTest()
         }
+        else if characteristicUUIDString == "Battery Level"{
+            BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: value)
+            print("\n\nUpdate Received: \(characteristicUUIDString)\t with value: \(value.uint8)\n\n")
+        }
         else{
+            
             print("\n\nUpdate Received: \(characteristicUUIDString)\n\n")
         }
     }

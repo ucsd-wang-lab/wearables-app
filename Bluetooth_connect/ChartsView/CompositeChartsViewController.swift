@@ -114,7 +114,7 @@ class CompositeChartsViewController: UIViewController {
             for loopNumber in Array(test.testData.keys).sorted(){
                 if test.testMode == 0 || test.testMode == 1{
                     // Ampero or Potentio Test
-                    guard let samplePeriod = test.testSettings2[Int(test.testMode)]?["Sample Period"]  else { continue }
+                    guard let samplePeriod = test.testSettings[Int(test.testMode)]?["Sample Period"]  else { continue }
                     
                     if let numOfDataSet = lineChartView.data?.dataSets.count{
                         // Measurement Missing, fill with empty data to preserve measurement number on select
@@ -141,7 +141,7 @@ class CompositeChartsViewController: UIViewController {
                 }
                 else if test.testMode == 2{
                     // Square Wave Test
-                    guard let samplePeriod = test.testSettings2[Int(test.testMode)]?["Frequency"]  else { continue }
+                    guard let samplePeriod = test.testSettings[Int(test.testMode)]?["Frequency"]  else { continue }
                                         
                     if let numOfDataSet = lineChartView.data?.dataSets.count{
                         if numOfDataSet != loopNumber{

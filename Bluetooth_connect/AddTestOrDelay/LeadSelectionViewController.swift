@@ -111,13 +111,13 @@ class LeadSelectionViewController: UIViewController {
             sender.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)
 //        if sender.alpha == notSelectedAlpha{
 //            sender.alpha = selectedAlpha
-            if let mask = testConfig?.testSettings2[index]?[maskString]{
+            if let mask = testConfig?.testSettings[index]?[maskString]{
                 let electrodeMask = mask | sender.tag
-                testConfig?.testSettings2[index]?[maskString] = electrodeMask
+                testConfig?.testSettings[index]?[maskString] = electrodeMask
 
             }
             else{
-                testConfig?.testSettings2[index]?[maskString] = sender.tag
+                testConfig?.testSettings[index]?[maskString] = sender.tag
 
             }
         }
@@ -125,10 +125,10 @@ class LeadSelectionViewController: UIViewController {
             // Button unselected
             sender.backgroundColor = UIColor(red: 253/255, green: 92/255, blue: 60/255, alpha: 1)
 //            sender.alpha = notSelectedAlpha
-            if let mask = testConfig?.testSettings2[index]?[maskString]{
+            if let mask = testConfig?.testSettings[index]?[maskString]{
 
                 let electrodeMask = mask - sender.tag
-                testConfig?.testSettings2[index]?[maskString] = electrodeMask
+                testConfig?.testSettings[index]?[maskString] = electrodeMask
 
             }
         }
@@ -139,7 +139,7 @@ class LeadSelectionViewController: UIViewController {
     }
     
     private func resetButtonColor(){
-        if let electrodeMask = testConfig?.testSettings2[Int(testConfig!.testMode)]?[maskString]{
+        if let electrodeMask = testConfig?.testSettings[Int(testConfig!.testMode)]?[maskString]{
             if electrodeMask & E1Button.tag != 0{
                 // Selected
                 E1Button.backgroundColor = UIColor(red: 249/255, green: 211/255, blue: 122/255, alpha: 1)   // Yellow
@@ -191,9 +191,9 @@ class LeadSelectionViewController: UIViewController {
         controller.isUpdate = isUpdate
         controller.updateIndex = updateIndex
         
-        if testConfig?.testSettings2[Int(testConfig!.testMode)]?[maskString] == nil{
+        if testConfig?.testSettings[Int(testConfig!.testMode)]?[maskString] == nil{
             let index = Int(testConfig!.testMode)
-            testConfig?.testSettings2[index]?[maskString] = 0
+            testConfig?.testSettings[index]?[maskString] = 0
         }
         controller.testConfig = testConfig
     }

@@ -62,7 +62,11 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)        
+        super.viewDidAppear(animated)
+        
+        updateBatteryLevel(newBatteryLevel: batteryLevel ?? 00)
+        loopCountTextField.isUserInteractionEnabled = canEditRows
+        
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
             scaledTotalRunTime = totalRunTime * UInt64(lCount)
@@ -175,6 +179,8 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                 saveDataButton.setTitle("Stop Queue", for: .normal)
                 saveDataButton.tag = 1
                 
+                canEditRows = false
+                
                 if testQueue.hasNext(){
                     currentLoopCount = 1
                     let test = testQueue.next()!
@@ -192,19 +198,31 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         }
         else if button.tag == 1{
             // Test is paused, resume test
+            canEditRows = false
+            
             button.layer.backgroundColor = UIColor.MICRONEEDLE_YELLOW.cgColor
             button.setTitleColor(.darkGray, for: .normal)
             button.setTitle("Pause Queue", for: .normal)
             button.tag = 2
             
-            // Sending Stop Signal
-            let data: UInt8 = 1
-            var d: Data = Data(count: 1)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            if testQueue.peek() is DelayConfig{
+                startDelay(delayAmount: 0)
+            }
+            else{
+                // Sending Start Signal
+                let data: UInt8 = 1
+                var d: Data = Data(count: 1)
+                d = withUnsafeBytes(of: data) { Data($0) }
+                let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+                BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            }
         }
         else{
+            canEditRows = false
+            
+            globalTimer?.invalidate()
+            globalTimer = nil
+            
             // Test is running, pause running test
             button.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
             button.setTitleColor(.white, for: .normal)
@@ -218,11 +236,12 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
             BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
         }
+        loopCountTextField.isUserInteractionEnabled = canEditRows
     }
     
     @IBAction func saveDataButtonPressed(_ sender: Any) {
         if saveDataButton.tag == 1{
-              // Sending Stop Signal
+            // Sending Stop Signal
             let data: UInt8 = 0
             var d: Data = Data(count: 1)
             d = withUnsafeBytes(of: data) { Data($0) }
@@ -237,6 +256,9 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             saveDataButton.layer.backgroundColor = UIColor.MICRONEEDLE_GREEN.cgColor
             saveDataButton.setTitle("Save Data", for: .normal)
             saveDataButton.tag = 0
+            
+            canEditRows = true
+            loopCountTextField.isUserInteractionEnabled = canEditRows
             return
         }
         
@@ -323,7 +345,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
                     csvString.append("Square Wave Measurement\n\n")
                 }
                 print("testData: \(t.testData)")
-                let testSettings = t.testSettings2[Int(t.testMode)]!
+                let testSettings = t.testSettings[Int(t.testMode)]!
                 for testSettingKeys in Array(testSettings.keys).sorted(){
                     csvString.append("\(testSettingKeys), \(testSettings[testSettingKeys]!)\n")
                 }
@@ -386,6 +408,19 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
         }
     }
     
+    private func updateBatteryLevel(newBatteryLevel: UInt8){
+        batteryLevelLabel.text = String(batteryLevel ?? 00) + "%"
+        if newBatteryLevel >= 40{
+            batteryLevelLabel.textColor = .MICRONEEDLE_GREEN
+        }
+        else if newBatteryLevel >= 20{
+            batteryLevelLabel.textColor = .orange
+        }
+        else{
+            batteryLevelLabel.textColor = .MICRONEEDLE_RED
+        }
+    }
+    
 }
 
 extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMailComposeViewControllerDelegate{
@@ -437,12 +472,12 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
             characteristicUUIDString == "Data Characteristic - SW Current"{
             if let test = testQueue[queuePosition] as? TestConfig{
                 if test.testMode == 0 || test.testMode == 1{
-                        if let samplePeriod = test.testSettings2[Int(test.testMode)]!["Sample Period"]{
+                        if let samplePeriod = test.testSettings[Int(test.testMode)]!["Sample Period"]{
                             testTimeElapsed += UInt64(samplePeriod)
                         }
                 }
                 else if test.testMode == 2{
-                    if let samplePeriod = test.testSettings2[Int(test.testMode)]!["Frequency"]{
+                    if let samplePeriod = test.testSettings[Int(test.testMode)]!["Frequency"]{
                         testTimeElapsed += UInt64(samplePeriod)
                     }
                 }
@@ -454,8 +489,8 @@ extension RunViewController:BLEValueRecordedObserver, DelayUpdatedObserver, MFMa
             
         }
         else if characteristicUUIDString == "Battery Level" {
-            let data = value!.uint8
-            batteryLevelLabel.text = String(data) + "%"
+            batteryLevel = value!.uint8
+            updateBatteryLevel(newBatteryLevel: batteryLevel ?? 00)
         }
     }
     

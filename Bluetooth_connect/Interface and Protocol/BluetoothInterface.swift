@@ -140,7 +140,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
                     notifyBLECharacteristicObserver(characteristicUUIDString: characteristic.uuid.uuidString)
                     
                     if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.NOTIFY.rawValue) != 0 || (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.INDICATE.rawValue) != 0{
-//                        print("characteristics notify = ", name)
+//                        if (characteristic.properties.rawValue & CHARACTERISTICS_PROPERTIES.NOTIFY.rawValue) != 0 {
+//                            print("Characteristic \(name) with NOTIFY")
+//                        }
+//                        else{
+//                            print("Characteristic \(name) with INDICATE")
+//                        }
                         self.connectedPeripheral.setNotifyValue(true, for: characteristic)
                     }
                 }
@@ -153,9 +158,18 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-//        print("write update received...\(characteristic.uuid.uuidString)")
-        
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) ?? "nil"
+        print("write update received...\(name)")
+
+//        let testConfig = testQueue.peek() as? TestConfig
+//        if let test = testConfig{
+//            var dict = test.testSettingUpdateReceived[Int(test.testMode)]!
+//            if let _ = dict[name]{
+//                dict[name] = true
+//                testQueue.updateTestSettingSendDict(fromTestAtIndex: 0, newTestSettingSendDict: dict)
+//                print("Dict = \(dict)")
+//            }
+//        }
         
         if name.contains("Mode Select") || name.contains("Potential") || name.contains("Sample Count") || name.contains("Sample Period") || name.contains("Initial Delay") || name.contains("Electrode Mask"){
             testQueue[queuePosition].numSettingSend += 1

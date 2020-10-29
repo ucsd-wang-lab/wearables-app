@@ -85,13 +85,12 @@ struct TestConfig: Config {
     var totalDuration: Int64
     var numSettingSend:Int
     
-    var initialDelay: Int
     var testMode: Int8
-    var testSettings:[String:Int]
     var testData: [Int: [Double]]       // loopNumber: Data Array
     var startTimeStamp: [Int: String]   // loopNumber: StartTime
     var endTimeStamp: [Int: String]     // loopNumber: EndTime
-    var testSettings2: [Int: [String: Int]]  // Measurement Type: [Key: Value]
+    var testSettings: [Int: [String: Int]]  // Measurement Type: [Key: Value]
+    var testSettingUpdateReceived: [Int: [String: Bool]]    // Measurement Type: [Key: Yes/No];
     var loopIteration: Int
     
     var leadConfigIndex: Int
@@ -102,16 +101,15 @@ struct TestConfig: Config {
         sec = 0
         milSec = 0
         totalDuration = 0
-        initialDelay = 0
         numSettingSend = 0
         testMode = -1
         
-        testSettings = [:]
         testData = [:]
         startTimeStamp = [:]
         endTimeStamp = [:]
         leadConfigIndex = -1
-        testSettings2 = [:]
+        testSettings = [:]
+        testSettingUpdateReceived = [:]
         loopIteration = 0
     }
     
@@ -122,14 +120,15 @@ struct TestConfig: Config {
         if name.contains("Test 1"){
             // Ampero
             testMode = 0
-            testSettings2.updateValue(["Potential": 100, "Initial Delay": 300, "Sample Period": 200, "Sample Count": 100], forKey: 0)
+            testSettings.updateValue(["Potential": 100, "Initial Delay": 300, "Sample Period": 200, "Sample Count": 100, "Electrode Mask": 72], forKey: 0)
             sec = 20
             milSec = 300
         }
         else if name.contains("Test 2"){
             // Potentio
             testMode = 1
-            testSettings2.updateValue(["Initial Delay": 200, "Sample Period": 200, "Sample Count": 5, "Filter Level": 3], forKey: 1)
+            testSettings.updateValue(["Initial Delay": 200, "Sample Period": 200, "Sample Count": 5, "Filter Level": 3, "Electrode Mask": 72], forKey: 1)
+//            testSettingUpdateReceived.updateValue(["Initial Delay": false, "Sample Period": false, "Sample Count": false, "Filter Level": false, "Electrode Mask": false], forKey: 1)
             sec = 1
             milSec = 200
             
@@ -137,10 +136,10 @@ struct TestConfig: Config {
         else if name.contains("Test 3"){
             // Square Wave
             testMode = 2
-            testSettings2.updateValue(["Quiet Time": 200, "Num Steps": 10, "Frequency": 100,
+            testSettings.updateValue(["Quiet Time": 200, "Num Steps": 10, "Frequency": 100,
                                        "Amplitude": 100, "Initial Potential": 100, "Final Potential": 200, "Gain Level": 4], forKey: 2)
             
-            testSettings2.updateValue(["Quiet Time": 200, "Num Steps": 200, "Frequency": 10,
+            testSettings.updateValue(["Quiet Time": 200, "Num Steps": 200, "Frequency": 10,
                                        "Amplitude": 100, "Initial Potential": 100, "Final Potential": 200, "Gain Level": 4], forKey: 2)
             
             milSec = 300
@@ -148,7 +147,7 @@ struct TestConfig: Config {
         }
         
         updateTotalDuration()
-//        generateTestData()
+        generateTestData()
     }
     
     mutating func updateTotalDuration() {
@@ -156,8 +155,8 @@ struct TestConfig: Config {
     }
     
     mutating func generateTestData(){
-        
-        for loopNum in 1..<3{
+        let numOfData = 3
+        for loopNum in 1..<numOfData{
             var data: [Double] = []
             for newData in 0..<10{
                 data.append(Double(newData * loopNum))
@@ -168,10 +167,14 @@ struct TestConfig: Config {
         for newData in 0..<5{
             data.append(Double(newData * newData))
         }
-        testData.updateValue(data, forKey: 3)
+        testData.updateValue(data, forKey: numOfData)
         
         startTimeStamp.updateValue("1", forKey: 1)
         startTimeStamp.updateValue("2", forKey: 2)
         startTimeStamp.updateValue("3", forKey: 3)
+        
+        endTimeStamp.updateValue("00:00:02:000", forKey: 1)
+        endTimeStamp.updateValue("00:00:03:000", forKey: 2)
+        endTimeStamp.updateValue("00:00:04:000", forKey: 3)
     }
 }

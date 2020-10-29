@@ -60,12 +60,17 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         messageLabel.alpha = 0
         self.view.addSubview(messageLabel)
         
+        BluetoothInterface.instance.attachBLEValueRecordedObserver(id: id, observer: self)
+        
         checkTextColor()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-                
+        
+        updateBatteryLevel(newBatteryLevel: batteryLevel ?? 00)
+        loopCountTextField.isUserInteractionEnabled = canEditRows
+        
         if let lCount = loopCount{
             loopCountTextField.text = String(lCount)
             scaledTotalRunTime = totalRunTime * UInt64(lCount)
@@ -81,7 +86,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalSec = 0
         totalMilSec = 0
         
-        for test in testQueue.testList{
+        for test in testQueue{
             updateTotalDuration(hour: test.hour, min: test.min, sec: test.sec, milSec: test.milSec)
         }
     }
@@ -137,36 +142,38 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let config = testQueue[indexPath.row]
-        
-        if config is DelayConfig {
-            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-            if #available(iOS 13.0, *) {
-                let controller = storyboard.instantiateViewController(identifier: "delayController") as! DelayConfigurationViewController
-                controller.delayName = config.name
-                controller.delayHour = config.hour
-                controller.delayMin = config.min
-                controller.delaySec = config.sec
-                controller.delayMS = config.milSec
-                controller.updateIndex = indexPath.row
-                controller.isUpdate = true
-                self.navigationController?.pushViewController(controller, animated: true)
-            } else {
-                print("\n\nVersion is not 13.0....cannot set default values\n\n")
-                performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+        if canEditRows{
+            let config = testQueue[indexPath.row]
+            
+            if config is DelayConfig {
+                let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+                if #available(iOS 13.0, *) {
+                    let controller = storyboard.instantiateViewController(identifier: "delayController") as! DelayConfigurationViewController
+                    controller.delayName = config.name
+                    controller.delayHour = config.hour
+                    controller.delayMin = config.min
+                    controller.delaySec = config.sec
+                    controller.delayMS = config.milSec
+                    controller.updateIndex = indexPath.row
+                    controller.isUpdate = true
+                    self.navigationController?.pushViewController(controller, animated: true)
+                } else {
+                    print("\n\nVersion is not 13.0....cannot set default values\n\n")
+                    performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+                }
             }
-        }
-        else{
-            let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
-            if #available(iOS 13.0, *) {
-                let controller = storyboard.instantiateViewController(identifier: "testController") as! TestConfigurationViewController
-                controller.isUpdate = true
-                controller.updateIndex = indexPath.row
-                controller.testConfig = testQueue[indexPath.row] as? TestConfig
-                self.navigationController?.pushViewController(controller, animated: true)
-            } else {
-                print("\n\nVersion is not 13.0....cannot set default values\n\n")
-                performSegue(withIdentifier: "toTestConfiguration", sender: self)
+            else{
+                let storyboard = UIStoryboard(name: "TestingNavigationController", bundle: nil)
+                if #available(iOS 13.0, *) {
+                    let controller = storyboard.instantiateViewController(identifier: "testController") as! TestConfigurationViewController
+                    controller.isUpdate = true
+                    controller.updateIndex = indexPath.row
+                    controller.testConfig = testQueue[indexPath.row] as? TestConfig
+                    self.navigationController?.pushViewController(controller, animated: true)
+                } else {
+                    print("\n\nVersion is not 13.0....cannot set default values\n\n")
+                    performSegue(withIdentifier: "toTestConfiguration", sender: self)
+                }
             }
         }
     }
@@ -177,8 +184,14 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         return view
     }
     
+    // Enabling real-time deleting of rows
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return UITableViewCell.EditingStyle.delete
+        if canEditRows{
+            return UITableViewCell.EditingStyle.delete
+        }
+        else{
+            return UITableViewCell.EditingStyle.none
+        }
     }
 
     
@@ -189,6 +202,15 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
             testQueue.remove(at: indexPath.row)
             tableView.endUpdates()
             
+            // Updating Queue Duration
+            totalHr = 0
+            totalMin = 0
+            totalSec = 0
+            totalMilSec = 0
+            
+            for test in testQueue{
+                updateTotalDuration(hour: test.hour, min: test.min, sec: test.sec, milSec: test.milSec)
+            }
         }
     }
     
@@ -208,8 +230,9 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
           // do nothing....
       }
     
+    // Enable real-time moving of rows
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return canEditRows
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -263,11 +286,28 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
     }
     
     @IBAction func addTestButtonClicked(_ sender: Any) {
-        performSegue(withIdentifier: "toTestConfiguration", sender: self)
+        if canEditRows{
+            performSegue(withIdentifier: "toTestConfiguration", sender: self)
+        }
     }
     
     @IBAction func addDelayButtonClicked(_ sender: Any) {
-        performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+        if canEditRows{
+            performSegue(withIdentifier: "toDelayConfiguration", sender: self)
+        }
+    }
+    
+    private func updateBatteryLevel(newBatteryLevel: UInt8){
+        batteryLevelLabel.text = String(batteryLevel ?? 00) + "%"
+        if newBatteryLevel >= 40{
+            batteryLevelLabel.textColor = .MICRONEEDLE_GREEN
+        }
+        else if newBatteryLevel >= 20{
+            batteryLevelLabel.textColor = .orange
+        }
+        else{
+            batteryLevelLabel.textColor = .MICRONEEDLE_RED
+        }
     }
 }
 
@@ -278,8 +318,8 @@ extension DeviceViewController: BLEValueRecordedObserver{
     
     func valueRecorded(with characteristicUUIDString: String, with value: Data?) {
         if characteristicUUIDString == "Battery Level" {
-            let data = value!.uint8
-            batteryLevelLabel.text = String(data) + "%"
+            batteryLevel = value!.uint8
+            updateBatteryLevel(newBatteryLevel: batteryLevel ?? 00)
         }
     }
     

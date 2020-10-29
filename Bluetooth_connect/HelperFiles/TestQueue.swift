@@ -10,9 +10,9 @@ import Foundation
 
 class TestQueue{
     
-    var testList: [Config]
-    var queueIterator: Int
-    var numQueueIteration: Int
+    private var testList: [Config]
+    private var queueIterator: Int
+    private var numQueueIteration: Int
     
     init() {
         testList = []
@@ -25,6 +25,15 @@ class TestQueue{
      */
     func enqueue(newTest: Config){
         testList.append(newTest)
+    }
+    
+    /**
+            Modify the test at the top of the queue with the provided test
+     */
+    func updateTest(withTest test: Config){
+        if queueIterator >= 0 && queueIterator < testList.count{
+           testList[queueIterator] = test
+        }
     }
     
     /**
@@ -72,6 +81,13 @@ class TestQueue{
      */
     func hasNext() -> Bool{
         return queueIterator < testList.count - 1
+    }
+    
+    /**
+            Returns the iterator for the Queue
+     */
+    func getIterator() -> Int{
+        return queueIterator
     }
     
     /**
@@ -205,12 +221,25 @@ class TestQueue{
             }
         }
     }
+    
+    func updateTestSettingSendDict(fromTestAtIndex: Int, newTestSettingSendDict: [String:Bool]){
+        if fromTestAtIndex >= 0 && fromTestAtIndex < testList.count{
+            let test = testList[fromTestAtIndex]
+            if test is TestConfig{
+                var testConfig = test as! TestConfig
+                testConfig.testSettingUpdateReceived.updateValue(newTestSettingSendDict, forKey: Int(testConfig.testMode))
+                testList[fromTestAtIndex] = testConfig
+            }
+        }
+    }
 }
 
-extension TestQueue: CustomStringConvertible{
+extension TestQueue: CustomStringConvertible, Sequence{
     var description: String {
         return "\(testList)"
     }
     
-    
+    func makeIterator() -> Array<Config>.Iterator {
+        return testList.makeIterator()
+    }
 }

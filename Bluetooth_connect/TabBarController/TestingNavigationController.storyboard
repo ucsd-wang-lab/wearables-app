@@ -3,7 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -151,13 +151,19 @@
                                 <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Measurement" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KRA-Tz-b7L">
-                                <rect key="frame" x="158" y="497.5" width="98" height="27.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timestamp" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KRA-Tz-b7L">
+                                <rect key="frame" x="167" y="497.5" width="80" height="22.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="KRA-Tz-b7L" secondAttribute="height" multiplier="79:22" id="OLV-Mf-ZwR"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
                                 <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a point for details" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqw-nk-GqR">
+                                <rect key="frame" x="20" y="530" width="374" height="308"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="24"/>
+                                <color key="textColor" red="0.19215686269999999" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -169,16 +175,21 @@
                             <constraint firstItem="KRA-Tz-b7L" firstAttribute="centerX" secondItem="xHL-t9-IPw" secondAttribute="centerX" id="DPm-cm-qhJ"/>
                             <constraint firstItem="Sk0-ov-5uf" firstAttribute="top" secondItem="vtd-5s-S5W" secondAttribute="bottom" id="G1R-VL-13d"/>
                             <constraint firstItem="Sk0-ov-5uf" firstAttribute="top" secondItem="QDx-ff-NtY" secondAttribute="bottom" constant="20" id="Htw-cN-aZt"/>
+                            <constraint firstItem="lqw-nk-GqR" firstAttribute="top" secondItem="KRA-Tz-b7L" secondAttribute="bottom" constant="10" id="Iee-Um-ftf"/>
                             <constraint firstItem="Sk0-ov-5uf" firstAttribute="trailing" secondItem="xHL-t9-IPw" secondAttribute="trailingMargin" id="Q8b-TY-Amb"/>
                             <constraint firstAttribute="trailing" secondItem="QDx-ff-NtY" secondAttribute="trailing" id="UOi-BH-jbI"/>
+                            <constraint firstItem="lqw-nk-GqR" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leading" constant="20" id="cQt-Ja-khP"/>
+                            <constraint firstAttribute="bottom" secondItem="lqw-nk-GqR" secondAttribute="bottom" constant="4" id="gwO-cg-gCS"/>
                             <constraint firstItem="QDx-ff-NtY" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leading" id="lzF-dA-kDg"/>
                             <constraint firstItem="QDx-ff-NtY" firstAttribute="top" secondItem="ERt-xF-jaT" secondAttribute="top" constant="20" id="o2v-Xb-CY4"/>
+                            <constraint firstAttribute="trailing" secondItem="lqw-nk-GqR" secondAttribute="trailing" constant="20" id="pbf-ZN-aQW"/>
                             <constraint firstItem="Sk0-ov-5uf" firstAttribute="leading" secondItem="xHL-t9-IPw" secondAttribute="leadingMargin" id="yOk-pJ-H7A"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="KwS-o6-H8k"/>
                     <connections>
                         <outlet property="chartsLabel" destination="vtd-5s-S5W" id="9an-7Y-p6F"/>
+                        <outlet property="detailLabel" destination="lqw-nk-GqR" id="CiO-9q-zBl"/>
                         <outlet property="floatingLabel" destination="LtG-tc-kKe" id="2Xz-YV-TNa"/>
                         <outlet property="lineChartView" destination="Sk0-ov-5uf" id="iQB-BS-jll"/>
                         <outlet property="xAxisLabel" destination="KRA-Tz-b7L" id="Iqi-UZ-U4p"/>

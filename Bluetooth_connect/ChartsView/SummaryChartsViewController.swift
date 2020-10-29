@@ -15,6 +15,8 @@ class SummaryChartsViewController: UIViewController {
     @IBOutlet weak var floatingLabel: UILabel!
     @IBOutlet weak var chartsLabel: UILabel!
     @IBOutlet weak var xAxisLabel: UILabel!
+    @IBOutlet weak var detailLabel: UILabel!
+    var units: String?
     
     var testConfig: TestConfig?
     override func viewDidLoad() {
@@ -41,13 +43,25 @@ class SummaryChartsViewController: UIViewController {
         
         if testConfig?.testMode == 0 || testConfig?.testMode == 2{
             chartsLabel.text = "Current (uA)"
+            units = "uA"
         }
         else if testConfig?.testMode == 1{
             chartsLabel.text = "Potential (mV)"
+            units = "mV"
         }
         
         customizeChart()
         drawChart()
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // Touched on screent
+        let touch = touches.first!
+        let location = touch.location(in: self.view)
+        if location.y < lineChartView.frame.minY{
+            chartValueNothingSelected(lineChartView)
+            lineChartView.highlightValue(nil)
+        }
     }
     
     func customizeChart(){
@@ -80,6 +94,7 @@ class SummaryChartsViewController: UIViewController {
         lineChartView.xAxis.drawGridLinesEnabled = false
         lineChartView.xAxis.labelPosition = .bottom
         lineChartView.xAxis.labelTextColor = .orange
+        lineChartView.xAxis.valueFormatter = self
         
         lineChartView.legend.enabled = false
     }
@@ -101,7 +116,7 @@ class SummaryChartsViewController: UIViewController {
     }
 }
 
-extension SummaryChartsViewController: ChartViewDelegate{
+extension SummaryChartsViewController: ChartViewDelegate, IAxisValueFormatter{
     func chartValueSelected(_ chartView: ChartViewBase, entry: ChartDataEntry, highlight: Highlight) {
         
         floatingLabel.isHidden = false
@@ -112,9 +127,17 @@ extension SummaryChartsViewController: ChartViewDelegate{
             let difference = floatingLabel.frame.maxX - self.view.frame.maxX
             floatingLabel.frame.origin.x -= difference
         }
+        
+        detailLabel.text = "Measurement: \(entry.x)\nValue: \(entry.y) \(units ?? "")\nTimestamp: \(testConfig?.endTimeStamp[Int(entry.x)] ?? "")"
     }
     
     func chartValueNothingSelected(_ chartView: ChartViewBase) {
         floatingLabel.isHidden = true
+        detailLabel.text = "Select a point for details"
+    }
+    
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        // Custom X-Axis
+        return "\(testConfig?.endTimeStamp[Int(value)] ?? "")"
     }
 }

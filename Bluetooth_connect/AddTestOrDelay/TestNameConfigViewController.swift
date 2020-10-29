@@ -87,8 +87,8 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
             // Amperometric and Potentiometric Test
             
             // Runtime of test in ms
-            var testRunTime = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Initial Delay"]!)! +
-                                ((testConfig?.testSettings2[Int(testConfig!.testMode)]!["Sample Period"]!)! * (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Sample Count"]!)!)
+            var testRunTime = (testConfig?.testSettings[Int(testConfig!.testMode)]!["Initial Delay"]!)! +
+                                ((testConfig?.testSettings[Int(testConfig!.testMode)]!["Sample Period"]!)! * (testConfig?.testSettings[Int(testConfig!.testMode)]!["Sample Count"]!)!)
             
             testConfig?.hour = testRunTime / 3600000
             testRunTime = testRunTime % 3600000
@@ -103,9 +103,9 @@ class TestNameConfigViewController: UIViewController, UITextFieldDelegate {
         }
         else if testConfig?.testMode == 2{
             // Square Wave Test
-            let quietTime = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Quiet Time"]!)!
-            let numSteps = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Num Steps"]!)!
-            let frequency = (testConfig?.testSettings2[Int(testConfig!.testMode)]!["Frequency"]!)!
+            let quietTime = (testConfig?.testSettings[Int(testConfig!.testMode)]!["Quiet Time"]!)!
+            let numSteps = (testConfig?.testSettings[Int(testConfig!.testMode)]!["Num Steps"]!)!
+            let frequency = (testConfig?.testSettings[Int(testConfig!.testMode)]!["Frequency"]!)!
             
             // Runtime of test in ms
             var testRunTime = Int(CGFloat(quietTime) + (CGFloat(numSteps) * CGFloat((1000 / (CGFloat(frequency))))))

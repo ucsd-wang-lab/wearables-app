@@ -8,13 +8,16 @@
 
 import UIKit
 
+let gloablDispatchGroup = DispatchGroup()
 var testQueue: TestQueue = TestQueue()
 
 var connectedDeiviceName:String?        // Name of the connected BLE device
-var loopCount:Int?                  // The number of times to loop through the queue
+var batteryLevel: UInt8?                // Battery Level of the Microneedle
+var loopCount:Int? = 3                  // The number of times to loop through the queue
 var numQueueIteration:Int = 0           // The number of times queue has been looped through
 var queuePosition: Int = 0              // The current test that is being run
 var currentLoopCount = 0                // The current loop counter for testing
+var canEditRows: Bool = true            // Keeping track of enabling to test edit, as long as test is not running
 var globalTimer: Timer?                 // Global timer to keep track of delays
 var globalTimerDuration: UInt64 = 0           // Duration of how long timer has been active
 var totalHr: UInt64 = 0
@@ -89,27 +92,28 @@ func sendModeSelection(config: Config, viewController: UIViewController){
 }
 
 func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
+    
     // Sending Mode Selection
     sendModeSelection(config: testCofig, viewController: viewController)
     
     // Sending Test Configuration
-    for characteristics in testCofig.testSettings2[Int(testCofig.testMode)]!.keys{
+    for characteristics in testCofig.testSettings[Int(testCofig.testMode)]!.keys{
         var char = characteristics
         if !characteristics.contains("Electrode Mask") && testCofig.testMode == 1{
             char += " - Potentio"
         }
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: char)
-        let value = testCofig.testSettings2[Int(testCofig.testMode)]![characteristics]!
+        let value = testCofig.testSettings[Int(testCofig.testMode)]![characteristics]!
         updateValue(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
     }
-
+    
     // Sending Start Signal
     DispatchQueue.global().async {
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d = withUnsafeBytes(of: data) { Data($0) }
         let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-        
+
         while !BluetoothInterface.instance.isConnected {
             // do nothing....Wait for connection to come back
         }
@@ -117,20 +121,15 @@ func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewControll
         print("Sending Start Signal.....")
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
+    
 }
 
 func startDelay(delayAmount: CGFloat){
     // Time Interval is in number of seconds. delayAmount is in milSec
-//    Timer.scheduledTimer(withTimeInterval: TimeInterval(delayAmount * 0.001), repeats: false) { (timer) in
-//        sendNextTest()
-//    }
     
     // Check timer every 50 ms
     guard globalTimer == nil else { return }
     globalTimer = Timer.scheduledTimer(timeInterval: TimeInterval(0.05), target: NavigationViewController.instance, selector: #selector(NavigationViewController.instance.delayUpdated), userInfo: nil, repeats: true)
-//    Timer.scheduledTimer(withTimeInterval: TimeInterval(0.05), repeats: true) { (timer) in
-//        NavigationViewController.instance.delayUpdated(timeInMS: 100)
-//    }
 }
 
 func sendNextTest(){
@@ -161,6 +160,7 @@ func sendNextTest(){
             // Finished testing
             currentLoopCount = 0
             testTimeElapsed = 0
+            canEditRows = true
             BluetoothInterface.instance.notifyQueueComplete()
             print("Finished Testing!!!")
             print("Test Queue = \(testQueue)")

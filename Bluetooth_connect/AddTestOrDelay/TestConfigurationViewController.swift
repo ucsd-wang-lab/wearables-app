@@ -136,14 +136,14 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
 //                let _key = key
                 let isValid = checkValidity(value: textField.text, characteristicName: key, textField: textField)
                 if isValid{
-                    var dict = testConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]
+                    var dict = testConfig?.testSettings[measurementTypeSegmentedControl.selectedSegmentIndex]
                     if dict != nil{
                         dict!.updateValue(Int(textField.text!)!, forKey: key)
                     }
                     else{
                         dict = [key: Int(textField.text!)!]
                     }
-                    testConfig?.testSettings2.updateValue(dict!, forKey: measurementTypeSegmentedControl.selectedSegmentIndex)
+                    testConfig?.testSettings.updateValue(dict!, forKey: measurementTypeSegmentedControl.selectedSegmentIndex)
                 }
             }
         }
@@ -183,7 +183,7 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
 
         cell.keyLabel.text = _key
 
-        if let value = testConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]?[_key]{
+        if let value = testConfig?.testSettings[measurementTypeSegmentedControl.selectedSegmentIndex]?[_key]{
             cell.valueLabel.text = "\(value)"
         }
         else{
@@ -252,12 +252,12 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
         var canSegue = true
         
         if isUpdate == true {
-            if testConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]?.count != tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]!.count + 1{
+            if testConfig?.testSettings[measurementTypeSegmentedControl.selectedSegmentIndex]?.count != tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]!.count + 1{
                 
                 canSegue = false
             }
         }
-        else if testConfig?.testSettings2[measurementTypeSegmentedControl.selectedSegmentIndex]?.count != tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]?.count{
+        else if testConfig?.testSettings[measurementTypeSegmentedControl.selectedSegmentIndex]?.count != tableMapping[measurementTypeSegmentedControl.selectedSegmentIndex]?.count{
             canSegue = false
         }
         

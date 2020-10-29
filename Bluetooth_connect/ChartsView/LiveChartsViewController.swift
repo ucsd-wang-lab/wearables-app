@@ -102,10 +102,10 @@ class LiveChartsViewController: UIViewController {
         var samplePeriod = 0
         
         if testMode == 0 || testMode == 1{
-            samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"] ?? 0
+            samplePeriod = testConfig?.testSettings[Int(testConfig?.testMode ?? 3)]?["Sample Period"] ?? 0
         }
         else if testMode == 2{
-            samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Frequency"] ?? 0
+            samplePeriod = testConfig?.testSettings[Int(testConfig?.testMode ?? 3)]?["Frequency"] ?? 0
         }
         if let data = testData{
             for point in data{
@@ -136,7 +136,7 @@ extension LiveChartsViewController: ChartViewDelegate, BLEValueRecordedObserver{
             
             if let testMode = testConfig?.testMode{
                 if testMode == 0 || testMode == 1{
-                    guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Sample Period"]  else { return }
+                    guard let samplePeriod = testConfig?.testSettings[Int(testConfig?.testMode ?? 3)]?["Sample Period"]  else { return }
                     
                     let data = value!.int32
                     detailLabel.text = "Measurement: \(testQueue.getQueuetIterationCounter())\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount ?? 0] ?? "")s"
@@ -146,7 +146,7 @@ extension LiveChartsViewController: ChartViewDelegate, BLEValueRecordedObserver{
                     }
                 }
                 else if testMode == 2{
-                    guard let samplePeriod = testConfig?.testSettings2[Int(testConfig?.testMode ?? 3)]?["Frequency"]  else { return }
+                    guard let samplePeriod = testConfig?.testSettings[Int(testConfig?.testMode ?? 3)]?["Frequency"]  else { return }
                     
                     let data = value!.int32
                     detailLabel.text = "Measurement: \(testQueue.getQueuetIterationCounter())\n Start Time: \(testConfig?.startTimeStamp[currentLoopCount ?? 0] ?? "")s"
