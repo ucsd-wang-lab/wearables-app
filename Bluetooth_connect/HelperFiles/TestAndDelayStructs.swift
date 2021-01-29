@@ -13,7 +13,6 @@ protocol Config {
     var sec: Int {get set}
     var milSec: Int {get set}
     var totalDuration: Int64{get set}
-    var numSettingSend:Int {get set}
     var testMode: Int8 { get set }
     
     /**
@@ -83,15 +82,15 @@ struct TestConfig: Config {
     var sec: Int
     var milSec: Int
     var totalDuration: Int64
-    var numSettingSend:Int
     
     var testMode: Int8
     var testData: [Int: [Double]]       // loopNumber: Data Array
     var startTimeStamp: [Int: String]   // loopNumber: StartTime
     var endTimeStamp: [Int: String]     // loopNumber: EndTime
-    var testSettings: [Int: [String: Int]]  // Measurement Type: [Key: Value]
+    var testSettings: [Int: [String: Int]]  // Measurement Type: [testmode: [Key: Value]]
     var testSettingUpdateReceived: [Int: [String: Bool]]    // Measurement Type: [Key: Yes/No];
     var loopIteration: Int
+    var resendSettingsIfDisconnect: Bool?
     
     var leadConfigIndex: Int
     
@@ -101,7 +100,6 @@ struct TestConfig: Config {
         sec = 0
         milSec = 0
         totalDuration = 0
-        numSettingSend = 0
         testMode = -1
         
         testData = [:]

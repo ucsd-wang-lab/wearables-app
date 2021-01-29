@@ -210,11 +210,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             }
             else{
                 // Sending Start Signal
-                let data: UInt8 = 1
-                var d: Data = Data(count: 1)
-                d = withUnsafeBytes(of: data) { Data($0) }
-                let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-                BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+                sendStartStopSignal(signal: 1)
             }
         }
         else{
@@ -230,11 +226,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             button.tag = 1
             
             // Sending Stop Signal
-            let data: UInt8 = 0
-            var d: Data = Data(count: 1)
-            d = withUnsafeBytes(of: data) { Data($0) }
-            let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
-            BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
+            sendStartStopSignal(signal: 0)
         }
         loopCountTextField.isUserInteractionEnabled = canEditRows
     }

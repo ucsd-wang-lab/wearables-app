@@ -34,8 +34,14 @@ class NavigationViewController: UINavigationController {
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 1"))
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
-        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
-        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+        
+        
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+        
+        
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
         
@@ -56,24 +62,69 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
     func deviceDisconnected(with device: String) {
         if BluetoothInterface.instance.autoConnect{
             BluetoothInterface.instance.startScan()
+            
+            if var test = testQueue.peek() as? TestConfig{
+                test.testSettingUpdateReceived[Int(test.testMode)] = [:]
+                if test.resendSettingsIfDisconnect == nil{
+                    test.resendSettingsIfDisconnect = true
+                }
+                testQueue.updatePeek(testConfig: test)
+            }
         }
         
     }
     
     func deviceConnected(with device: String) {
         BluetoothInterface.instance.autoConnect = true
+        if var test = testQueue.peek() as? TestConfig{
+            if let doResend = test.resendSettingsIfDisconnect{
+                if doResend == true{
+                    test.resendSettingsIfDisconnect = nil
+                    testQueue.updatePeek(testConfig: test)
+                    sendTestConfiguration(testCofig: test, viewController: NavigationViewController.instance)
+                }
+            }
+            
+        }
     }
     
     func writeResponseReceived(with characteristicUUIDString: String) {
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristicUUIDString) ?? "nil"
-
-        if var test = testQueue.peek() as? TestConfig{
-            if let didReceive = test.testSettingUpdateReceived[Int(test.testMode)]![name]{
-                if !didReceive{
+//        print("Write response received from: \(characteristicUUIDString)")
+        if name != "Mode Select"{
+            if var test = testQueue.peek() as? TestConfig{
+                
+                if let mapping = test.testSettingUpdateReceived[Int(test.testMode)]{
+                    print("Write response received from: \(characteristicUUIDString)")
+                    var map = mapping
+                    map.updateValue(true, forKey: name)
+                    test.testSettingUpdateReceived[Int(test.testMode)] = map
+                    testQueue.updatePeek(testConfig: test)
+                    
+                    // all settings sent....start test
+                    if map.count == test.testSettings[Int(test.testMode)]!.count{
+                        sendStartStopSignal(signal: 1)
+                        test.resendSettingsIfDisconnect = false
+                    }
+                }
+                else{
+                    print("Write response received from.....: \(characteristicUUIDString)")
+                    test.testSettingUpdateReceived[Int(test.testMode)] = [:]
                     test.testSettingUpdateReceived[Int(test.testMode)]!.updateValue(true, forKey: name)
+                    testQueue.updatePeek(testConfig: test)
+                }
+                
+                // resetting the number to settings sent....
+                if name == "Start/Stop Queue"{
+                    test.testSettingUpdateReceived[Int(test.testMode)] = [:]
+                    testQueue.updatePeek(testConfig: test)
                 }
             }
+            
         }
+        
+        
+        
     }
     
     func update(with characteristicUUIDString: String, with value: Data) {

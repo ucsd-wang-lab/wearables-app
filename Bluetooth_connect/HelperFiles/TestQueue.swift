@@ -65,6 +65,15 @@ class TestQueue{
     }
     
     /**
+            Update the top of the queue with the provided struct
+     */
+    func updatePeek(testConfig: TestConfig){
+        if queueIterator >= 0 && queueIterator < testList.count{
+            testList[queueIterator] = testConfig
+        }
+    }
+    
+    /**
             Get the next item in the queue iterator and
             advance the cursor position
      */

@@ -160,20 +160,6 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) ?? "nil"
         print("write update received...\(name)")
-
-//        let testConfig = testQueue.peek() as? TestConfig
-//        if let test = testConfig{
-//            var dict = test.testSettingUpdateReceived[Int(test.testMode)]!
-//            if let _ = dict[name]{
-//                dict[name] = true
-//                testQueue.updateTestSettingSendDict(fromTestAtIndex: 0, newTestSettingSendDict: dict)
-//                print("Dict = \(dict)")
-//            }
-//        }
-        
-        if name.contains("Mode Select") || name.contains("Potential") || name.contains("Sample Count") || name.contains("Sample Period") || name.contains("Initial Delay") || name.contains("Electrode Mask"){
-            testQueue[queuePosition].numSettingSend += 1
-        }
         
         notifyBLEWriteResponseReceived(characteristicUUIDString: characteristic.uuid.uuidString)
     }

@@ -13,7 +13,7 @@ var testQueue: TestQueue = TestQueue()
 
 var connectedDeiviceName:String?        // Name of the connected BLE device
 var batteryLevel: UInt8?                // Battery Level of the Microneedle
-var loopCount:Int? = 3                  // The number of times to loop through the queue
+var loopCount:Int?                      // The number of times to loop through the queue
 var numQueueIteration:Int = 0           // The number of times queue has been looped through
 var queuePosition: Int = 0              // The current test that is being run
 var currentLoopCount = 0                // The current loop counter for testing
@@ -91,24 +91,27 @@ func sendModeSelection(config: Config, viewController: UIViewController){
     updateValue(name: "Mode Select", encodingType: encodingType, value: String(value), viewController: viewController)
 }
 
-func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
-    
-    // Sending Mode Selection
-    sendModeSelection(config: testCofig, viewController: viewController)
-    
-    // Sending Test Configuration
-    for characteristics in testCofig.testSettings[Int(testCofig.testMode)]!.keys{
-        var char = characteristics
-        if !characteristics.contains("Electrode Mask") && testCofig.testMode == 1{
-            char += " - Potentio"
+func sendStartStopSignal(signal val: UInt8){
+    DispatchQueue.global().async {
+        
+        let data: UInt8 = val
+        var d: Data = Data(count: 1)
+        d = withUnsafeBytes(of: data) { Data($0) }
+        let charUUID = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: "Start/Stop Queue")!
+
+        while !BluetoothInterface.instance.isConnected {
+            // do nothing....Wait for connection to come back
         }
-        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: char)
-        let value = testCofig.testSettings[Int(testCofig.testMode)]![characteristics]!
-        updateValue(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
+
+        print("Sending Start Signal.....")
+        BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
-    
+}
+
+func sendStartSignal(){
     // Sending Start Signal
     DispatchQueue.global().async {
+        
         let data: UInt8 = 1
         var d: Data = Data(count: 1)
         d = withUnsafeBytes(of: data) { Data($0) }
@@ -121,7 +124,23 @@ func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewControll
         print("Sending Start Signal.....")
         BluetoothInterface.instance.writeData(data: d, characteristicUUIDString: charUUID)
     }
+}
+
+func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
     
+    // Sending Mode Selection
+    sendModeSelection(config: testCofig, viewController: viewController)
+    print("Num of testSettings: \(testCofig.testSettings[Int(testCofig.testMode)]!.count)")
+    // Sending Test Configuration
+    for characteristics in testCofig.testSettings[Int(testCofig.testMode)]!.keys{
+        var char = characteristics
+        if !characteristics.contains("Electrode Mask") && testCofig.testMode == 1{
+            char += " - Potentio"
+        }
+        let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: char)
+        let value = testCofig.testSettings[Int(testCofig.testMode)]![characteristics]!
+        updateValue(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
+    }
 }
 
 func startDelay(delayAmount: CGFloat){
