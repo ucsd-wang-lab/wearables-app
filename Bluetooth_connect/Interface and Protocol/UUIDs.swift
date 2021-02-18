@@ -67,7 +67,8 @@ enum CHARACTERISTICS_PROPERTIES: UInt{
 var CHARACTERISTIC_VALUE_MIN_VALUE: [Int: [String: Int]] = [0: ["Potential": -1000,
                                                                  "Initial Delay": 0,
                                                                  "Sample Period": 100,
-                                                                 "Sample Count": 0
+                                                                 "Sample Count": 0,
+                                                                 "Gain": 0
                                                                 ],
                                                              1: ["Initial Delay": 0,
                                                                  "Sample Period": 100,
@@ -91,7 +92,8 @@ var CHARACTERISTIC_VALUE_MIN_VALUE: [Int: [String: Int]] = [0: ["Potential": -10
 var CHARACTERISTIC_VALUE_MAX_VALUE: [Int: [String: Int]] = [0: ["Potential": 1000,
                                                                  "Initial Delay": Int(UInt16.max),
                                                                  "Sample Period": Int(UInt16.max),
-                                                                 "Sample Count": Int(UInt16.max)
+                                                                 "Sample Count": Int(UInt16.max),
+                                                                 "Gain": 27
                                                                 ],
                                                              1: ["Initial Delay": Int(UInt16.max),
                                                                  "Sample Period": Int(UInt16.max),

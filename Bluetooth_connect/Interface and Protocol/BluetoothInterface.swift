@@ -129,7 +129,7 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 
             for characteristic in characteristics{
 //                print("Characteristics = ", characteristic.uuid.uuidString)
-                if let _ = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
+                if let name = CharacteristicsUUID.instance.getCharacteristicName(characteristicUUID: characteristic.uuid.uuidString) {
 //                    print("characteristics = ", name)
 //
 //                    if name == "Electrode Selection"{
@@ -147,6 +147,12 @@ class BluetoothInterface: NSObject, CBCentralManagerDelegate, CBPeripheralManage
 //                            print("Characteristic \(name) with INDICATE")
 //                        }
                         self.connectedPeripheral.setNotifyValue(true, for: characteristic)
+                    }
+                    
+                    if name.contains("Battery Level") {
+                        let batteryLevelUUIDString: String = CharacteristicsUUID.instance.getCharacteristicUUID(characteristicName: name)!
+                        BluetoothInterface.instance.readData(characteristicUUIDString: batteryLevelUUIDString)
+
                     }
                 }
 //                else{

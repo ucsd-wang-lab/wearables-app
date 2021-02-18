@@ -13,7 +13,7 @@ var testQueue: TestQueue = TestQueue()
 
 var connectedDeiviceName:String?        // Name of the connected BLE device
 var batteryLevel: UInt8?                // Battery Level of the Microneedle
-var loopCount:Int?                      // The number of times to loop through the queue
+var loopCount:Int? = 1                     // The number of times to loop through the queue
 var numQueueIteration:Int = 0           // The number of times queue has been looped through
 var queuePosition: Int = 0              // The current test that is being run
 var currentLoopCount = 0                // The current loop counter for testing
@@ -126,6 +126,16 @@ func sendStartSignal(){
     }
 }
 
+func updateCharacteristic(name: String, encodingType: Any?, value: String?, viewController: UIViewController){
+    updateValue(name: name, encodingType: encodingType, value: value, viewController: viewController)
+    
+    // CAUTION: This will freeze the app for the specified time.....
+    do{
+        // sleep for 200 ms
+        let second: Double = 1000000.0
+        usleep(useconds_t(second * (1.0 / 5.0)))  // in microseconds, i.e. 10^{-6}
+    }
+}
 func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewController){
     
     // Sending Mode Selection
@@ -139,7 +149,7 @@ func sendTestConfiguration(testCofig: TestConfig, viewController: UIViewControll
         }
         let encodingType = CharacteristicsUUID.instance.getCharacteristicDataType(characteristicName: char)
         let value = testCofig.testSettings[Int(testCofig.testMode)]![characteristics]!
-        updateValue(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
+        updateCharacteristic(name: char, encodingType: encodingType, value: String(value), viewController: viewController)
     }
 }
 

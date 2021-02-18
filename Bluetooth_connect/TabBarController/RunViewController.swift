@@ -83,6 +83,7 @@ class RunViewController: UIViewController, UITextFieldDelegate, UITableViewDeleg
             scaledTotalRunTime = totalRunTime * UInt64(loopCount)
         }
         self.view.endEditing(true)
+        updateProgressBar()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

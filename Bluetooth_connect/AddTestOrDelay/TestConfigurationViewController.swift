@@ -34,7 +34,8 @@ class TestConfigurationViewController: UIViewController, UITableViewDataSource, 
     var tableMapping: [Int: [Int : [String: String]]] = [0: [0: ["Potential": " mV"],
                                                              1: ["Initial Delay": " ms"],
                                                              2: ["Sample Period": " ms"],
-                                                             3: ["Sample Count": ""]
+                                                             3: ["Sample Count": ""],
+                                                             4: ["Gain": ""]
                                                             ],
                                                          1: [0: ["Initial Delay": " ms"],
                                                              1: ["Sample Period": " ms"],

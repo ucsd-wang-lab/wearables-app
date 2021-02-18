@@ -211,6 +211,9 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
             for test in testQueue{
                 updateTotalDuration(hour: test.hour, min: test.min, sec: test.sec, milSec: test.milSec)
             }
+            if testQueue.isEmpty(){
+                updateTotalDuration(hour: 0, min: 0, sec: 0, milSec: 0)
+            }
         }
     }
     
@@ -277,6 +280,7 @@ class DeviceViewController: UIViewController, UITextFieldDelegate, UITableViewDe
         totalRunTime += (totalSec * 1000) + totalMilSec
         
         delayLabel.text = constructDelayString(hour: Int(totalHr), min: Int(totalMin), sec: Int(totalSec), milSec: Int(totalMilSec))
+        print("\nUpdating delay label......\n")
     }
     
     private func scaleTotalRunTime(){

@@ -36,10 +36,10 @@ class NavigationViewController: UINavigationController {
 //        testQueue.enqueue(newTest: DelayConfig(name: "Delay 1"))
         
         
-//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
-//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
-//        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
-//        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
+        testQueue.enqueue(newTest: TestConfig(name: "Test 2"))
+        testQueue.enqueue(newTest: DelayConfig(name: "Delay 3"))
         
         
 //        testQueue.enqueue(newTest: TestConfig(name: "Test 3"))
@@ -157,6 +157,7 @@ extension NavigationViewController: BLEStatusObserver, BLEValueUpdateObserver{
             sendNextTest()
         }
         else if characteristicUUIDString == "Battery Level"{
+            batteryLevel = value.uint8
             BluetoothInterface.instance.notifyBLEValueRecordedObserver(with: characteristicUUIDString, with: value)
             print("\n\nUpdate Received: \(characteristicUUIDString)\t with value: \(value.uint8)\n\n")
         }

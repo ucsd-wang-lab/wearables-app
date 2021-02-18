@@ -37,7 +37,7 @@ struct DelayConfig: Config {
         hour = -1
         min = -1
         sec = -1
-        milSec = -1
+        milSec = 0
         totalDuration = -1
         numSettingSend = 1
         testMode = 4

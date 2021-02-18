@@ -97,7 +97,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 3
+        return 2
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -135,7 +135,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
                 delayConfig!.hour = 0
                 delayConfig!.min = delayPickerView.selectedRow(inComponent: 0)
                 delayConfig!.sec = delayPickerView.selectedRow(inComponent: 1)
-                delayConfig!.milSec = delayPickerView.selectedRow(inComponent: 2)
+//                delayConfig!.milSec = delayPickerView.selectedRow(inComponent: 2)
                 delayConfig!.testMode = 4
                 delayConfig!.updateTotalDuration()
                 testQueue[index] = delayConfig!
@@ -147,7 +147,7 @@ class DelayConfigurationViewController: UIViewController, UITextFieldDelegate, U
             delayConfig.hour = 0
             delayConfig.min = delayPickerView.selectedRow(inComponent: 0)
             delayConfig.sec = delayPickerView.selectedRow(inComponent: 1)
-            delayConfig.milSec = delayPickerView.selectedRow(inComponent: 2)
+//            delayConfig.milSec = delayPickerView.selectedRow(inComponent: 2)
             delayConfig.testMode = 4
             delayConfig.updateTotalDuration()
             testQueue.enqueue(newTest: delayConfig)
